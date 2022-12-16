@@ -1,0 +1,37 @@
+@import './components/Header/header-cleint.scss';
+@import './main.scss';
+@import './pages/home.scss';
+@import './animation.scss';
+
+
+
+
+
+* {
+    scroll-behavior: smooth;
+}
+
+html {
+    font-family: 'Public Sans', sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgb(22, 28, 36); 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(0, 171, 85); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(1, 128, 64); 
+  }
+
