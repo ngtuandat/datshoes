@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const NavCleint = () => {
+const NavClient = () => {
   const router = useRouter();
   const path = router.pathname;
   const [pathSelected, setPathSelected] = useState("/");
@@ -48,4 +48,4 @@ const NavCleint = () => {
   );
 };
 
-export default NavCleint;
+export default NavClient;
