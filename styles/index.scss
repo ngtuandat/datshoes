@@ -2,9 +2,7 @@
 @import './main.scss';
 @import './pages/home.scss';
 @import './animation.scss';
-
-
-
+@import './pages/sign.scss';
 
 
 * {
@@ -33,5 +31,15 @@ html {
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: rgb(1, 128, 64); 
+  }
+
+  ::-moz-selection { /* Code for Firefox */
+    color: white;
+    background: rgb(0, 171, 85); 
+  }
+  
+  ::selection {
+    color: white;
+    background: rgb(0, 171, 85); 
   }
 

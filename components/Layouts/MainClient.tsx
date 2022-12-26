@@ -1,16 +1,13 @@
 import React from "react";
+import { ChildrenProps } from "../../interfaces/main";
 import MenuFixed from "../MenuSidebar/MenuFixed";
-import HeaderCleint from "./../Header/HeaderCleint";
+import HeaderClient from "../Header/HeaderClient";
 
-interface ChildrenProps {
-  children?: React.ReactNode;
-}
-
-const MainCleint = ({ children }: ChildrenProps) => {
+const MainClient = ({ children }: ChildrenProps) => {
   return (
     <div className="overflow-y-auto ">
       <header>
-        <HeaderCleint />
+        <HeaderClient />
       </header>
       <main>
         <div>{children}</div>
@@ -20,4 +17,4 @@ const MainCleint = ({ children }: ChildrenProps) => {
   );
 };
 
-export default MainCleint;
+export default MainClient;

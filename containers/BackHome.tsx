@@ -8,9 +8,9 @@ import { FaFigma } from "react-icons/fa";
 
 const BackHome = () => {
   return (
-    <div className=" bg-home-dark w-full h-screen fixed top-0 left-0">
+    <div className="bg-home-dark w-full h-screen fixed top-0 left-0">
       <div className="grid grid-cols-12 h-screen gap-24 relative max-w-[1200px] mx-auto">
-        <div className="-mt-[18%] col-span-6 row-start-1 text-center flex flex-col justify-center items-center px-20 space-y-5">
+        <div className="-mt-[18%] col-span-6 row-start-1 text-center flex flex-col justify-center items-center space-y-5">
           <div>
             <h2 className="font-extrabold text-5xl leading-[1.33333] text-white">
               Start <br />
@@ -18,7 +18,7 @@ const BackHome = () => {
             </h2>
           </div>
           <div>
-            <h1 className="text-8xl bg-text -mt-1">Shoes</h1>
+            <h1 className="text-8xl bg-text -mt-1">Cuc Shoes</h1>
           </div>
           <div>
             <p className="text-white text-sm my-2 leading-6 font-normal">

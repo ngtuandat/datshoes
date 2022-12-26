@@ -30,7 +30,7 @@ const ContentHome = () => {
             variants={minimalUi}
             className="uppercase text-[rgb(99,115,129)] text-xs font-bold -mt-2 mb-2"
           >
-            shoes
+            Cuc shoes
           </motion.p>
           <motion.h1
             initial="offscreenH"
@@ -38,7 +38,7 @@ const ContentHome = () => {
             variants={minimalUi}
             className="text-white font-extrabold text-[40px]"
           >
-            Shoes
+            Cuc Shoes
             <br />
             có gì?
           </motion.h1>

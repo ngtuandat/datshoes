@@ -1,11 +1,25 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import NavCleint from "../NavBar/NavCleint";
 import { motion, useScroll } from "framer-motion";
+import NoSign from "../CheckSign/NoSign";
+import NavClient from "./../NavBar/NavClient";
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
+import Logged from "../CheckSign/Logged";
 
-const HeaderCleint = () => {
+const HeaderClient = () => {
   const { scrollYProgress } = useScroll();
   const [headerChange, setHeaderChange] = useState("h-[88px]");
+  const [name, setName] = useState<string>();
+
+  const token = Cookies.get("token");
+
+  useEffect(() => {
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      setName(decoded.firstName + "" + decoded.lastName);
+    }
+  }, [token]);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -27,7 +41,10 @@ const HeaderCleint = () => {
         className={`h-full flex items-center justify-between max-w-[1200px] mx-auto`}
       >
         <Image src="/images/logo.svg" alt="logo" width={40} height={40} />
-        <NavCleint />
+        <div className="flex items-center space-x-5">
+          <NavClient />
+          {name ? <Logged name={name} /> : <NoSign />}
+        </div>
       </div>
       <motion.div
         className="progress-bar rounded-r-lg"
@@ -37,4 +54,4 @@ const HeaderCleint = () => {
   );
 };
 
-export default HeaderCleint;
+export default HeaderClient;
