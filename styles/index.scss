@@ -3,10 +3,16 @@
 @import './pages/home.scss';
 @import './animation.scss';
 @import './pages/sign.scss';
+@import './pages/product.scss';
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import 'swiper/css/scrollbar';
 
 
 * {
     scroll-behavior: smooth;
+    outline: none;
 }
 
 html {

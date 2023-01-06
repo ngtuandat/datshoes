@@ -6,6 +6,7 @@ import NavClient from "./../NavBar/NavClient";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import Logged from "../CheckSign/Logged";
+import Link from "next/link";
 
 const HeaderClient = () => {
   const { scrollYProgress } = useScroll();
@@ -40,7 +41,9 @@ const HeaderClient = () => {
       <div
         className={`h-full flex items-center justify-between max-w-[1200px] mx-auto`}
       >
-        <Image src="/images/logo.svg" alt="logo" width={40} height={40} />
+        <Link href="/">
+          <Image src="/images/logo.svg" alt="logo" width={40} height={40} />
+        </Link>
         <div className="flex items-center space-x-5">
           <NavClient />
           {name ? <Logged name={name} /> : <NoSign />}
