@@ -9,7 +9,7 @@ const MainClient = ({ children }: ChildrenProps) => {
       <header>
         <HeaderClient />
       </header>
-      <main>
+      <main className="bg-dark min-h-screen pt-[80px]">
         <div>{children}</div>
       </main>
       <MenuFixed />

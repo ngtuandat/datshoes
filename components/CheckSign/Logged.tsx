@@ -27,7 +27,7 @@ const Logged = ({ name }: LoggedProps) => {
   return (
     <div>
       <Menu as="div" className="relative">
-        <Menu.Button className="flex items-center space-x-2">
+        <Menu.Button className="flex items-center space-x-2 hover:opacity-90">
           <img src="/images/avt.jpg" className="w-9 h-9 rounded-full" alt="" />
           <div className="text-white font-semibold">{name}</div>
         </Menu.Button>
