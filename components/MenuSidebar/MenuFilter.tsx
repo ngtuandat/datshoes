@@ -259,7 +259,7 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
         <div className="absolute bottom-0 right-0 left-0 w-full p-5">
           <div className="flex justify-center py-3 px-5 border border-[rgba(145,158,171,0.24)] space-x-1 cursor-pointer select-none rounded-lg items-center">
             <ImBin />
-            <h1>Clear</h1>
+            <p>Clear</p>
           </div>
         </div>
       </motion.div>

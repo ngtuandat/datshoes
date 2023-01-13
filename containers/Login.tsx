@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUserCheck } from "../redux/apiReq";
-import { useSelector } from "react-redux/es/exports";
 
 const Login = () => {
   const [email, setEmail] = useState<string>();

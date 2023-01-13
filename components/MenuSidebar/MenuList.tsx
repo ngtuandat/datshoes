@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 import { BsFillSunFill } from "react-icons/bs";
 import { FaCloudMoon } from "react-icons/fa";
 import { IoContrastSharp, IoContrastOutline } from "react-icons/io5";
-import { CiAlignRight, CiAlignLeft } from "react-icons/ci";
 import {
   BsLayoutTextSidebarReverse,
   BsLayoutTextSidebar,
 } from "react-icons/bs";
+import { CgSidebar, CgSidebarRight } from "react-icons/cg";
 
 const menuList = [
   {
@@ -20,7 +20,7 @@ const menuList = [
   },
   {
     title: "Direction",
-    icons: [<CiAlignRight />, <CiAlignLeft />],
+    icons: [<CgSidebarRight />, <CgSidebar />],
   },
   {
     title: "Layout",

@@ -13,9 +13,24 @@ model User {
   firstName String
   lastName  String
   email     String   @unique
+  admin     Boolean  @default(false)
   password  String
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   @@map(name: "users")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  price       Int
+  color       String[]
+  category    String
+  description String
+  size        Int[]
+  gender      String
+  listImage   String[]
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
 }

@@ -19,7 +19,7 @@ export const registerUser = async (
     try {
         await CreateAcc(user);
         dispatch(registerSuccess());
-        router.push("/login");
+        router.push("/sign-in");
     } catch (error) {
         dispatch(registerFailed(error));
     }
@@ -29,7 +29,11 @@ export const loginUserCheck = async (user: User, dispatch: Dispatch<AnyAction>, 
     try {
         const res = await LoginUser(user)
         dispatch(loginSuccess(res.data))
-        router.push('/')
+        if (res.data.admin === true) {
+            router.push('/dashboard')
+        } else {
+            router.push('/')
+        }
     } catch (error) {
         dispatch(loginFailed(error))
     }
