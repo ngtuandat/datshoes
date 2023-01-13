@@ -37,7 +37,9 @@ const Logged = ({ name }: LoggedProps) => {
               {({ active }) => (
                 <button
                   className={`${
-                    active ? "bg-green-500 " : ""
+                    active
+                      ? "bg-[rgba(0,171,85,0.16)] text-[rgb(91,229,132)] "
+                      : ""
                   } group flex w-full items-center text-white rounded-md px-2 py-2 space-x-2 text-sm `}
                 >
                   {item.icon}

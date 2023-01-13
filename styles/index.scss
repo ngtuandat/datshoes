@@ -8,6 +8,8 @@
 @import 'swiper/css/navigation';
 @import 'swiper/css/pagination';
 @import 'swiper/css/scrollbar';
+@import './components/tiptap.scss';
+@import './scrollbar/index.scss';
 
 
 * {
@@ -18,26 +20,6 @@
 html {
     font-family: 'Public Sans', sans-serif;
 }
-
-::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: rgb(22, 28, 36); 
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: rgb(0, 171, 85); 
-    border-radius: 10px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(1, 128, 64); 
-  }
 
   ::-moz-selection { /* Code for Firefox */
     color: white;

@@ -56,14 +56,16 @@ const MainAdmin = ({ children }: ChildrenProps) => {
           <button
             onClick={() => setZoomOutMenu(!zoomOutMenu)}
             className={`fixed top-7 ${
-              zoomOutMenu ? "left-[76px]" : "left-[268px]"
+              zoomOutMenu ? "left-[76px]" : "left-[266px]"
             } border border-dashed rounded-full border-[rgba(145,158,171,0.24)] transition-all duration-300 hover:border-[rgba(145,158,171,0.5)] text-[rgb(145,158,171)] p-1 z-[2400] bg-[rgb(22,28,36)] hover:text-white`}
           >
             {zoomOutMenu ? <MdKeyboardArrowRight /> : <MdKeyboardArrowLeft />}
           </button>
           <NavAdmin zoomOutMenu={zoomOutMenu} />
         </motion.nav>
-        <main className="px-10 pt-20 flex-1">{children}</main>
+        <main className="px-10 pt-20 flex-1 min-h-screen max-w-[1200px] mx-auto pb-10">
+          {children}
+        </main>
       </div>
       <MenuFixed />
     </div>

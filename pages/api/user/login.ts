@@ -42,6 +42,7 @@ async function LoginUser(user: User, res: NextApiResponse) {
                     email: userCheck.email,
                     firstName: userCheck.firstName,
                     lastName: userCheck.lastName,
+                    admin: userCheck.admin
                 },
                 secret
             );
@@ -51,6 +52,7 @@ async function LoginUser(user: User, res: NextApiResponse) {
                 id: userCheck.id,
                 email: userCheck.email,
                 name: userCheck.lastName,
+                admin: userCheck.admin
             });
         }
     } catch (error) {
