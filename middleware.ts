@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
         }
     } else {
         if (pathname.startsWith('/dashboard')) {
-            return NextResponse.redirect(new URL('/', request.url))
+            return NextResponse.redirect(new URL('/sign-in', request.url))
         }
     }
 }

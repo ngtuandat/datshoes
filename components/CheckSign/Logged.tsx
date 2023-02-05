@@ -4,19 +4,22 @@ import { BsFilePerson } from "react-icons/bs";
 import { RxExit } from "react-icons/rx";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 interface LoggedProps {
   name: string;
+  avatar: string | undefined;
 }
 
 const menuUser = [
   {
     icon: <BsFilePerson />,
     title: "Trang cá nhân",
+    href: "/user/profile",
   },
 ];
 
-const Logged = ({ name }: LoggedProps) => {
+const Logged = ({ name, avatar }: LoggedProps) => {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -28,7 +31,11 @@ const Logged = ({ name }: LoggedProps) => {
     <div>
       <Menu as="div" className="relative">
         <Menu.Button className="flex items-center space-x-2 hover:opacity-90">
-          <img src="/images/avt.jpg" className="w-9 h-9 rounded-full" alt="" />
+          <img
+            src={avatar ? avatar : "/images/avt.jpg"}
+            className="w-9 h-9 rounded-full"
+            alt=""
+          />
           <div className="text-white font-semibold">{name}</div>
         </Menu.Button>
         <Menu.Items className="absolute bg-dark shadow-md top-[130%] rounded-lg w-40 p-1">
@@ -43,9 +50,11 @@ const Logged = ({ name }: LoggedProps) => {
                   } group flex w-full items-center text-white rounded-md px-2 py-2 space-x-2 text-sm `}
                 >
                   {item.icon}
-                  <p className="w-full min-w-fit flex justify-start">
-                    {item.title}
-                  </p>
+                  <Link href={item.href}>
+                    <p className="w-full min-w-fit flex justify-start">
+                      {item.title}
+                    </p>
+                  </Link>
                 </button>
               )}
             </Menu.Item>

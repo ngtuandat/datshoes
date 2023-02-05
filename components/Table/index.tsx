@@ -13,12 +13,13 @@ interface TableProps {
    * The loading state of the table
    */
   loading?: boolean;
+  className?: string;
 }
 
-const Table = ({ dataSource, columns, loading }: TableProps) => {
+const Table = ({ dataSource, columns, loading, className }: TableProps) => {
   return (
     <div>
-      <div className="mt-8 flex flex-col">
+      <div className={`flex flex-col ${className}`}>
         <div className="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
           <div
             id="table-scroll"

@@ -44,7 +44,7 @@ const Modal = ({ children, open, setOpen, title }: ModalProps) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 w-full bg-black bg-opacity-25" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -64,7 +64,7 @@ const Modal = ({ children, open, setOpen, title }: ModalProps) => {
                     onClick={closeModal}
                   />
                   {title ? (
-                    <div className="px-4 sm:px-6 text-lg mb-3 font-semibold border-b">
+                    <div className="text-lg mb-3 font-semibold text-white">
                       {title}
                     </div>
                   ) : null}

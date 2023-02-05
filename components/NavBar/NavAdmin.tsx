@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { SiGoogleanalytics } from "react-icons/si";
 import { FaUserCog } from "react-icons/fa";

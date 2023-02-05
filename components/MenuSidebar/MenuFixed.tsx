@@ -97,7 +97,7 @@ const MenuFixed = () => {
             variants={navMenu}
             className="flex justify-between items-center py-4 pl-5 pr-2 border-b border-dashed border-[rgba(255,255,255,0.3)]"
           >
-            <h1 className="text-white font-semibold">Settings</h1>
+            <p className="text-white font-semibold">Settings</p>
             <div className="flex space-x-1 items-center text-[rgb(145,158,171)]">
               <div className="flex items-center justify-center p-2 cursor-pointer hover:bg-[rgba(145,158,171,0.08)] rounded-full">
                 <IoReload className="w-4 h-4" />
