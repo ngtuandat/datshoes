@@ -30,7 +30,7 @@ async function CreateAccount(res: NextApiResponse, user: newUser) {
         //   Mã hóa pass
         const hashed = await bcrypt.hash(user.password, salt);
 
-        await prisma.user.create({
+        const regis = await prisma.user.create({
             data: {
                 email: user.email,
                 password: hashed,
@@ -38,6 +38,11 @@ async function CreateAccount(res: NextApiResponse, user: newUser) {
                 lastName: user.lastName,
             },
         });
+        await prisma.profile.create({
+            data: {
+                user: { connect: { email: regis.email } }
+            }
+        })
         res.status(200).json("Register Successfully!");
 
     } catch (error) {

@@ -28,3 +28,28 @@ interface Role {
     id: string;
     role: boolean;
 }
+export interface ProfileProps {
+    email: string
+    firstName: string
+    lastName: string
+    profile: {
+        address: string
+        birthDay: Date
+        phoneNumber: number
+        sex: string
+        city: string
+        avatar: string
+    }
+}
+
+export interface ProfileUpdate {
+    firstName: string;
+    lastName: string;
+    phone: number | undefined;
+    address: string;
+    city: string;
+    sex: string;
+    birthDay: Date | undefined;
+    avatar: string | undefined;
+    email: string;
+}

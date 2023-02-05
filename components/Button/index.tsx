@@ -35,7 +35,7 @@ const Button = ({
     <button
       type={submit ? "submit" : "button"}
       onClick={onClick}
-      className={`flex items-center space-x-1 ${
+      className={`flex items-center space-x-2 ${
         loading && "pointer-events-none"
       } ${className}`}
     >

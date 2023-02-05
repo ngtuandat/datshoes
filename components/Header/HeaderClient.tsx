@@ -7,18 +7,26 @@ import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import Logged from "../CheckSign/Logged";
 import Link from "next/link";
+import { getProfile } from "../../services/user";
 
 const HeaderClient = () => {
   const { scrollYProgress } = useScroll();
   const [headerChange, setHeaderChange] = useState("h-[88px]");
   const [name, setName] = useState<string>();
+  const [avatar, setAvatar] = useState<string>();
 
   const token = Cookies.get("token");
+
+  const fetchProfile = async (email: string) => {
+    const res = await getProfile(email);
+    setAvatar(res.data.profile.profile.avatar);
+  };
 
   useEffect(() => {
     if (token) {
       const decoded: any = jwt_decode(token);
-      setName(decoded.firstName + "" + decoded.lastName);
+      setName(decoded.firstName + " " + decoded.lastName);
+      fetchProfile(decoded.email);
     }
   }, [token]);
 
@@ -46,7 +54,7 @@ const HeaderClient = () => {
         </Link>
         <div className="flex items-center space-x-5">
           <NavClient />
-          {name ? <Logged name={name} /> : <NoSign />}
+          {name ? <Logged name={name} avatar={avatar} /> : <NoSign />}
         </div>
       </div>
       <motion.div

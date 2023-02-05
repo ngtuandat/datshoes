@@ -7,11 +7,10 @@ import ProductContent from "../../containers/ProductContent";
 const Product = () => {
   return (
     <>
-      <CustomHeader>
+      <CustomHeader title='Sản phẩm'>
         <title>Sản phẩm | Cuc Shoes</title>
       </CustomHeader>
       <div className="max-w-[1200px] mx-auto text-white">
-        <h1 className="text-2xl font-bold">Sản phẩm</h1>
         <FilterContent />
         <ProductContent />
       </div>

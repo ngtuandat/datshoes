@@ -1,6 +1,6 @@
 export interface SortOption {
-    name: string;
-    value: string;
+    name: string
+    value: string
 }
 
 export interface ProductProps {
@@ -24,8 +24,16 @@ export interface ListProduct {
     name: string
     price: number
     size: number[]
-    createdAt?: string;
+    createdAt?: string
     gender: string
+    review: ListReview[]
+}
+
+export interface ListReview {
+    content: string
+    createdAt: string
+    nameUser: string
+    rating: number
 }
 
 export interface ProductValidator {
@@ -34,4 +42,44 @@ export interface ProductValidator {
     img: string
     size: string
     price: string
+}
+
+export interface CommentReview {
+    idProduct: string | string[] | undefined
+    rating: number | undefined
+    name: string
+    content: string
+}
+
+export interface ProductBuy {
+    idUser: string;
+    id: string | undefined;
+    name: string | undefined;
+    size: number | undefined;
+    price: number | undefined;
+    color: string;
+    quantity: number;
+    image: string | undefined;
+}
+
+export interface RatingStarProps {
+    star: number,
+    total: number
+}
+
+export interface listProductBuyProps {
+    colorProd: string
+    idProd: string
+    imageProd: string
+    nameProd: string
+    priceProd: number
+    quantityProd: number
+    sizeProd: number
+    idProd: string
+    userId: string
+}
+
+export interface IdProdCart {
+    idProd: string
+    idUser: string
 }

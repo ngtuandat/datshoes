@@ -45,7 +45,7 @@ const color = [
 
 interface ProductUploadProps {
   productEdit?: ListProduct;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
   const [dfCheck, setDfCheck] = useState("kids");
@@ -59,6 +59,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
   const [loadingUploadFiles, setLoadingUploadFiles] = useState(false);
   const [nameProduct, setNameProduct] = useState<string>("");
   const [descProduct, setDescProduct] = useState<string>("");
+  const [descProductEdit, setDescProductEdit] = useState<string>("");
   const [idProductEdit, setIdProductEdit] = useState<string>("");
   const [priceProduct, setPriceProduct] = useState<number>(0);
   const [validatorMess, setValidatorMess] = useState<ProductValidator>();
@@ -196,7 +197,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
           const res = await UpdateProduct(product);
           if (res.status === 200) {
             toast.success("Cập nhật thành công!");
-            setOpen(false);
+            if (setOpen) setOpen(false);
           }
         } else {
           const res = await CreateProduct(product);
@@ -219,7 +220,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
       setPreview(productEdit.listImage);
       setListImage(productEdit.listImage);
       setNameProduct(productEdit.name);
-      setDescProduct(productEdit.description);
+      setDescProductEdit(productEdit.description);
       setPriceProduct(productEdit.price);
       setIdProductEdit(productEdit.id);
     }
@@ -257,9 +258,10 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
             <span className="text-sm font-semibold text-[rgb(145,158,171)]">
               Description
             </span>
+
             <TipTap
               validator={validatorMess?.desc}
-              descValue={descProduct}
+              descValue={descProductEdit}
               setDesc={setDescProduct}
             />
           </div>

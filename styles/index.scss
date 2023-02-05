@@ -10,11 +10,15 @@
 @import 'swiper/css/scrollbar';
 @import './components/tiptap.scss';
 @import './scrollbar/index.scss';
+@import './pages/profile.scss';
 
 
 * {
     scroll-behavior: smooth;
     outline: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 html {
@@ -31,3 +35,6 @@ html {
     background: rgb(0, 171, 85); 
   }
 
+.mdl-js {
+  padding: 0 !important;
+}

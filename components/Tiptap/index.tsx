@@ -189,7 +189,7 @@ const TipTap = ({
   setDesc,
 }: {
   validator: string | undefined;
-  descValue: string;
+  descValue?: string;
   setDesc: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const editor = useEditor(

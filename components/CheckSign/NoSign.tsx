@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { ReactElement } from "react";
 
 const NoSign = () => {
+  const router = useRouter();
   return (
     <div className="flex space-x-2 items-center">
       <Link href="/sign-in">

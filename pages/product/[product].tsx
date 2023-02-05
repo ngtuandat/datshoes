@@ -1,4 +1,10 @@
-import React, { Fragment, ReactElement, useState } from "react";
+import React, {
+  Fragment,
+  ReactElement,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from "react";
 import { CustomHeader } from "../../components/Header/CustomHeader";
 import MainClient from "../../components/Layouts/MainClient";
 import { BsCheck } from "react-icons/bs";
@@ -10,23 +16,71 @@ import {
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper";
-import SwiperClass from "swiper/types/swiper-class";
+import { useRouter } from "next/dist/client/router";
+import {
+  getDetailProduct,
+  getProductCart,
+  getRatingStarProd,
+} from "../../services/product";
+import { ListProduct, RatingStarProps } from "./../../interfaces/product.d";
+import RatingStar from "../../components/Rating/RatingStar";
+import RatingBar from "../../components/Rating/RatingBar";
+import { TiStarFullOutline } from "react-icons/ti";
+import { FaPencilAlt } from "react-icons/fa";
+import Modal from "../../components/Modal";
+import LetterAvatar from "../../components/LetterAvatar";
+import { addToCart } from "./../../services/product/index";
+import Review from "../../containers/Review";
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 
-const productDetail = {
-  images: [
-    "https://api-prod-minimal-v4.vercel.app/assets/images/products/product_3.jpg",
-    "https://api-prod-minimal-v4.vercel.app/assets/images/products/product_4.jpg",
-  ],
-  name: "Relaxed Adjustable Strap Slingback Sandal",
-  price: 100000,
-  color: ["red", "blue"],
-  size: [39, 40, 41, 42, 43],
-};
+const tabs = ["description", "review"];
 
 const ProductDetail = () => {
   const [colorCheck, setColorCheck] = useState<string>("");
   const [sizeValue, setSizeValue] = useState<number>();
   const [quantity, setQuantity] = useState<number>(1);
+  const [dataProduct, setDataProduct] = useState<ListProduct>();
+  const [selectTab, setSelectTab] = useState("description");
+  const [offsetLeftLine, setOffsetLeftLine] = useState<string>("-9px");
+  const [offsetWidthLine, setOffsetWidthLine] = useState<string>("76px");
+  const [openWriteReview, setOpenWriteReview] = useState(false);
+  const [ratingStar, setRatingStar] = useState<RatingStarProps[]>([]);
+  const [averageStar, setAverageStar] = useState<number>();
+
+  const router = useRouter();
+  const token = Cookies.get("token");
+
+  const fetchDetailProduct = async (id: string | string[]) => {
+    const res = await getDetailProduct(String(id));
+    setDataProduct(res.data.detail);
+    setSizeValue(res.data.detail.size[0]);
+  };
+
+  const fetchCart = async (id: string) => {
+    const res = await getProductCart(id);
+    if (res.data.count) {
+      sessionStorage.setItem("count", res.data.count);
+    }
+  };
+
+  const fetchRating = async (id: string) => {
+    const res = await getRatingStarProd(id);
+    setRatingStar(res.data.rating);
+    setAverageStar(res.data.average);
+  };
+
+  useEffect(() => {
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      fetchCart(decoded.id);
+    }
+    if (router.query.product) {
+      fetchDetailProduct(router.query.product);
+    }
+    fetchRating(String(router.query.product));
+  }, [router.query.product, openWriteReview]);
+
   const handleMinus = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -35,15 +89,41 @@ const ProductDetail = () => {
     }
   };
 
-  const a = 3;
+  const handleSelectTab = (e: any, tab: string) => {
+    setOffsetLeftLine(String(Number(e.target.offsetLeft) - 33) + "px");
+    setOffsetWidthLine(String(e.target.offsetWidth) + "px");
+    setSelectTab(tab);
+    fetchRating(String(router.query.product));
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      if (token) {
+        const decoded: any = jwt_decode(token);
+        const productBuy = {
+          idUser: String(decoded.id),
+          id: dataProduct?.id,
+          name: dataProduct?.name,
+          size: sizeValue,
+          price: dataProduct?.price,
+          color: colorCheck,
+          quantity: quantity,
+          image: dataProduct?.listImage[0],
+        };
+        await addToCart(productBuy);
+        fetchCart(decoded.id);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
-      <CustomHeader>
-        <title>Details</title>
+      <CustomHeader title="Chi tiết sản phẩm">
+        <title>{dataProduct?.name} | Cuc Shoes</title>
       </CustomHeader>
-      <div className="max-w-[1200px] mx-auto text-white">
-        <h1 className="text-2xl font-bold mb-10">Chi tiết sản phẩm</h1>
+      <section className="text-white">
         <div className="grid grid-cols-12">
           <div className="col-span-7">
             <div className="h-full">
@@ -54,22 +134,23 @@ const ProductDetail = () => {
                 grabCursor
                 className="select-none product-images-slide rounded-xl"
               >
-                {productDetail.images.map((image, idx) => (
-                  <SwiperSlide key={idx}>
-                    <img src={image} alt="" />
-                  </SwiperSlide>
-                ))}
+                {dataProduct &&
+                  dataProduct.listImage.map((image, idx) => (
+                    <SwiperSlide key={idx}>
+                      <img src={image} alt="" />
+                    </SwiperSlide>
+                  ))}
               </Swiper>
 
-              <Swiper
+              {/* <Swiper
                 loop
                 spaceBetween={10}
-                slidesPerView={a}
+                slidesPerView={dataProduct?.listImage.length}
                 modules={[Navigation, Thumbs]}
                 className="select-none product-images-slide-thumbs max-w-sm mx-auto mt-6"
               >
                 <div>
-                  {productDetail.images.map((image, idx) => (
+                  {dataProduct?.listImage.map((image, idx) => (
                     <SwiperSlide key={idx}>
                       <img
                         className="cursor-pointer rounded-xl object-cover"
@@ -79,14 +160,14 @@ const ProductDetail = () => {
                     </SwiperSlide>
                   ))}
                 </div>
-              </Swiper>
+              </Swiper> */}
             </div>
           </div>
           <div className="px-10 pt-8 col-span-5 space-y-5">
             <div className="space-y-3">
-              <h2 className="text-2xl font-bold">{productDetail.name}</h2>
+              <h2 className="text-2xl font-bold">{dataProduct?.name}</h2>
               <p className="text-xl font-semibold">
-                {productDetail.price.toLocaleString("vi")} đồng
+                {dataProduct?.price.toLocaleString("vi")} đồng
               </p>
             </div>
             <div className="border-y border-dashed border-[rgba(145,158,171,0.24)]">
@@ -94,7 +175,7 @@ const ProductDetail = () => {
                 <div className="flex items-center justify-between h-10">
                   <p className="text-base font-semibold">Color</p>
                   <div className="flex items-center space-x-2">
-                    {productDetail.color.map((color, idx) => (
+                    {dataProduct?.color.map((color, idx) => (
                       <div key={idx}>
                         <div
                           onClick={() => setColorCheck(color)}
@@ -148,7 +229,7 @@ const ProductDetail = () => {
                     >
                       <Menu.Items className="absolute left-0 p-2 z-10 mt-2 w-20 origin-top-left rounded-md bg-[rgb(33,43,54)] shadow-2xl focus:outline-none">
                         <div className="py-1">
-                          {productDetail.size.map((option, idx) => (
+                          {dataProduct?.size.map((option, idx) => (
                             <Menu.Item key={idx}>
                               {({ active }) => (
                                 <p
@@ -187,7 +268,10 @@ const ProductDetail = () => {
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <button className="flex items-center space-x-1 px-5 py-3 text-base font-bold rounded-lg text-[rgb(33,43,54)] bg-[rgb(255,171,0)] hover:shadow-[0_15px_20px_-15px_rgb(255,171,0)]">
+              <button
+                onClick={handleAddToCart}
+                className="flex items-center space-x-1 px-5 py-3 text-base font-bold rounded-lg text-[rgb(33,43,54)] bg-[rgb(255,171,0)] hover:shadow-[0_15px_20px_-15px_rgb(255,171,0)]"
+              >
                 <MdOutlineAddShoppingCart />
                 <p>Thêm vào giỏ hàng</p>
               </button>
@@ -197,7 +281,119 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-      </div>
+        <div className="bg-[rgb(33,43,54)] mt-20 rounded-xl overflow-hidden">
+          <div className="bg-[rgba(145,158,171,0.16)] relative min-h-[48px] flex items-center space-x-8 px-6 text-sm font-semibold">
+            {tabs.map((item, idx) => (
+              <button
+                key={idx}
+                onClick={(e) => handleSelectTab(e, item)}
+                className={`first-letter:uppercase ${
+                  selectTab === item ? "" : "text-[rgb(145,158,171)]"
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+            <hr
+              className="absolute h-0.5 rounded-md bg-green-500 top-11 transition-all duration-300 border-none outline-none"
+              style={{ left: offsetLeftLine, width: offsetWidthLine }}
+            />
+          </div>
+          <div>
+            {dataProduct && selectTab === "description" && (
+              <div
+                className="p-6"
+                dangerouslySetInnerHTML={{ __html: dataProduct?.description }}
+              />
+            )}
+            {dataProduct && selectTab === "review" && (
+              <div>
+                <div className="grid grid-cols-3 border-b border-[rgba(145,158,171,0.24)]">
+                  <div className="col-span-1 flex flex-col justify-center items-center space-y-2">
+                    <p className="text-[rgb(145,158,171)] text-base font-semibold">
+                      Đánh giá trung bình
+                    </p>
+                    <span className="text-[44px] font-extrabold">
+                      {averageStar ? averageStar.toFixed(1) : 5}/5
+                    </span>
+                    <div className="text-2xl">
+                      <RatingStar
+                        star={averageStar ? Number(averageStar.toFixed(1)) : 5}
+                      />
+                    </div>
+                    <span className="text-[rgb(145,158,171)] text-xs">
+                      {dataProduct.review.length} đánh giá
+                    </span>
+                  </div>
+                  <div className="col-span-1 px-6 py-10 border-x border-[rgba(145,158,171,0.24)]">
+                    {ratingStar.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center space-x-4 mt-3"
+                      >
+                        <p className="flex items-center font-semibold min-w-[30px]">
+                          <span className="text-sm">{item.star}</span>
+                          <TiStarFullOutline className="text-yellow-500 ml-1" />
+                        </p>
+                        <RatingBar
+                          percent={
+                            (item.total / dataProduct.review.length) * 100
+                          }
+                        />
+                        <p className="text-sm text-[rgb(145,158,171)] min-w-[80px]">
+                          {item.total} đánh giá
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <button
+                      onClick={() => setOpenWriteReview(true)}
+                      className="flex items-center space-x-2 font-bold cursor-pointer border px-4 py-3 rounded-md border-[rgba(145,158,171,0.32)] hover:bg-[rgba(145,158,171,0.08)] hover:border-white"
+                    >
+                      <FaPencilAlt />
+                      <p>Đánh giá của bạn</p>
+                    </button>
+                    <Modal
+                      title="Thêm đánh giá"
+                      open={openWriteReview}
+                      setOpen={setOpenWriteReview}
+                    >
+                      <Review setOpen={setOpenWriteReview} />
+                    </Modal>
+                  </div>
+                </div>
+                <div className="p-10">
+                  {dataProduct.review.map((item, idx) => (
+                    <div className="flex first:mt-0 mt-10 space-x-5" key={idx}>
+                      <div className="flex flex-col items-center text-center">
+                        <LetterAvatar
+                          className="w-14 h-14"
+                          name={item.nameUser}
+                        />
+                        <p className="flex flex-col mt-4">
+                          <span className="text-sm font-semibold">
+                            {item.nameUser}
+                          </span>
+                          <span className="text-xs text-[rgb(145,158,171)] font-normal mt-1">
+                            {new Date(item.createdAt).toDateString()}
+                          </span>
+                        </p>
+                      </div>
+                      <div>
+                        <RatingStar className="text-lg" star={item.rating} />
+                        <span className="block text-base font-medium mt-2">
+                          {item.content}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
     </>
   );
 };

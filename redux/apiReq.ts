@@ -1,6 +1,7 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { NextRouter } from "next/router";
 import { Dispatch } from "react";
+import { getProductCart } from "../services/product";
 import { newUser, User } from './../interfaces/user.d';
 import { CreateAcc, LoginUser } from './../services/user/index';
 
@@ -32,7 +33,7 @@ export const loginUserCheck = async (user: User, dispatch: Dispatch<AnyAction>, 
         if (res.data.admin === true) {
             router.push('/dashboard')
         } else {
-            router.push('/')
+            router.back()
         }
     } catch (error) {
         dispatch(loginFailed(error))

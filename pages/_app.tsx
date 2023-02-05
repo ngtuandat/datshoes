@@ -7,7 +7,6 @@ import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import { ToastContainer } from "react-toastify";
-import { AnimatePresence } from "framer-motion";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

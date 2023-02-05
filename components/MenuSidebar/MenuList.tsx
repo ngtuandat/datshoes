@@ -30,7 +30,7 @@ const menuList = [
 
 const ulVariant = {
   open: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
   },
   closed: {
     transition: { staggerChildren: 0.05, staggerDirection: -1 },
@@ -55,7 +55,7 @@ const liVariant = {
 };
 const MenuList = () => {
   return (
-    <motion.ul variants={ulVariant} className="p-5 space-y-5">
+    <motion.ul variants={ulVariant} className="p-5 list-none space-y-5">
       {menuList.map((item, index) => (
         <motion.li variants={liVariant} key={index} className="space-y-3">
           <h2 className="text-xs font-semibold text-[rgb(145,158,171)]">
