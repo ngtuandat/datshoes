@@ -17,7 +17,7 @@ import { ListMenuHover } from "../../interfaces/main";
 const menuAdmin = [
   {
     label: "Thống Kê",
-    href: "/statistics",
+    href: "/dashboard",
     icon: <SiGoogleanalytics />,
   },
 

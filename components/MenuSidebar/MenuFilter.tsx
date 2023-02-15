@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { BsCheck } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
 import { ImBin } from "react-icons/im";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 const filterCheck = [
   {
@@ -72,27 +73,95 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
   const [valueCheck, setValueCheck] = useState<string[]>([]);
   const [dfCheck, setDfCheck] = useState("all");
   const [colorCheck, setColorCheck] = useState<string[]>([]);
+  const [minPrice, setMinPrice] = useState<number>();
+  const [maxPrice, setMaxPrice] = useState<number>();
 
+  const router = useRouter();
   const handleCheckBox = (value: string) => {
     if (!valueCheck.includes(value)) {
       setValueCheck([...valueCheck, value]);
+      const query = {
+        ...router.query,
+        gender: [...valueCheck, value].join("-"),
+      };
+      router.push({ pathname: "/product", query }, undefined, {
+        shallow: true,
+      });
     } else {
       const res = valueCheck.filter((item) => item !== value);
       setValueCheck(res);
+      const query = { ...router.query, gender: res.join("-") };
+      router.push({ pathname: "/product", query }, undefined, {
+        shallow: true,
+      });
     }
   };
 
   const handleColorCheck = (color: string) => {
     if (!colorCheck.includes(color)) {
       setColorCheck([...colorCheck, color]);
+      const query = {
+        ...router.query,
+        color: [...colorCheck, color].join("-"),
+      };
+      router.push({ pathname: "/product", query }, undefined, {
+        shallow: true,
+      });
     } else {
       const res = colorCheck.filter((item) => item !== color);
       setColorCheck(res);
+      const query = { ...router.query, color: res.join("-") };
+      router.push({ pathname: "/product", query }, undefined, {
+        shallow: true,
+      });
     }
   };
   const handleClose = () => {
     setOpen(false);
     setTimeout;
+  };
+
+  const handleCheckCategory = (value: string) => {
+    setDfCheck(value);
+    const query = { ...router.query, category: value };
+
+    router.push({ pathname: "/product", query }, undefined, {
+      shallow: true,
+    });
+  };
+
+  const handleMinPrice = (value: number) => {
+    setMinPrice(value);
+    const query = { ...router.query, min: value };
+
+    router.push({ pathname: "/product", query }, undefined, {
+      shallow: true,
+    });
+  };
+
+  const handleMaxPrice = (value: number) => {
+    setMaxPrice(value);
+    const query = { ...router.query, max: value };
+
+    router.push({ pathname: "/product", query }, undefined, {
+      shallow: true,
+    });
+  };
+
+  const handleClearFilter = () => {
+    setValueCheck([]);
+    setColorCheck([]);
+    setDfCheck("all");
+    setMinPrice(Number(""));
+    setMaxPrice(Number(""));
+    const query = {
+      page: router.query.page,
+      sort: router.query.sort,
+      query: router.query.query,
+    };
+    router.push({ pathname: "/product", query }, undefined, {
+      shallow: true,
+    });
   };
 
   return (
@@ -176,7 +245,7 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
                       id={`filter-mobile-${section.id}-${optionIdx}`}
                       name={`${section.id}[]`}
                       defaultValue={option.value}
-                      onChange={() => setDfCheck(option.value)}
+                      onChange={() => handleCheckCategory(option.value)}
                       type="radio"
                       className={`w-5 h-5 transition-all appearance-none border-2 group-hover:border-green-400 border-gray-500 rounded-full cursor-pointer ${
                         dfCheck === option.value ? "border-green-500" : ""
@@ -240,6 +309,8 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
                   type="number"
                   className="bg-[rgba(145,158,171,0.12)] p-0.5 pl-1 text-opacity-80 rounded-md outline-none border-none w-1/2"
                   placeholder="0"
+                  value={minPrice}
+                  onChange={(e) => handleMinPrice(e.target.valueAsNumber)}
                 />
               </div>
               <div className="flex space-x-2 items-center">
@@ -250,6 +321,8 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
                   type="number"
                   className="bg-[rgba(145,158,171,0.12)] p-0.5 pl-1 text-opacity-80 rounded-md outline-none border-none w-1/2"
                   placeholder="9999..."
+                  value={maxPrice}
+                  onChange={(e) => handleMaxPrice(e.target.valueAsNumber)}
                 />
               </div>
             </div>
@@ -257,7 +330,10 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
         </div>
 
         <div className="absolute bottom-0 right-0 left-0 w-full p-5">
-          <div className="flex justify-center py-3 px-5 border border-[rgba(145,158,171,0.24)] space-x-1 cursor-pointer select-none rounded-lg items-center">
+          <div
+            onClick={handleClearFilter}
+            className="flex justify-center py-3 px-5 border border-[rgba(145,158,171,0.24)] space-x-1 cursor-pointer select-none rounded-lg items-center"
+          >
             <ImBin />
             <p>Clear</p>
           </div>

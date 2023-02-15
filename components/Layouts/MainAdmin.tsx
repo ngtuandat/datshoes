@@ -63,7 +63,11 @@ const MainAdmin = ({ children }: ChildrenProps) => {
           </button>
           <NavAdmin zoomOutMenu={zoomOutMenu} />
         </motion.nav>
-        <main className="px-10 pt-20 flex-1 min-h-screen max-w-[1200px] mx-auto pb-10">
+        <main
+          className={`px-6 pt-24 flex-1 min-h-screen ${
+            zoomOutMenu ? "max-w-[1356px]" : "max-w-[1200px]"
+          } mx-auto pb-10 transition-all`}
+        >
           {children}
         </main>
       </div>

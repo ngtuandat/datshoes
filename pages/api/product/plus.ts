@@ -17,7 +17,8 @@ async function handlePlus(res: NextApiResponse, product: IdProdCart) {
         const productUpdate = await prisma.cart.findFirst({
             where: {
                 idProd: product.idProd,
-                userId: product.idUser
+                userId: product.idUser,
+                bought: false
             }
         })
         if (productUpdate) {

@@ -49,13 +49,59 @@ async function createProduct(product: ProductProps, res: NextApiResponse) {
 }
 
 async function getProduct(res: NextApiResponse, query: GetUsersQuery) {
+    const color = (query.color?.split('-'))?.map((item) => item)
+
+    const colorFull = [
+        'black', 'green', 'pink', 'white', 'red', 'blue', 'yellow', 'lime'];
+    const genderFull = ['men', 'women', 'kids']
+    const order = query.sort === 'desc-date' ? { createdAt: 'desc' } : query.sort === 'desc-price' ? { price: 'desc' } : query.sort === 'asc-price' ? { price: 'asc' } : { createdAt: 'asc' }
+    const category = query.category === 'all' ? { in: ['Shoes', 'Accessories'] } : { contains: query.category, mode: 'insensitive' }
     try {
         const getProd = await prisma.product.findMany({
             skip: (Number(query.page || 1) - 1) * 6,
             take: Number(query.limit),
+            where: {
+                name: {
+                    contains: query.query,
+                    mode: 'insensitive'
+                },
+                gender: {
+                    in: query.gender ? query.gender?.split('-') : genderFull,
+                },
+                color: {
+                    hasSome: query.color ? color : colorFull,
+                },
+                category: Object(category),
+                price: {
+                    gt: query.min ? Number(query.min) : 0,
+                    lt: query.max ? Number(query.max) : 999999999
+                }
+            },
+            orderBy: Object(order)
         });
 
-        const total = await prisma.product.count();
+        const total = await prisma.product.count({
+            where: {
+                name: {
+                    contains: query.query,
+                    mode: 'insensitive'
+                },
+                gender: {
+                    in: query.gender ? query.gender?.split('-') : genderFull,
+                },
+                color: {
+                    hasSome: query.color ? color : colorFull,
+                },
+                category: {
+                    contains: query.category,
+                    mode: 'insensitive'
+                },
+                price: {
+                    gt: query.min ? Number(query.min) : 0,
+                    lt: query.max ? Number(query.max) : 999999999
+                }
+            },
+        });
 
         res.status(200).json({ product: getProd, total });
     } catch (error) {

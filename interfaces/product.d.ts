@@ -83,3 +83,29 @@ export interface IdProdCart {
     idProd: string
     idUser: string
 }
+
+export interface ChooseAddress {
+    name: string | undefined;
+    address: string;
+    phone: number | undefined;
+}
+
+export interface ValidatorAddress {
+    fullName: string;
+    address: string;
+    phoneNumber: number;
+    city: string;
+}
+
+export interface PurchaseProps {
+    colorProd: string
+    idProd: string
+    imageProd: string
+    nameProd: string
+    priceProd: number
+    quantityProd: number
+    sizeProd: number
+    id: string
+    userId: string
+    boughtAt: string
+}

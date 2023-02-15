@@ -19,9 +19,11 @@ const HeaderClient = () => {
 
   const fetchProfile = async (email: string) => {
     const res = await getProfile(email);
-    setAvatar(res.data.profile.profile.avatar);
+    if (res.data.profile) {
+      setAvatar(res.data.profile?.profile?.avatar);
+      setName(res.data.profile?.firstName + " " + res.data.profile?.lastName);
+    }
   };
-
   useEffect(() => {
     if (token) {
       const decoded: any = jwt_decode(token);

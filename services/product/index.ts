@@ -11,6 +11,10 @@ export const getAllProducts = async (query: GetUsersQuery) => {
     return await axios.get("/api/product", { params: query });
 };
 
+export const getAllProductsManage = async (query: GetUsersQuery) => {
+    return await axios.get("/api/product/manage", { params: query });
+};
+
 export const UpdateProduct = async (product: ProductProps) => {
     return await axios.put('/api/product', { product })
 };
@@ -49,4 +53,16 @@ export const miniusQuantityCart = async (product: IdProdCart) => {
 
 export const deleteProdCart = async (productDelete: IdProdCart) => {
     return await axios.delete('/api/product/cart', { data: { productDelete } })
+}
+
+export const boughtProduct = async (id: string) => {
+    return await axios.put('/api/product/cart', { id })
+}
+
+export const getPurchaseOrder = async (id: string) => {
+    return await axios.get('/api/product/purchase', { params: { id } })
+}
+
+export const deletePurchase = async (id: string) => {
+    return await axios.delete('/api/product/purchase', { data: { id } })
 }

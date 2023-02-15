@@ -20,6 +20,11 @@ export default function Cart(
         const productDl = req.body.productDelete
         deleteProd(res, productDl)
     }
+
+    if (req.method === 'PUT') {
+        const id = req.body.id
+        updateBoughtProd(res, id)
+    }
 }
 
 async function addProductToCart(res: NextApiResponse, product: ProductBuy) {
@@ -28,7 +33,8 @@ async function addProductToCart(res: NextApiResponse, product: ProductBuy) {
             where: {
                 idProd: product.id,
                 AND: {
-                    userId: product.idUser
+                    userId: product.idUser,
+                    bought: false
                 }
             }
         })
@@ -66,7 +72,8 @@ async function getListProductCart(res: NextApiResponse, id: string) {
     try {
         const result = await prisma.cart.findMany({
             where: {
-                userId: id
+                userId: id,
+                bought: false
             },
             orderBy: {
                 createdAt: 'asc'
@@ -74,7 +81,8 @@ async function getListProductCart(res: NextApiResponse, id: string) {
         })
         const count = await prisma.cart.count({
             where: {
-                userId: id
+                userId: id,
+                bought: false
             }
         })
         res.status(200).json({ result, count })
@@ -88,7 +96,8 @@ async function deleteProd(res: NextApiResponse, product: IdProdCart) {
         const productDelete = await prisma.cart.findFirst({
             where: {
                 idProd: product.idProd,
-                userId: product.idUser
+                userId: product.idUser,
+                bought: false
             }
         })
         if (productDelete) {
@@ -100,6 +109,22 @@ async function deleteProd(res: NextApiResponse, product: IdProdCart) {
             res.status(200).json('Delete Successful')
         }
         res.status(404).json('Not Found')
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
+async function updateBoughtProd(res: NextApiResponse, id: string) {
+    try {
+        await prisma.cart.updateMany({
+            where: {
+                userId: id
+            },
+            data: {
+                bought: true,
+            }
+        })
+        res.status(200).json('Bought Successful')
     } catch (error) {
         res.status(500).json(error)
     }

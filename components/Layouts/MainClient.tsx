@@ -4,6 +4,7 @@ import MenuFixed from "../MenuSidebar/MenuFixed";
 import HeaderClient from "../Header/HeaderClient";
 import Cart from "../MenuSidebar/Cart";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const MainClient = ({ children }: ChildrenProps) => {
   const router = useRouter();

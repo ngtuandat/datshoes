@@ -13,6 +13,13 @@ export interface User {
 export interface GetUsersQuery {
     page?: number;
     limit?: number;
+    query?: string;
+    color?: string;
+    gender?: string;
+    category?: string;
+    min?: number;
+    max?: number;
+    sort?: string
 }
 
 interface ListUser {

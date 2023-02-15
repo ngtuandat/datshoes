@@ -182,6 +182,9 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
         priceProduct,
         sizeSelected.length > 0)
       ) {
+        const colorLower = colorSelected.map((element) => {
+          return element.toLowerCase();
+        });
         const product = {
           id: idProductEdit,
           name: nameProduct,
@@ -189,7 +192,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
           image: listImage,
           gender: dfCheck,
           category: categoryValue,
-          color: colorSelected,
+          color: colorLower,
           price: priceProduct,
           size: sizeSelected,
         };
@@ -375,6 +378,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
               selectValue={categoryValue}
               setSelectValue={setCategoryValue}
               classNameMenu="py-3"
+              classNameTitle="text-xs"
               title="Category"
             />
             <div>

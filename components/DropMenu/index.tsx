@@ -7,13 +7,17 @@ interface DropValueProps {
   selectValue: any;
   setSelectValue: any;
   classNameMenu?: string;
+  classNameTitle?: string;
   title?: string;
+  classDrop?:string
 }
 const DropMenu = ({
   listMenu,
   selectValue,
   setSelectValue,
   classNameMenu,
+  classNameTitle,
+  classDrop,
   title,
 }: DropValueProps) => {
   return (
@@ -22,7 +26,9 @@ const DropMenu = ({
       className="relative border border-[rgba(145,158,171,0.32)] hover:border-white rounded-lg"
     >
       {title && (
-        <p className="absolute px-1 text-[rgb(99,115,129)] -top-2 left-3 text-xs bg-[rgb(33,43,54)] cursor-text ">
+        <p
+          className={`absolute px-1 text-[rgb(99,115,129)] -top-2 left-3 bg-[rgb(33,43,54)] cursor-text ${classNameTitle}`}
+        >
           {title}
         </p>
       )}
@@ -41,7 +47,10 @@ const DropMenu = ({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute left-0 p-2 z-[2900] mt-2 w-full origin-top-left rounded-md bg-[rgb(26,34,43)] shadow-2xl focus:outline-none">
+        <Menu.Items
+          id="drop-scroll"
+          className={`absolute overflow-y-hidden transition-all duration-200 hover:overflow-y-auto left-0 p-2 z-[2900] mt-2 w-full origin-top-left rounded-md bg-[rgb(26,34,43)] shadow-2xl focus:outline-none ${classDrop}`}
+        >
           <div className="py-1">
             {listMenu.map((option, idx) => (
               <Menu.Item key={idx}>

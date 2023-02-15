@@ -55,6 +55,7 @@ const ProductDetail = () => {
     const res = await getDetailProduct(String(id));
     setDataProduct(res.data.detail);
     setSizeValue(res.data.detail.size[0]);
+    setColorCheck(res.data.detail.color[0]);
   };
 
   const fetchCart = async (id: string) => {
@@ -118,12 +119,35 @@ const ProductDetail = () => {
     }
   };
 
+  const handleBuyNow = async () => {
+    try {
+      if (token) {
+        const decoded: any = jwt_decode(token);
+        const productBuy = {
+          idUser: String(decoded.id),
+          id: dataProduct?.id,
+          name: dataProduct?.name,
+          size: sizeValue,
+          price: dataProduct?.price,
+          color: colorCheck,
+          quantity: quantity,
+          image: dataProduct?.listImage[0],
+        };
+        await addToCart(productBuy);
+        fetchCart(decoded.id);
+        router.push("/checkout");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <CustomHeader title="Chi tiết sản phẩm">
         <title>{dataProduct?.name} | Cuc Shoes</title>
       </CustomHeader>
-      <section className="text-white">
+      <section className="text-white pb-10">
         <div className="grid grid-cols-12">
           <div className="col-span-7">
             <div className="h-full">
@@ -275,7 +299,10 @@ const ProductDetail = () => {
                 <MdOutlineAddShoppingCart />
                 <p>Thêm vào giỏ hàng</p>
               </button>
-              <button className="flex-1 px-5 py-3 text-base font-bold rounded-lg bg-green-500  hover:shadow-[0_15px_20px_-15px] hover:shadow-green-500">
+              <button
+                onClick={handleBuyNow}
+                className="flex-1 px-5 py-3 text-base font-bold rounded-lg bg-green-500  hover:shadow-[0_15px_20px_-15px] hover:shadow-green-500"
+              >
                 <p>Mua ngay</p>
               </button>
             </div>
