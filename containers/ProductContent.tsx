@@ -20,6 +20,11 @@ const ProductContent = () => {
   const router = useRouter();
 
   const fetchProducts = async (query?: GetUsersQuery): Promise<void> => {
+    console.log({
+      ...query,
+      limit: limitValue,
+    });
+
     try {
       const { data } = await getAllProducts({
         ...query,
@@ -36,7 +41,7 @@ const ProductContent = () => {
 
   const fetchCart = async (id: string) => {
     const res = await getProductCart(id);
-    if(res.data.count) {
+    if (res.data.count) {
       sessionStorage.setItem("count", res.data.count);
     }
   };
@@ -52,18 +57,6 @@ const ProductContent = () => {
       { shallow: true }
     );
   };
-
-  useEffect(() => {
-    router.push(
-      {
-        query: {
-          limit: limitValue,
-        },
-      },
-      undefined,
-      { shallow: true }
-    );
-  }, [limitValue]);
 
   useEffect(() => {
     const query = handleQueryParams(router.query);
@@ -93,41 +86,44 @@ const ProductContent = () => {
   };
   return (
     <>
-      <div className="grid grid-cols-4 gap-6 mb-10">
-        {products &&
-          products.map((product, idx) => (
-            <Link
-              href={`/product/${product.id}`}
-              className="bg-product rounded-lg cursor-pointer"
-              key={idx}
-            >
-              <div className="p-2">
-                <img
-                  className="rounded-lg"
-                  src={product.listImage[0]}
-                  alt={product.name}
-                />
-              </div>
-              <div className="py-6 px-2">
-                <h1 className="text-base font-semibold">{product.name}</h1>
-                <div className="flex items-center justify-between mt-5 px-3">
-                  <div className="flex items-center">
-                    {product.color.map((col, idx) => (
-                      <div
-                        className="h-3 w-3 rounded-full"
-                        key={idx}
-                        style={{ backgroundColor: col }}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-base font-semibold">
-                    {product.price.toLocaleString("vi")} đ
-                  </p>
+      {products && products?.length > 0 ? (
+        <div className="grid grid-cols-4 gap-6 mb-10">
+          {products.map((product, idx) => (
+              <Link
+                href={`/product/${product.id}`}
+                className="bg-product rounded-lg cursor-pointer hover:-translate-y-1 transition-all duration-200"
+                key={idx}
+              >
+                <div className="p-2">
+                  <img
+                    className="rounded-lg"
+                    src={product.listImage[0]}
+                    alt={product.name}
+                  />
                 </div>
-              </div>
-            </Link>
-          ))}
-      </div>
+                <div className="py-6 px-2">
+                  <h1 className="text-base font-semibold">{product.name}</h1>
+                  <div className="flex items-center justify-between mt-5 px-3">
+                    <div className="flex items-center">
+                      {product.color.map((col, idx) => (
+                        <div
+                          className="h-3 w-3 rounded-full"
+                          key={idx}
+                          style={{ backgroundColor: col }}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-base font-semibold">
+                      {product.price.toLocaleString("vi")} đ
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+        </div>
+      ) : (
+        <p className='flex w-full justify-center items-center text-2xl font-bold py-40 opacity-20'>Không có sản phẩm bạn đang tìm!!</p>
+      )}
       <PaginationClient
         current={Number(router.query.page || 1)}
         pageSize={limitValue}

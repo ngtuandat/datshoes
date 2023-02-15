@@ -5,6 +5,8 @@ import { CiSearch } from "react-icons/ci";
 import { motion } from "framer-motion";
 import { Menu, Transition } from "@headlessui/react";
 import MenuFilter from "../components/MenuSidebar/MenuFilter";
+import { SortOption } from "../interfaces/product";
+import { useRouter } from "next/router";
 
 const inputVariant = {
   open: {
@@ -18,8 +20,8 @@ const inputVariant = {
 
 const sortOptions = [
   { name: "Mới nhất", value: "desc-date" },
-  { name: "Giá: Cao-Thấp", value: "desc" },
-  { name: "Giá: Thấp-Cao", value: "asc" },
+  { name: "Giá: Cao-Thấp", value: "desc-price" },
+  { name: "Giá: Thấp-Cao", value: "asc-price" },
 ];
 
 const FilterContent = () => {
@@ -28,10 +30,26 @@ const FilterContent = () => {
   const [sortValue, setSortValue] = useState("desc-date");
   const [sortOption, setSortOption] = useState("Mới nhất");
 
+  const router = useRouter();
+
   const handleSort = (option: SortOption) => {
     setSortOption(option.name);
     setSortValue(option.value);
+    const query = { ...router.query, sort: option.value };
+
+    router.push({ pathname: "/product", query }, undefined, {
+      shallow: true,
+    });
   };
+
+  const handleQuerySearch = (value: string) => {
+    const query = { ...router.query, query: value };
+
+    router.push({ pathname: "/product", query }, undefined, {
+      shallow: true,
+    });
+  };
+
   return (
     <div className="mb-10 flex items-center justify-between mt-10">
       <form className="flex items-center text-xl">
@@ -48,6 +66,7 @@ const FilterContent = () => {
             variants={inputVariant}
             initial="close"
             animate={focused ? "open" : "closed"}
+            onChange={(e) => handleQuerySearch(e.target.value)}
             type="text"
             id="simple-search"
             className="bg-transparent border text-base placeholder:text-[rgb(99,115,129)] border-[rgba(145,158,171,0.32)] outline-none rounded-lg block w-full pl-10 p-2 "

@@ -17,8 +17,16 @@ export function middleware(request: NextRequest) {
         if (pathname.startsWith('/sign-in') && decoded) {
             return NextResponse.redirect(new URL('/', request.url))
         }
+
+        if (pathname.startsWith('/sign-up') && decoded) {
+            return NextResponse.redirect(new URL('/', request.url))
+        }
     } else {
         if (pathname.startsWith('/dashboard')) {
+            return NextResponse.redirect(new URL('/sign-in', request.url))
+        }
+
+        if (pathname.startsWith('/checkout')) {
             return NextResponse.redirect(new URL('/sign-in', request.url))
         }
     }

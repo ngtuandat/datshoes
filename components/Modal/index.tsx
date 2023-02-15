@@ -9,9 +9,10 @@ interface ModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
+  classClose?: string;
 }
 
-const Modal = ({ children, open, setOpen, title }: ModalProps) => {
+const Modal = ({ children, open, setOpen, title, classClose }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
@@ -60,7 +61,7 @@ const Modal = ({ children, open, setOpen, title }: ModalProps) => {
               >
                 <Dialog.Panel className="w-fit h-fit transform overflow-hidden rounded-2xl bg-[rgb(22,28,36)] px-6 py-10 text-left align-middle shadow-xl transition-all">
                   <IoMdClose
-                    className="absolute top-3 right-6 text-white hover:text-red-500 text-xl cursor-pointer"
+                    className={`absolute top-3 right-6 text-white hover:text-red-500 text-xl cursor-pointer ${classClose}`}
                     onClick={closeModal}
                   />
                   {title ? (

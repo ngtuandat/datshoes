@@ -1,13 +1,11 @@
-/* eslint-disable react/no-unescaped-entities */
-import Link from "next/link";
-import React, { SyntheticEvent, useState } from "react";
-import { useRouter } from "next/router";
-import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import Link from "next/dist/client/link";
+import { useRouter } from "next/dist/client/router";
+import { SyntheticEvent, useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { MessValidatorRegis } from "../interfaces/main";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux/es/exports";
-import { registerUser } from "./../redux/apiReq";
+import { registerUser } from "../redux/apiReq";
 
 const Register = () => {
   const [firstName, setFirstName] = useState<string>("");

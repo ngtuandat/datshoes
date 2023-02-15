@@ -6,7 +6,7 @@ import Pagination from "../../../components/Pagination";
 import Table from "../../../components/Table";
 import { useRouter } from "next/dist/client/router";
 import { GetUsersQuery } from "../../../interfaces/user";
-import { deleteProduct, getAllProducts } from "../../../services/product";
+import { deleteProduct, getAllProductsManage } from "../../../services/product";
 import { ListProduct } from "../../../interfaces/product";
 import dateFormat from "dateformat";
 import ModalImg from "../../../components/Modal/ModalImg";
@@ -46,7 +46,7 @@ const ManageProduct = () => {
 
   const fetchProducts = async (query?: GetUsersQuery): Promise<void> => {
     try {
-      const { data } = await getAllProducts({
+      const { data } = await getAllProductsManage({
         ...query,
         limit: limitValue,
       });

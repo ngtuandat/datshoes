@@ -60,6 +60,7 @@ model Cart {
   imageProd    String
   user         User     @relation(fields: [userId], references: [id])
   userId       String
+  bought       Boolean  @default(false)
   createdAt    DateTime @default(now()) @map(name: "created_at")
   updatedAt    DateTime @updatedAt @map(name: "updated_at")
 }

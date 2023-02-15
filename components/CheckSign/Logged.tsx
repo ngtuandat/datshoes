@@ -5,6 +5,7 @@ import { RxExit } from "react-icons/rx";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { BiPurchaseTagAlt } from "react-icons/bi";
 
 interface LoggedProps {
   name: string;
@@ -17,6 +18,11 @@ const menuUser = [
     title: "Trang cá nhân",
     href: "/user/profile",
   },
+  {
+    icon: <BiPurchaseTagAlt />,
+    title: "Đơn mua",
+    href: "/user/purchase",
+  },
 ];
 
 const Logged = ({ name, avatar }: LoggedProps) => {
@@ -25,6 +31,7 @@ const Logged = ({ name, avatar }: LoggedProps) => {
   const handleLogout = () => {
     router.push("/sign-in");
     Cookies.remove("token");
+    sessionStorage.removeItem("count");
   };
 
   return (
@@ -40,22 +47,22 @@ const Logged = ({ name, avatar }: LoggedProps) => {
         </Menu.Button>
         <Menu.Items className="absolute bg-dark shadow-md top-[130%] rounded-lg w-40 p-1">
           {menuUser.map((item, index) => (
-            <Menu.Item as="div" key={index} className="w-full">
+            <Menu.Item key={index}>
               {({ active }) => (
-                <button
-                  className={`${
-                    active
-                      ? "bg-[rgba(0,171,85,0.16)] text-[rgb(91,229,132)] "
-                      : ""
-                  } group flex w-full items-center text-white rounded-md px-2 py-2 space-x-2 text-sm `}
-                >
-                  {item.icon}
-                  <Link href={item.href}>
+                <Link href={item.href}>
+                  <button
+                    className={`${
+                      active
+                        ? "bg-[rgba(0,171,85,0.16)] text-[rgb(91,229,132)] "
+                        : ""
+                    } group flex w-full items-center text-white rounded-md px-2 py-2 space-x-2 text-sm `}
+                  >
+                    {item.icon}
                     <p className="w-full min-w-fit flex justify-start">
                       {item.title}
                     </p>
-                  </Link>
-                </button>
+                  </button>
+                </Link>
               )}
             </Menu.Item>
           ))}

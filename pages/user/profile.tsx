@@ -8,6 +8,8 @@ import { TbCameraPlus } from "react-icons/tb";
 import Radio from "../../components/Radio";
 import { ProfileProps } from "../../interfaces/user";
 import Button from "../../components/Button";
+import DropMenu from "../../components/DropMenu";
+import { useRouter } from "next/router";
 
 const sex = [
   {
@@ -18,6 +20,22 @@ const sex = [
       { value: "khác", label: "Khác" },
     ],
   },
+];
+
+const listCity = [
+  "Hà Nội",
+  "TP.Hồ Chí Minh",
+  "Nghệ An",
+  "Đà Nẵng",
+  "An Giang",
+  "Bà rịa – Vũng tàu",
+  "Bắc Giang",
+  "Bắc Kạn",
+  "Bình Dương",
+  "Hà Nam",
+  "Hải Phòng",
+  "Nam Định",
+  "Quảng Ninh",
 ];
 const Profile = () => {
   const [profileUser, setProfileUser] = useState<ProfileProps>();
@@ -35,6 +53,7 @@ const Profile = () => {
   const [urlAvatar, setUrlAvatar] = useState<string>();
 
   const token = Cookies.get("token");
+  const router = useRouter();
   const fetchProfile = async (email: string) => {
     const res = await getProfile(email);
     setProfileUser(res.data.profile);
@@ -92,6 +111,7 @@ const Profile = () => {
       const decoded: any = jwt_decode(token);
       fetchProfile(decoded.email);
     }
+    router.back();
   };
 
   useEffect(() => {
@@ -114,7 +134,6 @@ const Profile = () => {
       setUrlAvatar(profileUser.profile.avatar);
     }
   }, [profileUser]);
-
 
   return (
     <>
@@ -266,25 +285,15 @@ const Profile = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="relative">
-              <input
-                defaultValue={city && city}
-                onChange={(e) => setCity(e.target.value)}
-                id="city"
-                type="text"
-                className={`peer text-white bg-transparent border w-full px-2.5 py-3 rounded-lg focus:border-white hover:border-white border-color-primary `}
-              />
-              <label
-                className={`absolute text-base px-1 text-white peer-focus:-top-3 peer-focus:left-3 peer-focus:text-sm peer-focus:text-[rgb(99,115,129)] transition-all duration-300 bg-[rgb(33,43,54)] ${
-                  city && city.length
-                    ? "bg-[rgb(33,43,54)] text-[rgb(99,115,129)] left-3 text-sm -top-3"
-                    : "top-3 left-4"
-                } cursor-text `}
-                htmlFor="city"
-              >
-                Thành phố
-              </label>
-            </div>
+            <DropMenu
+              listMenu={listCity}
+              selectValue={city ? city : "Chọn thành phố"}
+              setSelectValue={setCity}
+              classNameTitle="text-sm"
+              classNameMenu="py-3.5"
+              classDrop="h-[200px]"
+              title="Thành phố"
+            />
             <div className="flex items-center space-x-4 mx-1">
               <span className="text-white">Giới tính:</span>
               <Radio

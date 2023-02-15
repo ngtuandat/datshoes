@@ -32,8 +32,10 @@ export const loginUserCheck = async (user: User, dispatch: Dispatch<AnyAction>, 
         dispatch(loginSuccess(res.data))
         if (res.data.admin === true) {
             router.push('/dashboard')
-        } else {
+        } else if (router.pathname !== '/sign-up') {
             router.back()
+        } else {
+            router.push('/')
         }
     } catch (error) {
         dispatch(loginFailed(error))
