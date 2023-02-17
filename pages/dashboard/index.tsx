@@ -14,7 +14,7 @@ const Dashboard = ({ loading }: { loading: Boolean }) => {
       <CustomHeader>
         <title>DashBoard</title>
       </CustomHeader>
-      <div className="grid min-[1200px]:grid-cols-3 grid-cols-1 gap-6">
+      <div className="grid lg:grid-cols-3 grid-cols-1 gap-6">
         <Analysis
           name="Sản phẩm được bán"
           parameter={768}
@@ -35,10 +35,10 @@ const Dashboard = ({ loading }: { loading: Boolean }) => {
         />
       </div>
       <div className="grid grid-cols-3 gap-6 mt-6">
-        <div className="col-span-3 min-[1200px]:col-span-1">
+        <div className="col-span-3 lg:col-span-1">
           <MultipleRadialbars />
         </div>
-        <div className="col-span-3 min-[1200px]:col-span-2">
+        <div className="col-span-3 lg:col-span-2">
           <Area />
         </div>
       </div>
