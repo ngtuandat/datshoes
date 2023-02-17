@@ -14,6 +14,7 @@ import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import Modal from "../../../components/Modal";
 import ProductUpload from "../../../containers/Uploads/ProductUpload";
 import { toast } from "react-toastify";
+import LoadingPage from "../../../components/Loading/LoadingPage";
 
 const columnProduct = [
   "Số thứ tự",
@@ -31,7 +32,7 @@ const columnProduct = [
 ];
 const DEFAULT_PRODUCTS_LIMIT = 5;
 
-const ManageProduct = () => {
+const ManageProduct = ({ loading }: { loading: Boolean }) => {
   const router = useRouter();
   let count = DEFAULT_PRODUCTS_LIMIT * (Number(router.query.page) - 1) + 1;
   const [limitValue, setLimitValue] = useState(DEFAULT_PRODUCTS_LIMIT);
@@ -49,6 +50,7 @@ const ManageProduct = () => {
       const { data } = await getAllProductsManage({
         ...query,
         limit: limitValue,
+        page: query?.page ? query?.page : 1,
       });
 
       setProduct(data.product);
@@ -84,27 +86,8 @@ const ManageProduct = () => {
   }, [limitValue]);
 
   useEffect(() => {
-    const query = handleQueryParams(router.query);
-    fetchProducts(query);
+    fetchProducts(router.query);
   }, [router.query, openEditModal]);
-
-  const handleQueryParams = (query: any) => {
-    const newQuery = query;
-
-    if (!newQuery.page) {
-      query.page = "1";
-      router.push(
-        {
-          query: {
-            ...newQuery,
-          },
-        },
-        undefined,
-        { shallow: true }
-      );
-    }
-    return newQuery;
-  };
 
   const handleModalImgMain = (url: string) => {
     setImgModal(url);
@@ -205,6 +188,7 @@ const ManageProduct = () => {
 
   return (
     <>
+      {loading && <LoadingPage />}
       <ContentHeader title="Quản lý sản phẩm" name="Danh sách sản phẩm" />
       <Card>
         <Card.Content>

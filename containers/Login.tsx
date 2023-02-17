@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-2/5 mx-auto bg-[rgb(22,28,36)] rounded-xl py-8 md:py-16 text-xl px-5 md:px-12 flex flex-col justify-center z-50">
+    <div className="w-[90%] lg:w-2/4 xl:w-2/5 mx-auto bg-[rgb(22,28,36)] rounded-xl py-8 md:py-16 text-xl px-5 md:px-12 flex flex-col justify-center z-50">
       <div>
         <h1 className="text-3xl font-bold text-white text-center">
           Chào mừng trở lại
@@ -101,14 +101,14 @@ const Login = () => {
           <Link href="/">
             <button
               type="button"
-              className="bg-gray-400 flex text-white md:px-14 px-3 w-fit text-lg rounded-full py-2 hover:bg-gray-500 font-semibold"
+              className="bg-gray-400 w-[116px] md:w-[204px] flex items-center justify-center text-white md:px-14 px-3 lg:w-fit text-lg rounded-full py-2 hover:bg-gray-500 font-semibold"
             >
               <p>Trở về</p>
             </button>
           </Link>
           <button
             type="submit"
-            className="bg-[rgb(0,171,85)] px-3 text-white md:px-14 text-lg rounded-full py-2 hover:bg-opacity-75 font-semibold"
+            className="bg-[rgb(0,171,85)] w-[116px] md:w-[204px] px-3 text-white md:px-14 text-lg rounded-full py-2 hover:bg-opacity-75 font-semibold"
           >
             Đăng nhập
           </button>

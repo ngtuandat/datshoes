@@ -20,7 +20,7 @@ const MenuBar = ({ editor }: any) => {
   }
 
   return (
-    <div className="flex items-center space-x-4 text-white border-b border-color-primary p-3">
+    <div className="flex flex-wrap space-y-2 items-center space-x-4 text-white border-b border-color-primary p-3">
       <div className="flex items-center space-x-2 text-sm">
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}

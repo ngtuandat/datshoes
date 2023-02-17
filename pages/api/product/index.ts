@@ -51,6 +51,7 @@ async function createProduct(product: ProductProps, res: NextApiResponse) {
 async function getProduct(res: NextApiResponse, query: GetUsersQuery) {
     const color = (query.color?.split('-'))?.map((item) => item)
 
+
     const colorFull = [
         'black', 'green', 'pink', 'white', 'red', 'blue', 'yellow', 'lime'];
     const genderFull = ['men', 'women', 'kids']

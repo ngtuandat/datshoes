@@ -2,17 +2,19 @@ import React, { useEffect } from "react";
 import { ReactElement } from "react";
 import { CustomHeader } from "../../components/Header/CustomHeader";
 import MainAdmin from "../../components/Layouts/MainAdmin";
+import LoadingPage from "../../components/Loading/LoadingPage";
 import Analysis from "../../containers/Charts/Analysis";
 import Area from "../../containers/Charts/Area";
 import MultipleRadialbars from "../../containers/Charts/MultipleRadialbars";
 
-const Dashboard = () => {
+const Dashboard = ({ loading }: { loading: Boolean }) => {
   return (
     <div className="text-white">
+      {loading && <LoadingPage />}
       <CustomHeader>
         <title>DashBoard</title>
       </CustomHeader>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid min-[1200px]:grid-cols-3 grid-cols-1 gap-6">
         <Analysis
           name="Sản phẩm được bán"
           parameter={768}
@@ -33,10 +35,10 @@ const Dashboard = () => {
         />
       </div>
       <div className="grid grid-cols-3 gap-6 mt-6">
-        <div className="col-span-1">
+        <div className="col-span-3 min-[1200px]:col-span-1">
           <MultipleRadialbars />
         </div>
-        <div className="col-span-2">
+        <div className="col-span-3 min-[1200px]:col-span-2">
           <Area />
         </div>
       </div>

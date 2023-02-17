@@ -79,7 +79,7 @@ const Register = () => {
 
   return (
     <>
-      <div className="bg-[rgb(22,28,36)] w-4/5 xl:w-2/5 shadow-2xl rounded-xl py-8 md:py-12 text-xl mt-8 px-5 md:px-12 flex flex-col justify-center z-50">
+      <div className="bg-[rgb(22,28,36)] w-[90%] lg:w-2/4 xl:w-2/5 shadow-2xl rounded-xl py-8 md:py-12 text-xl mt-8 px-5 md:px-12 flex flex-col justify-center z-50">
         <div className="space-y-2">
           <h1 className=" text-white text-2xl sm:font-medium sm:text-3xl text-center">
             Chào mừng đến với Cuc Shoes

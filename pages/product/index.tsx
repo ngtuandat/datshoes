@@ -1,16 +1,18 @@
 import React, { ReactElement } from "react";
 import { CustomHeader } from "../../components/Header/CustomHeader";
 import MainClient from "../../components/Layouts/MainClient";
+import LoadingPage from "../../components/Loading/LoadingPage";
 import FilterContent from "../../containers/FilterContent";
 import ProductContent from "../../containers/ProductContent";
 
-const Product = () => {
+const Product = ({ loading }: { loading: Boolean }) => {
   return (
     <>
-      <CustomHeader title='Sản phẩm'>
+      {loading && <LoadingPage />}
+      <CustomHeader title="Sản phẩm">
         <title>Sản phẩm | Cuc Shoes</title>
       </CustomHeader>
-      <div className="max-w-[1200px] mx-auto text-white">
+      <div className="text-white">
         <FilterContent />
         <ProductContent />
       </div>

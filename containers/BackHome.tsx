@@ -1,53 +1,37 @@
 import React from "react";
-import { AiFillApi, AiOutlineSketch } from "react-icons/ai";
-import { RxOpenInNewWindow } from "react-icons/rx";
-import { TbBrandNextjs } from "react-icons/tb";
-import { SiTypescript } from "react-icons/si";
-import { IoLogoJavascript } from "react-icons/io";
-import { FaFigma } from "react-icons/fa";
+import { RiLuggageCartFill } from "react-icons/ri";
+import Link from "next/link";
 
 const BackHome = () => {
   return (
     <div className="bg-home-dark w-full h-screen fixed top-0 left-0">
-      <div className="grid grid-cols-12 h-screen gap-24 relative max-w-[1200px] mx-auto">
-        <div className="-mt-[18%] col-span-6 row-start-1 text-center flex flex-col justify-center items-center space-y-5">
+      <div className="grid lg:grid-cols-12 h-screen lg:gap-24 relative max-w-sm lg:max-w-[1200px] mx-auto">
+        <div className="-mt-[18%] lg:col-span-6 row-start-1 text-center flex flex-col justify-center items-center space-y-1 lg:space-y-5">
           <div>
-            <h2 className="font-extrabold text-5xl leading-[1.33333] text-white">
+            <h2 className="font-extrabold text-4xl lg:text-5xl leading-[1.33333] text-white">
               Start <br />
               shopping at
             </h2>
           </div>
           <div>
-            <h1 className="text-8xl bg-text -mt-1">Cuc Shoes</h1>
+            <h1 className="text-6xl lg:text-8xl bg-text lg:-mt-1">Cuc Shoes</h1>
           </div>
           <div>
-            <p className="text-white text-sm my-2 leading-6 font-normal">
+            <p className="text-white text-sm my-1 mb-4 lg:mb-2 lg:my-2 leading-6 font-normal">
               Ở đây các bạn sẽ có được những sản phẩm đang nổi lên và yên tâm về
               giá thành và chất lượng sản phẩm!
             </p>
           </div>
-          <div className="flex space-x-3">
-            <button className="flex items-center space-x-1 bg-white text-base border border-transparent font-bold px-5 py-3 text-[rgb(33,43,54)] rounded-lg hover:bg-opacity-95">
-              <AiFillApi className="text-xl" />
-              <p>Live Preview</p>
-            </button>
-            <button className="flex items-center space-x-1 border border-white text-base font-bold px-5 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-5">
-              <RxOpenInNewWindow className="text-xl" />
-              <p>Design Preview</p>
-            </button>
-          </div>
-          <div className="text-white opacity-40 pt-10">
-            <p className="uppercase font-bold text-xs">Available for</p>
-            <div className="flex space-x-3 text-2xl mt-5 leading-10 items-start justify-center">
-              <AiOutlineSketch />
-              <FaFigma />
-              <IoLogoJavascript />
-              <SiTypescript />
-              <TbBrandNextjs />
-            </div>
+          <div className="flex justify-start">
+            <Link href="/product">
+              <button className="flex items-center space-x-1 border border-white text-base font-bold px-5 py-3 text-white rounded-lg hover:bg-white hover:bg-opacity-5">
+                <RiLuggageCartFill className="text-xl" />
+                <p>Mua Hàng Ngay</p>
+              </button>
+            </Link>
           </div>
         </div>
-        <div className="col-span-6 mt-[88px] absolute -right-[40%] overflow-hidden h-full ">
+        <div className="lg:col-span-6 hidden lg:block mt-[88px] absolute -right-[40%] overflow-hidden h-full ">
           <div className="flex">
             <div className="w-[344px] relative flex flex-col">
               <img

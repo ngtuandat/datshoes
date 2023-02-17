@@ -51,29 +51,32 @@ const FilterContent = () => {
   };
 
   return (
-    <div className="mb-10 flex items-center justify-between mt-10">
-      <form className="flex items-center text-xl">
-        <label htmlFor="simple-search" className="sr-only">
-          Search
-        </label>
-        <div className="relative w-full">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <CiSearch className="text-[rgb(99,115,129)]" />
+    <div className="mb-4 lg:mb-10 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:space-y-0 space-y-3 lg:mt-10">
+      <div className="flex justify-between">
+        <form className="flex items-center text-xl">
+          <label htmlFor="simple-search" className="sr-only">
+            Search
+          </label>
+          <div className="relative lg:w-full">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <CiSearch className="text-[rgb(99,115,129)]" />
+            </div>
+            <motion.input
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              variants={inputVariant}
+              initial="close"
+              animate={focused ? "open" : "closed"}
+              onChange={(e) => handleQuerySearch(e.target.value)}
+              type="text"
+              id="simple-search"
+              className="bg-transparent border text-base placeholder:text-[rgb(99,115,129)] border-[rgba(145,158,171,0.32)] outline-none rounded-lg block lg:w-full pl-10 p-2 "
+              placeholder="Search..."
+            />
           </div>
-          <motion.input
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            variants={inputVariant}
-            initial="close"
-            animate={focused ? "open" : "closed"}
-            onChange={(e) => handleQuerySearch(e.target.value)}
-            type="text"
-            id="simple-search"
-            className="bg-transparent border text-base placeholder:text-[rgb(99,115,129)] border-[rgba(145,158,171,0.32)] outline-none rounded-lg block w-full pl-10 p-2 "
-            placeholder="Search..."
-          />
-        </div>
-      </form>
+          <div />
+        </form>
+      </div>
       <div className="flex items-center space-x-1">
         <button
           onClick={() => setOpenFilter(true)}

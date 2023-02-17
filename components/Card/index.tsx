@@ -46,7 +46,7 @@ const Card = ({ className, children, title, footer }: CardProps) => {
 
 Card.Content = ({ className, children }: CardProps) => {
   return (
-    <div className={`px-4 py-5 sm:p-6 ${className ? className : ""}`}>
+    <div className={`px-4 py-5 sm:p-6 max-[1200px]:pr-0 ${className ? className : ""}`}>
       {children}
     </div>
   );

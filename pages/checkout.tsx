@@ -29,6 +29,7 @@ import Modal from "../components/Modal";
 import DropMenu from "../components/DropMenu";
 import { BsCheck } from "react-icons/bs";
 import { IoBagCheckOutline } from "react-icons/io5";
+import LoadingPage from "../components/Loading/LoadingPage";
 
 const tabs = ["Giỏ hàng", "Địa chỉ và thông tin", "Thanh toán"];
 const column = ["Sản phẩm", "Giá", "Số lượng", "Tổng tiền", ""];
@@ -54,7 +55,7 @@ const listCity = [
   "Quảng Ninh",
 ];
 
-const Checkout = () => {
+const Checkout = ({ loading }: { loading: Boolean }) => {
   const [currentTab, setCurrentTab] = useState(tabs[0]);
   const [listProductBuy, setListProductBuy] = useState([]);
   const [listTabOver, setListTabOver] = useState<string[]>([]);
@@ -297,12 +298,13 @@ const Checkout = () => {
 
   return (
     <>
+      {loading && <LoadingPage />}
       <CustomHeader title="Checkout">
         <title>Checkout | Cuc Shoes</title>
       </CustomHeader>
       <section className="pb-10">
         <div className="text-white grid grid-cols-12 mb-10">
-          <div className="col-span-8">
+          <div className="col-span-12 lg:col-span-8">
             <div className="flex items-center">
               {tabs.map((item, idx) => (
                 <div className="flex-1 text-[rgb(145,158,171)]" key={idx}>
@@ -350,7 +352,7 @@ const Checkout = () => {
           <div className="col-span-4" />
         </div>
         <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-8">
+          <div className="col-span-12 lg:col-span-8">
             {currentTab === tabs[0] && (
               <>
                 <div className="bg-[rgb(33,43,54)] overflow-hidden rounded-xl">
@@ -587,9 +589,7 @@ const Checkout = () => {
                             "bg-green-600 border-none"
                           }`}
                         >
-                          {optionDelivery === item.title && (
-                            <BsCheck className="text-[rgb(33,43,54)] text-lg" />
-                          )}
+                          <BsCheck className="text-[rgb(33,43,54)] text-lg" />
                         </div>
                         <div>
                           <p className="text-sm font-semibold">{item.title}</p>
@@ -644,7 +644,7 @@ const Checkout = () => {
               </div>
             )}
           </div>
-          <div className="col-span-4 text-white">
+          <div className="col-span-12 lg:col-span-4 text-white">
             {currentTab === tabs[2] && (
               <div className="bg-[rgb(33,43,54)] rounded-xl p-6 mb-6">
                 <div className="flex items-center justify-between">
@@ -762,13 +762,13 @@ const Checkout = () => {
               </div>
               <div className="flex items-center space-x-3 mt-3">
                 <Link href="/product">
-                  <p className="text-white hover:bg-[rgba(145,158,171,0.08)] flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] border border-color-primary px-1 py-2 rounded-md">
+                  <p onClick={() =>setOpenModalBought(false)} className="text-white hover:bg-[rgba(145,158,171,0.08)] flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] border border-color-primary px-1 py-2 rounded-md">
                     <IoIosArrowBack />{" "}
                     <span className="font-bold text-sm">Tiếp Tục Mua Hàng</span>
                   </p>
                 </Link>
                 <Link href="/user/purchase">
-                  <p className="text-white hover:bg-green-700 flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] bg-green-600 px-1 py-2 rounded-md">
+                  <p onClick={() =>setOpenModalBought(false)} className="text-white hover:bg-green-700 flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] bg-green-600 px-1 py-2 rounded-md">
                     <IoBagCheckOutline />
                     <span className="font-bold text-sm">Đơn mua</span>
                   </p>
