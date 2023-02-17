@@ -1,11 +1,12 @@
 import Link from "next/dist/client/link";
 import { useRouter } from "next/dist/client/router";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "validator";
 import { MessValidatorRegis } from "../interfaces/main";
 import { registerUser } from "../redux/apiReq";
+import { registerFailed } from "../redux/authSlice";
 
 const Register = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -61,6 +62,8 @@ const Register = () => {
   const handleRegister = async (e: SyntheticEvent) => {
     e.preventDefault();
     const valid = validatorForm();
+    console.log(validatorMess);
+    console.log(valid);
 
     if (!valid) {
       try {
@@ -76,6 +79,11 @@ const Register = () => {
       }
     }
   };
+
+  useEffect(() => {
+    setValidatorMess(undefined);
+    dispatch(registerFailed(undefined));
+  }, [firstName, lastName, email, password, password2]);
 
   return (
     <>

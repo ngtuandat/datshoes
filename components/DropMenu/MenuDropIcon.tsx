@@ -30,7 +30,7 @@ const MenuDropIcon = ({
         {information ? (
           <Menu.Item
             as="div"
-            className="w-full px-2 py-3 border-b border-dashed border-[rgba(145,158,171,0.24)]"
+            className=" z-[5000] w-full px-2 py-3 border-b border-dashed border-[rgba(145,158,171,0.24)]"
           >
             <p className="text-sm font-semibold text-white">
               {information.name}

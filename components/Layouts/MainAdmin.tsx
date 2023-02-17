@@ -75,7 +75,7 @@ const MainAdmin = ({ children }: ChildrenProps) => {
     <div className="bg-[rgb(22,28,36)]">
       <div className="">
         <header
-          className={`max-w-lg sm:max-w-2xl md:max-w-3xl lg:max-w-[1200px] mx-auto px-2 min-[1200px]:hidden fixed left-auto right-0 top-0 transition-all duration-300 w-full flex items-center justify-between ${headerChange}`}
+          className={`z-[9999] max-w-[1200px] mx-auto px-2 min-[1200px]:hidden fixed left-auto right-0 top-0 transition-all duration-300 w-full flex items-center justify-between ${headerChange}`}
         >
           <div onClick={() => setOpen(true)} className="cursor-pointer">
             <IoMenuOutline className="text-[rgb(145,158,171)] text-xl " />
