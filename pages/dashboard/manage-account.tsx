@@ -10,10 +10,11 @@ import Role from "../../containers/Role";
 import Card from "../../components/Card";
 import ContentHeader from "./../../components/Header/ContentHeader";
 import Pagination from "../../components/Pagination";
+import LoadingPage from "../../components/Loading/LoadingPage";
 
 const DEFAULT_USERS_LIMIT = 5;
 
-const ManageAccount = () => {
+const ManageAccount = ({ loading }: { loading: Boolean }) => {
   const [users, setUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [limitValue, setLimitValue] = useState(DEFAULT_USERS_LIMIT);
@@ -21,13 +22,14 @@ const ManageAccount = () => {
   const columnUser = ["Số thứ tự", "Tên", "Email", "Ngày tạo", "Admin"];
   const router = useRouter();
 
-  let count = DEFAULT_USERS_LIMIT * (Number(router.query.page) - 1) + 1;
+  let count = DEFAULT_USERS_LIMIT * (Number(router.query.page || 1) - 1) + 1;
 
   const fetchUsers = async (query?: GetUsersQuery): Promise<void> => {
     try {
       const { data } = await getAllUser({
         ...query,
         limit: limitValue,
+        page: query?.page ? query?.page : 1,
       });
       setUsers(data.users);
       setTotalUsers(data.total);
@@ -38,12 +40,15 @@ const ManageAccount = () => {
   };
 
   const onChangePage = (page: number) => {
-    router.push({
-      query: {
-        page: page,
+    router.push(
+      {
+        query: {
+          page: page,
+        },
       },
-    }, undefined,
-    { shallow: true });
+      undefined,
+      { shallow: true }
+    );
   };
 
   useEffect(() => {
@@ -59,27 +64,8 @@ const ManageAccount = () => {
   }, [limitValue]);
 
   useEffect(() => {
-    const query = handleQueryParams(router.query);
-    fetchUsers(query);
+    fetchUsers(router.query);
   }, [router.query]);
-
-  const handleQueryParams = (query: any) => {
-    const newQuery = query;
-
-    if (!newQuery.page) {
-      query.page = "1";
-      router.push(
-        {
-          query: {
-            ...newQuery,
-          },
-        },
-        undefined,
-        { shallow: true }
-      );
-    }
-    return newQuery;
-  };
 
   const dataSource = useMemo(() => {
     return users.map((item: ListUser, index: number) => {
@@ -96,10 +82,8 @@ const ManageAccount = () => {
   }, [users]);
   return (
     <div>
-      <ContentHeader
-        title="Quản lý tài khoản"
-        name="Danh sách người dùng"
-      />
+      {loading && <LoadingPage />}
+      <ContentHeader title="Quản lý tài khoản" name="Danh sách người dùng" />
       <Card>
         <Card.Content>
           <Table columns={columnUser} dataSource={dataSource} />

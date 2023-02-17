@@ -81,63 +81,79 @@ const navMenu = {
     },
   },
 };
+const backFilter = {
+  open: {},
+  closed: {
+    scale: 0,
+  },
+};
 
 const MenuFixed = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  
   return (
-    <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
-      <motion.div
-        variants={sidebar}
-        className="fixed h-screen w-72 bottom-0 right-0 z-[2000] bg-[rgba(22,28,36,0.8)] backdrop-blur-sm  rounded-lg shadow-2xl flex"
-      >
-        <div className="w-full flex flex-col justify-between">
-          <motion.div
-            initial="close"
-            animate={isOpen ? "open" : "closed"}
-            variants={navMenu}
-            className="flex justify-between items-center py-4 pl-5 pr-2 border-b border-dashed border-[rgba(255,255,255,0.3)]"
-          >
-            <p className="text-white font-semibold">Settings</p>
-            <div className="flex space-x-1 items-center text-[rgb(145,158,171)]">
-              <div className="flex items-center justify-center p-2 cursor-pointer hover:bg-[rgba(145,158,171,0.08)] rounded-full">
-                <IoReload className="w-4 h-4" />
-              </div>
-              <div
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-center p-2 cursor-pointer hover:bg-[rgba(145,158,171,0.08)] rounded-full"
-              >
-                <MdClose className="w-[18px] h-[18px]" />
-              </div>
-            </div>
-          </motion.div>
-          <div className="flex-1">
-            <MenuList />
-          </div>
-          <motion.button
-            initial="close"
-            animate={isOpen ? "open" : "closed"}
-            variants={buttonFullScreen}
-            className="w-full px-5 pb-5"
-          >
-            <div className="text-sm font-semibold w-full col-span-1 border hover:bg-[rgb(99,115,129)] hover:bg-opacity-5 border-[rgba(145,158,171,0.12)] outline-none text-[rgb(99,115,129)] rounded-lg flex items-center justify-center space-x-3 h-12">
-              <p>Fullscrren</p>
-              <BsFullscreen className="-mb-[1px]" />
-            </div>
-          </motion.button>
-        </div>
-        <motion.button
-          onClick={() => setIsOpen(!isOpen)}
+      <>
+        <motion.div
+          onClick={() => setIsOpen(false)}
           initial="close"
           animate={isOpen ? "open" : "closed"}
-          variants={buttonIcon}
-          className={`absolute select-none outline-none bottom-[22px] right-[21px] flex justify-center items-center rounded-full w-14 h-14 cursor-pointer  ${
-            isOpen ? "" : "shadow-sm shadow-black transition-all delay-700"
-          }`}
+          variants={backFilter}
+          className={`fixed inset-0`}
+        />
+      <motion.nav initial={false} animate={isOpen ? "open" : "closed"}>
+        <motion.div
+          variants={sidebar}
+          className="fixed h-screen w-72 bottom-0 right-0 z-[8000] bg-[rgba(22,28,36,0.8)] backdrop-blur-sm  rounded-lg shadow-2xl flex"
         >
-          <img src="/images/home/ic_setting.svg" className="p-30" />
-        </motion.button>
-      </motion.div>
-    </motion.nav>
+          <div className="w-full flex flex-col justify-between">
+            <motion.div
+              initial="close"
+              animate={isOpen ? "open" : "closed"}
+              variants={navMenu}
+              className="flex justify-between items-center py-4 pl-5 pr-2 border-b border-dashed border-[rgba(255,255,255,0.3)]"
+            >
+              <p className="text-white font-semibold">Settings</p>
+              <div className="flex space-x-1 items-center text-[rgb(145,158,171)]">
+                <div className="flex items-center justify-center p-2 cursor-pointer hover:bg-[rgba(145,158,171,0.08)] rounded-full">
+                  <IoReload className="w-4 h-4" />
+                </div>
+                <div
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="flex items-center justify-center p-2 cursor-pointer hover:bg-[rgba(145,158,171,0.08)] rounded-full"
+                >
+                  <MdClose className="w-[18px] h-[18px]" />
+                </div>
+              </div>
+            </motion.div>
+            <div className="flex-1">
+              <MenuList />
+            </div>
+            <motion.button
+              initial="close"
+              animate={isOpen ? "open" : "closed"}
+              variants={buttonFullScreen}
+              className="w-full px-5 pb-5"
+            >
+              <div className="text-sm font-semibold w-full col-span-1 border hover:bg-[rgb(99,115,129)] hover:bg-opacity-5 border-[rgba(145,158,171,0.12)] outline-none text-[rgb(99,115,129)] rounded-lg flex items-center justify-center space-x-3 h-12">
+                <p>Fullscrren</p>
+                <BsFullscreen className="-mb-[1px]" />
+              </div>
+            </motion.button>
+          </div>
+          <motion.button
+            onClick={() => setIsOpen(!isOpen)}
+            initial="close"
+            animate={isOpen ? "open" : "closed"}
+            variants={buttonIcon}
+            className={`absolute select-none outline-none bottom-[22px] right-[21px] flex justify-center items-center rounded-full w-14 h-14 cursor-pointer  ${
+              isOpen ? "" : "shadow-sm shadow-black transition-all delay-700"
+            }`}
+          >
+            <img src="/images/home/ic_setting.svg" className="p-30" />
+          </motion.button>
+        </motion.div>
+      </motion.nav>
+      </>
   );
 };
 

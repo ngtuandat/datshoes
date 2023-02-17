@@ -33,10 +33,11 @@ import { addToCart } from "./../../services/product/index";
 import Review from "../../containers/Review";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
+import LoadingPage from "../../components/Loading/LoadingPage";
 
 const tabs = ["description", "review"];
 
-const ProductDetail = () => {
+const ProductDetail = ({ loading }: { loading: Boolean }) => {
   const [colorCheck, setColorCheck] = useState<string>("");
   const [sizeValue, setSizeValue] = useState<number>();
   const [quantity, setQuantity] = useState<number>(1);
@@ -144,12 +145,13 @@ const ProductDetail = () => {
 
   return (
     <>
+      {loading && <LoadingPage />}
       <CustomHeader title="Chi tiết sản phẩm">
         <title>{dataProduct?.name} | Cuc Shoes</title>
       </CustomHeader>
       <section className="text-white pb-10">
         <div className="grid grid-cols-12">
-          <div className="col-span-7">
+          <div className="col-span-12 lg:col-span-7">
             <div className="h-full">
               <Swiper
                 loop
@@ -187,7 +189,7 @@ const ProductDetail = () => {
               </Swiper> */}
             </div>
           </div>
-          <div className="px-10 pt-8 col-span-5 space-y-5">
+          <div className="px-0 lg:px-10 pt-8 col-span-12 lg:col-span-5 space-y-5">
             <div className="space-y-3">
               <h2 className="text-2xl font-bold">{dataProduct?.name}</h2>
               <p className="text-xl font-semibold">
@@ -336,11 +338,11 @@ const ProductDetail = () => {
             {dataProduct && selectTab === "review" && (
               <div>
                 <div className="grid grid-cols-3 border-b border-[rgba(145,158,171,0.24)]">
-                  <div className="col-span-1 flex flex-col justify-center items-center space-y-2">
-                    <p className="text-[rgb(145,158,171)] text-base font-semibold">
+                  <div className="col-span-3 lg:col-span-1 flex flex-col justify-center items-center space-y-2">
+                    <p className="text-[rgb(145,158,171)] text-base font-semibold mt-5 lg:mt-0">
                       Đánh giá trung bình
                     </p>
-                    <span className="text-[44px] font-extrabold">
+                    <span className="text-3xl lg:text-[44px] font-extrabold">
                       {averageStar ? averageStar.toFixed(1) : 5}/5
                     </span>
                     <div className="text-2xl">
@@ -352,7 +354,7 @@ const ProductDetail = () => {
                       {dataProduct.review.length} đánh giá
                     </span>
                   </div>
-                  <div className="col-span-1 px-6 py-10 border-x border-[rgba(145,158,171,0.24)]">
+                  <div className="col-span-3 lg:col-span-1 px-6 py-10 border-x border-[rgba(145,158,171,0.24)]">
                     {ratingStar.map((item, idx) => (
                       <div
                         key={idx}
@@ -373,10 +375,10 @@ const ProductDetail = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="col-span-1 flex items-center justify-center">
+                  <div className="col-span-3 lg:col-span-1 flex items-center justify-center">
                     <button
                       onClick={() => setOpenWriteReview(true)}
-                      className="flex items-center space-x-2 font-bold cursor-pointer border px-4 py-3 rounded-md border-[rgba(145,158,171,0.32)] hover:bg-[rgba(145,158,171,0.08)] hover:border-white"
+                      className="mb-8 flex items-center space-x-2 font-bold cursor-pointer border px-4 py-3 rounded-md border-[rgba(145,158,171,0.32)] hover:bg-[rgba(145,158,171,0.08)] hover:border-white"
                     >
                       <FaPencilAlt />
                       <p>Đánh giá của bạn</p>
@@ -392,13 +394,16 @@ const ProductDetail = () => {
                 </div>
                 <div className="p-10">
                   {dataProduct.review.map((item, idx) => (
-                    <div className="flex first:mt-0 mt-10 space-x-5" key={idx}>
-                      <div className="flex flex-col items-center text-center">
+                    <div
+                      className="flex flex-col lg:flex-row first:mt-0 mt-10 lg:space-x-5"
+                      key={idx}
+                    >
+                      <div className="flex lg:flex-col items-center mb-4 lg:mb-0 space-x-4 lg:space-x-0 text-center">
                         <LetterAvatar
                           className="w-14 h-14"
                           name={item.nameUser}
                         />
-                        <p className="flex flex-col mt-4">
+                        <p className="flex flex-col items-start lg:items-center lg:mt-4">
                           <span className="text-sm font-semibold">
                             {item.nameUser}
                           </span>

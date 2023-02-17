@@ -46,7 +46,7 @@ const Review = ({ setOpen }: ReviewProps) => {
       {!token && (
         <div>
           <Link href="/sign-in">
-            <button className="bg-green-600 hover:bg-green-700 py-1 w-1/2 block mx-auto rounded-md text-white text-base font-semibold">
+            <button className="bg-green-600 hover:bg-green-700 py-1 w-3/4 lg:w-1/2 block mx-auto rounded-md text-white text-base font-semibold">
               Đăng nhập để đánh giá
             </button>
           </Link>
@@ -90,7 +90,7 @@ const Review = ({ setOpen }: ReviewProps) => {
         <textarea
           id="content-review"
           onChange={(e) => setContentReview(e.target.value)}
-          className={`peer resize-none text-white bg-transparent border w-full h-full px-2.5 py-3 rounded-lg focus:border-white hover:border-white border-color-primary `}
+          className={`peer resize-none text-white bg-transparent border w-[61%] lg:w-full h-full px-2.5 py-3 rounded-lg focus:border-white hover:border-white border-color-primary `}
         />
         <label
           className={`absolute text-base px-1 peer-focus:-top-3 text-white peer-focus:left-3 peer-focus:text-sm peer-focus:text-[rgb(99,115,129)] transition-all duration-300 bg-[rgb(22,28,36)] ${

@@ -10,7 +10,11 @@ export const CustomHeader = ({
 }): JSX.Element => {
   return (
     <div>
-      {title ? <div className="text-2xl font-bold mb-10 text-white">{title}</div> : null}
+      {title ? (
+        <div className="text-lg lg:text-2xl font-bold mb-4 lg:mb-10 text-white">
+          {title}
+        </div>
+      ) : null}
       <Head>{children}</Head>
     </div>
   );

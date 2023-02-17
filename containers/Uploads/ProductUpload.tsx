@@ -231,8 +231,8 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-x-6">
-        <div className="col-span-8 bg-[rgb(33,43,54)] p-6 rounded-2xl">
+      <div className="grid grid-cols-12 max-[1200px]:gap-y-4 gap-x-6">
+        <div className="col-span-12 min-[1200px]:col-span-8 bg-[rgb(33,43,54)] p-6 rounded-2xl">
           <div className="relative">
             <input
               value={nameProduct}
@@ -365,7 +365,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
             <i className="text-red-500 text-xs pl-1">{validatorMess.img}</i>
           )}
         </div>
-        <div className="col-span-4">
+        <div className="col-span-12 min-[1200px]:col-span-4">
           <div className="bg-[rgb(33,43,54)] rounded-2xl p-6 space-y-8">
             <Radio
               dfCheck={dfCheck}

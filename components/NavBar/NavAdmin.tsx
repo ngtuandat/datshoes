@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { SiGoogleanalytics } from "react-icons/si";
 import { FaUserCog } from "react-icons/fa";
@@ -59,7 +59,13 @@ const menuChildrenVariant = {
   },
 };
 
-const NavAdmin = ({ zoomOutMenu }: { zoomOutMenu: boolean }) => {
+const NavAdmin = ({
+  zoomOutMenu,
+  setOpen,
+}: {
+  zoomOutMenu?: boolean;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [name, setName] = useState<string>();
   const [pathSelected, setPathSelected] = useState("dashboard");
   const [openMenu, setOpenMenu] = useState<string[]>([]);
@@ -100,11 +106,21 @@ const NavAdmin = ({ zoomOutMenu }: { zoomOutMenu: boolean }) => {
     }
     setDisplayMenu("block");
   };
+  const handleNavigation = () => {
+    setOpenMenu([]);
+    setOpen && setOpen(false);
+  };
+
+  const handleNavigationChild = (label: string) => {
+    setOpenMenu([label]);
+    setOpen && setOpen(false);
+  };
+
   return (
     <div className="relative">
       <div
-        className={`h-full overflow-y-auto fixed top-0 transition-all duration-300 left-0 ${
-          zoomOutMenu ? "w-[90px]" : "w-[280px]"
+        className={`h-full  overflow-y-auto fixed top-0 transition-all duration-300 left-0 ${
+          zoomOutMenu ? "w-[90px]" : "w-64 min-[1200px]:w-[280px]"
         }`}
       >
         <div className={`${zoomOutMenu ? "px-1.5" : "px-5"}`}>
@@ -133,7 +149,7 @@ const NavAdmin = ({ zoomOutMenu }: { zoomOutMenu: boolean }) => {
               <div key={idx}>
                 {menu.href ? (
                   <Link
-                    onClick={() => setOpenMenu([])}
+                    onClick={handleNavigation}
                     className={`block ${
                       zoomOutMenu ? "text-[10px]" : "text-sm"
                     }`}
@@ -213,7 +229,7 @@ const NavAdmin = ({ zoomOutMenu }: { zoomOutMenu: boolean }) => {
                       <Link
                         key={idex}
                         href={item.href}
-                        onClick={() => setOpenMenu([menu.label])}
+                        onClick={() => handleNavigationChild(menu.label)}
                       >
                         <div className="flex items-center py-2 pl-4 pr-3 rounded-md text-[rgb(145,158,171)] hover:bg-[rgba(145,158,171,0.08)]">
                           <RxDotFilled

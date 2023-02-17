@@ -4,18 +4,20 @@ import MenuFixed from "../MenuSidebar/MenuFixed";
 import HeaderClient from "../Header/HeaderClient";
 import Cart from "../MenuSidebar/Cart";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 
 const MainClient = ({ children }: ChildrenProps) => {
   const router = useRouter();
   return (
-    <div className="overflow-y-auto ">
+    <div>
       <header>
         <HeaderClient />
       </header>
       <main className="bg-dark min-h-screen pt-[80px]">
         <div
-          className={`${!(router.asPath === "/") && "max-w-[1200px] mx-auto"}`}
+          className={`${
+            !(router.asPath === "/") &&
+            "max-w-lg sm:max-w-2xl md:max-w-3xl lg:max-w-[1200px] mx-auto px-2"
+          }`}
         >
           {children}
         </div>

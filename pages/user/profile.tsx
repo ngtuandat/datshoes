@@ -10,6 +10,7 @@ import { ProfileProps } from "../../interfaces/user";
 import Button from "../../components/Button";
 import DropMenu from "../../components/DropMenu";
 import { useRouter } from "next/router";
+import LoadingPage from "../../components/Loading/LoadingPage";
 
 const sex = [
   {
@@ -37,7 +38,7 @@ const listCity = [
   "Nam Định",
   "Quảng Ninh",
 ];
-const Profile = () => {
+const Profile = ({ loading }: { loading: Boolean }) => {
   const [profileUser, setProfileUser] = useState<ProfileProps>();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -137,11 +138,12 @@ const Profile = () => {
 
   return (
     <>
+      {loading && <LoadingPage />}
       <CustomHeader title="Profile">
         <title>Profile | Cuc Shoes</title>
       </CustomHeader>
       <div className="grid grid-cols-12 gap-6">
-        <div className="bg-[rgb(33,43,54)] flex flex-col justify-center items-center shadow-lg col-span-4 px-6 py-16 rounded-lg">
+        <div className="bg-[rgb(33,43,54)] flex flex-col justify-center items-center shadow-lg col-span-12 lg:col-span-4 px-6 py-16 rounded-lg">
           <form
             className="flex flex-col justify-center items-center"
             onSubmit={(e) => handleOnSubmit(e)}
@@ -195,9 +197,9 @@ const Profile = () => {
             Cho phép *.jpeg, *.jpg, *.png, *.gif <br /> max size of 3.1 MB
           </span>
         </div>
-        <div className="bg-[rgb(33,43,54)] shadow-lg rounded-lg col-span-8 space-y-5 p-6 pt-8">
+        <div className="bg-[rgb(33,43,54)] shadow-lg rounded-lg col-span-12 lg:col-span-8 space-y-5 p-6 pt-8">
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 col-span-2 lg:col-span-1">
               <div className="relative">
                 <input
                   defaultValue={firstName}
@@ -244,7 +246,7 @@ const Profile = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="relative">
+            <div className="relative col-span-2 lg:col-span-1">
               <input
                 defaultValue={phoneNumber && phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.valueAsNumber)}
@@ -263,7 +265,7 @@ const Profile = () => {
                 Số điện thoại
               </label>
             </div>
-            <div className="relative">
+            <div className="relative col-span-2 lg:col-span-1">
               <input
                 defaultValue={address && address}
                 onChange={(e) => setAddress(e.target.value)}
@@ -285,16 +287,18 @@ const Profile = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <DropMenu
-              listMenu={listCity}
-              selectValue={city ? city : "Chọn thành phố"}
-              setSelectValue={setCity}
-              classNameTitle="text-sm"
-              classNameMenu="py-3.5"
-              classDrop="h-[200px]"
-              title="Thành phố"
-            />
-            <div className="flex items-center space-x-4 mx-1">
+            <div className="col-span-2 lg:col-span-1">
+              <DropMenu
+                listMenu={listCity}
+                selectValue={city ? city : "Chọn thành phố"}
+                setSelectValue={setCity}
+                classNameTitle="text-sm"
+                classNameMenu="py-3.5"
+                classDrop="h-[200px]"
+                title="Thành phố"
+              />
+            </div>
+            <div className="flex items-center space-x-4 mx-1 col-span-2 lg:col-span-1">
               <span className="text-white">Giới tính:</span>
               <Radio
                 dfCheck={checkSex ? checkSex : "khác"}
@@ -304,8 +308,8 @@ const Profile = () => {
               />
             </div>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="space-x-2">
+          <div className="flex flex-col lg:flex-row items-center justify-between">
+            <div className="space-x-2 flex items-center lg:mb-0 mb-5">
               <span className="text-white ml-1">Ngày sinh:</span>
               <input
                 id="birth-day"
@@ -324,6 +328,9 @@ const Profile = () => {
               Lưu thay đổi
             </button>
           </div>
+          <i className="block mt-5 text-red-500 opacity-70 text-[13px]">
+            Thông tin sẽ được cập nhật lại khi đăng nhập lại!!
+          </i>
         </div>
       </div>
     </>

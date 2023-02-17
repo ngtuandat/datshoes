@@ -118,7 +118,6 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
   };
   const handleClose = () => {
     setOpen(false);
-    setTimeout;
   };
 
   const handleCheckCategory = (value: string) => {

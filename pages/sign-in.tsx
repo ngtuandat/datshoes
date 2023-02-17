@@ -1,11 +1,13 @@
 import React, { ReactElement } from "react";
 import Sign from "../components/Layouts/Sign";
+import LoadingPage from "../components/Loading/LoadingPage";
 import { CustomHeader } from "./../components/Header/CustomHeader";
 import Login from "./../containers/Login";
 
-const SignIn = () => {
+const SignIn = ({ loading }: { loading: Boolean }) => {
   return (
     <div className="w-full">
+      {loading && <LoadingPage />}
       <CustomHeader>
         <title>Login | Cuc Shoes</title>
       </CustomHeader>
