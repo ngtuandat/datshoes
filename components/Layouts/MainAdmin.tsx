@@ -23,7 +23,7 @@ const menuNav = {
 };
 const menuHeader = {
   open: {
-    x: -120,
+    x: 0,
     opacity: 1,
     transition: {
       deplay: 1,
@@ -31,8 +31,8 @@ const menuHeader = {
     },
   },
   closed: {
-    x: -400,
-    opacity: 0,
+    x: -260,
+    opacity: 1,
     transition: {
       duration: 0.2,
     },
@@ -95,7 +95,7 @@ const MainAdmin = ({ children }: ChildrenProps) => {
               initial="closed"
               animate={open ? "open" : "closed"}
               variants={menuHeader}
-              className="h-screen fixed z-[2100] bg-product shadow-xl w-64 top-0 bottom-0 right-0"
+              className="h-screen fixed z-[10000] bg-product shadow-xl w-64 top-0 bottom-0 left-0"
             >
               <NavAdmin setOpen={setOpen} />
             </motion.div>
