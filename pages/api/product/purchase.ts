@@ -8,11 +8,13 @@ export default function Purchase(
 ) {
     if (req.method === "GET") {
         const id = req.query.id
+        if(!id) return
         getListProductPurchase(res, String(id))
     }
 
     if (req.method === "DELETE") {
         const id = req.body.id
+        if(!id) return
         deletePurchaseOrder(res, id)
     }
 }

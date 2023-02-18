@@ -9,11 +9,13 @@ export default function Profile(
 ) {
     if (req.method === "GET") {
         const email = req.query.email
+        if(!email) return
         profileUser(res, String(email))
     }
 
     if (req.method === 'PUT') {
         const profileUpdate = req.body.profileUpdate
+        if(!profileUpdate) return
         updateProfile(res, profileUpdate)
     }
 }

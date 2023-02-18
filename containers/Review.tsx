@@ -51,11 +51,14 @@ const Review = ({ setOpen }: ReviewProps) => {
   };
 
   return (
-    <div className='md:w-[500px]'>
+    <div className="md:w-[500px]">
       {!token && (
         <div>
           <Link href="/sign-in">
-            <button onClick={() =>  setOpen(false)} className="bg-green-600 hover:bg-green-700 py-1 min-w-fit px-2 w-3/4 lg:w-1/2 block mx-auto rounded-md text-white text-base font-semibold">
+            <button
+              onClick={() => setOpen(false)}
+              className="bg-green-600 hover:bg-green-700 py-1 min-w-fit px-2 w-3/4 lg:w-1/2 block mx-auto rounded-md text-white text-base font-semibold"
+            >
               Đăng nhập để đánh giá
             </button>
           </Link>

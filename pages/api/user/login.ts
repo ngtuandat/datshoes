@@ -12,6 +12,7 @@ export default function Login(
 ) {
     if (req.method === "POST") {
         const user = req.body.user
+        if(!user) return
         LoginUser(user, res)
     }
 }
@@ -25,36 +26,35 @@ async function LoginUser(user: User, res: NextApiResponse) {
                 email: user.email
             }
         })
-        if (!userCheck) {
+        if (!userCheck)
             res.status(400).json('Email không hợp lệ')
-        } else {
-            const validPassword = await bcrypt.compare(
-                user.password,
-                String(userCheck.password)
-            );
-            if (!validPassword) {
-                res.status(400).json("Mật khẩu không đúng");
-            }
 
-            const token = jwt.sign(
-                {
-                    id: userCheck.id,
-                    email: userCheck.email,
-                    firstName: userCheck.firstName,
-                    lastName: userCheck.lastName,
-                    admin: userCheck.admin
-                },
-                secret
-            );
-            res.setHeader("Set-Cookie", serialize("token", token, { path: "/" }));
+        const validPassword = await bcrypt.compare(
+            user.password,
+            String(userCheck?.password)
+        );
+        if (!validPassword)
+            res.status(400).json("Mật khẩu không đúng");
 
-            res.status(200).json({
-                id: userCheck.id,
-                email: userCheck.email,
-                name: userCheck.lastName,
-                admin: userCheck.admin
-            });
-        }
+        const token = jwt.sign(
+            {
+                id: userCheck?.id,
+                email: userCheck?.email,
+                firstName: userCheck?.firstName,
+                lastName: userCheck?.lastName,
+                admin: userCheck?.admin
+            },
+            secret
+        );
+        res.setHeader("Set-Cookie", serialize("token", token, { path: "/" }));
+
+        res.status(200).json({
+            id: userCheck?.id,
+            email: userCheck?.email,
+            name: userCheck?.lastName,
+            admin: userCheck?.admin
+        });
+
     } catch (error) {
         res.status(500).json(error)
     }

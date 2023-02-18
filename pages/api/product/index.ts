@@ -9,21 +9,25 @@ export default function Product(
 ) {
     if (req.method === 'POST') {
         const product = req.body.product
+        if (!product) return
         createProduct(product, res)
     }
 
     if (req.method === "GET") {
         const query = req.query
+        if (!query) return
         getProduct(res, query)
     }
 
     if (req.method === 'PUT') {
         const product = req.body.product
+        if (!product) return
         updateProduct(res, product)
     }
 
     if (req.method === "DELETE") {
         const id = req.body.id
+        if (!id) return
         deleteProduct(res, id)
     }
 }

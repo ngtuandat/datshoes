@@ -117,10 +117,9 @@ const Profile = ({ loading }: { loading: Boolean }) => {
         email: email,
       };
       const res = await updateProfile(profileUpdate);
-      if (token && res.status === 200) {
-        const decoded: any = jwt_decode(token);
-        fetchProfile(decoded.email);
-      }
+      if (!(token && res.status === 200)) return;
+      const decoded: any = jwt_decode(token);
+      fetchProfile(decoded.email);
       router.back();
     } catch (error) {
       console.log(error);
@@ -128,10 +127,9 @@ const Profile = ({ loading }: { loading: Boolean }) => {
   };
 
   useEffect(() => {
-    if (token) {
-      const decoded: any = jwt_decode(token);
-      fetchProfile(decoded.email);
-    }
+    if (!token) return;
+    const decoded: any = jwt_decode(token);
+    fetchProfile(decoded.email);
   }, [token]);
 
   useEffect(() => {

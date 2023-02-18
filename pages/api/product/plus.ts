@@ -8,6 +8,7 @@ export default function PlusQuantity(
 ) {
     if (req.method === "POST") {
         const product = req.body.product
+        if(!product) return
         handlePlus(res, product)
     }
 }

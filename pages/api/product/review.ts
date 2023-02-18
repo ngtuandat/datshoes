@@ -8,11 +8,13 @@ export default function Review(
 ) {
     if (req.method === 'POST') {
         const comment = req.body.comment
+        if (!comment) return
         addReviewUser(res, comment)
     }
 
     if (req.method === 'GET') {
         const id = req.query.id
+        if (!id) return
         countRating(res, String(id))
     }
 }

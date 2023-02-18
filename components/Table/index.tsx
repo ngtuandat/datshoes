@@ -25,7 +25,7 @@ const Table = ({ dataSource, columns, loading, className }: TableProps) => {
             id="table-scroll"
             className="inline-block w-[94%] overflow-x-auto py-2 align-middle md:mx-6 lg:mx-8"
           >
-            <div className="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <div className="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg overflow-x-auto">
               <table className="min-w-full">
                 <thead className="bg-[rgb(51,61,72)]">
                   <tr>

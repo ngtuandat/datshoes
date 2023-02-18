@@ -8,6 +8,7 @@ export default function MiniusQuantity(
 ) {
     if (req.method === "POST") {
         const product = req.body.product
+        if (!product) return
         handleMinius(res, product)
     }
 }
@@ -18,7 +19,7 @@ async function handleMinius(res: NextApiResponse, product: IdProdCart) {
             where: {
                 idProd: product.idProd,
                 userId: product.idUser,
-                bought:false
+                bought: false
             }
         })
         if (productUpdate) {
