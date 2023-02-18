@@ -23,10 +23,9 @@ const HeaderClient = () => {
   const fetchProfile = async (email: string) => {
     try {
       const res = await getProfile(email);
-      if (res.data.profile) {
-        setAvatar(res.data.profile?.profile?.avatar);
-        setName(res.data.profile?.firstName + " " + res.data.profile?.lastName);
-      }
+      if (!res.data.profile) return;
+      setAvatar(res.data.profile?.profile?.avatar);
+      setName(res.data.profile?.firstName + " " + res.data.profile?.lastName);
     } catch (error) {
       console.log(error);
     }
@@ -41,11 +40,10 @@ const HeaderClient = () => {
   }, [openHeader]);
 
   useEffect(() => {
-    if (token) {
-      const decoded: any = jwt_decode(token);
-      setName(decoded.firstName + " " + decoded.lastName);
-      fetchProfile(decoded.email);
-    }
+    if (!token) return;
+    const decoded: any = jwt_decode(token);
+    setName(decoded.firstName + " " + decoded.lastName);
+    fetchProfile(decoded.email);
   }, [token]);
 
   useEffect(() => {

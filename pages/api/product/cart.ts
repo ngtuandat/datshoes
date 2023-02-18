@@ -8,21 +8,25 @@ export default function Cart(
 ) {
     if (req.method === "POST") {
         const product = req.body.product
+        if (!product) return
         addProductToCart(res, product)
     }
 
     if (req.method === "GET") {
         const id = req.query.id
+        if (!id) return
         getListProductCart(res, String(id))
     }
 
     if (req.method === "DELETE") {
         const productDl = req.body.productDelete
+        if (!productDl) return
         deleteProd(res, productDl)
     }
 
     if (req.method === 'PUT') {
         const id = req.body.id
+        if (!id) return
         updateBoughtProd(res, id)
     }
 }

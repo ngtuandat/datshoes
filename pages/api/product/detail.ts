@@ -8,9 +8,8 @@ export default function ProductDetail(
 ) {
     if (req.method === "GET") {
         const id = req.query.id
-        if (id) {
-            getDetailProduct(res, String(id))
-        }
+        if (!id) return
+        getDetailProduct(res, String(id))
     }
 }
 

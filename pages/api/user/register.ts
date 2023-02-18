@@ -10,6 +10,7 @@ export default function register(
 ) {
     if (req.method === 'POST') {
         const user = req.body.user
+        if(!user) return
         CreateAccount(res, user)
     }
 }
@@ -24,9 +25,8 @@ async function CreateAccount(res: NextApiResponse, user: newUser) {
                 email: user.email,
             },
         });
-        if (users) {
-            res.status(500).json('Email already exists')
-        }
+        if (users) res.status(500).json('Email already exists')
+
         //   Mã hóa pass
         const hashed = await bcrypt.hash(user.password, salt);
 

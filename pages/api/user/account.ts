@@ -9,6 +9,7 @@ export default function User(
 ) {
     if (req.method === "GET") {
         const query = req.query
+        if (!query) return
         getUser(res, query)
     }
 

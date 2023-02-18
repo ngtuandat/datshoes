@@ -9,6 +9,7 @@ export default function Product(
 
     if (req.method === "GET") {
         const query = req.query
+        if(!query) return
         getProduct(res, query)
     }
 

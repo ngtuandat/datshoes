@@ -19,27 +19,25 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
       const res = await getPurchaseOrder(id);
       setListPurchase(res.data.result);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   const handleDeletePurchase = async (id: string) => {
     try {
       const res = await deletePurchase(id);
-      if (res.status === 200 && token) {
-        const decoded: any = jwt_decode(token);
-        fetchPurchase(decoded.id);
-      }
+      if (!(res.status === 200 && token)) return;
+      const decoded: any = jwt_decode(token);
+      fetchPurchase(decoded.id);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    if (token) {
-      const decoded: any = jwt_decode(token);
-      fetchPurchase(decoded.id);
-    }
+    if (!token) return;
+    const decoded: any = jwt_decode(token);
+    fetchPurchase(decoded.id);
   }, [token]);
 
   return (
@@ -67,7 +65,9 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                       alt={item.nameProd}
                     />
                     <div className="text-white">
-                      <p className="text-base lg:text-xl font-bold">{item.nameProd}</p>
+                      <p className="text-base lg:text-xl font-bold">
+                        {item.nameProd}
+                      </p>
                       <p className="text-sm text-[rgb(145,158,171)]">
                         Size: {item.sizeProd}
                       </p>
