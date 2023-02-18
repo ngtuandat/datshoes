@@ -16,37 +16,46 @@ const Review = ({ setOpen }: ReviewProps) => {
   const router = useRouter();
 
   const [currentStar, setCurrentStar] = useState<number>();
+  const [errStar, setErrStar] = useState<string>();
   const [contentReview, setContentReview] = useState<string>("");
   const [nameUser, setNameUser] = useState<string>("");
 
   const handleAddReview = async () => {
-    if (token) {
-      const decoded: any = jwt_decode(token);
-      const commentUser = {
-        idProduct: router.query.product,
-        rating: Number(currentStar) + 1,
-        name: decoded.firstName + " " + decoded.lastName,
-        content: contentReview,
-      };
-      await addReview(commentUser);
-    } else {
-      const commentUser = {
-        idProduct: router.query.product,
-        rating: Number(currentStar) + 1,
-        name: nameUser,
-        content: contentReview,
-      };
-      await addReview(commentUser);
+    try {
+      if (!currentStar) {
+        setErrStar("Hãy chọn số sao bạn muốn");
+        return;
+      }
+      if (token) {
+        const decoded: any = jwt_decode(token);
+        const commentUser = {
+          idProduct: router.query.product,
+          rating: Number(currentStar) + 1,
+          name: decoded.firstName + " " + decoded.lastName,
+          content: contentReview,
+        };
+        await addReview(commentUser);
+      } else {
+        const commentUser = {
+          idProduct: router.query.product,
+          rating: Number(currentStar) + 1,
+          name: nameUser,
+          content: contentReview,
+        };
+        await addReview(commentUser);
+      }
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
     }
-    setOpen(false);
   };
 
   return (
-    <>
+    <div className='md:w-[500px]'>
       {!token && (
         <div>
           <Link href="/sign-in">
-            <button className="bg-green-600 hover:bg-green-700 py-1 w-3/4 lg:w-1/2 block mx-auto rounded-md text-white text-base font-semibold">
+            <button onClick={() =>  setOpen(false)} className="bg-green-600 hover:bg-green-700 py-1 min-w-fit px-2 w-3/4 lg:w-1/2 block mx-auto rounded-md text-white text-base font-semibold">
               Đăng nhập để đánh giá
             </button>
           </Link>
@@ -57,14 +66,17 @@ const Review = ({ setOpen }: ReviewProps) => {
           </p>
         </div>
       )}
-      <div className="flex space-x-2 items-center mb-10">
-        <span className="text-sm font-normal text-white">
-          Đánh giá của bạn về sản phẩm:
-        </span>
-        <RatingReview
-          currentStar={currentStar}
-          setCurrentStar={setCurrentStar}
-        />
+      <div className="flex flex-col  space-y-1 mb-10">
+        <div className="flex space-x-2 items-center">
+          <span className="text-sm font-normal text-white">
+            Đánh giá của bạn về sản phẩm:
+          </span>
+          <RatingReview
+            currentStar={currentStar}
+            setCurrentStar={setCurrentStar}
+          />
+        </div>
+        {errStar && <i className="text-red-500 text-xs">{errStar}</i>}
       </div>
       {!token && (
         <div className="relative mb-5">
@@ -86,11 +98,11 @@ const Review = ({ setOpen }: ReviewProps) => {
           </label>
         </div>
       )}
-      <div className="relative w-[550px] h-[100px]">
+      <div className="relative h-[100px]">
         <textarea
           id="content-review"
           onChange={(e) => setContentReview(e.target.value)}
-          className={`peer resize-none text-white bg-transparent border w-[61%] lg:w-full h-full px-2.5 py-3 rounded-lg focus:border-white hover:border-white border-color-primary `}
+          className={`peer resize-none text-white bg-transparent border w-full h-full px-2.5 py-3 rounded-lg focus:border-white hover:border-white border-color-primary `}
         />
         <label
           className={`absolute text-base px-1 peer-focus:-top-3 text-white peer-focus:left-3 peer-focus:text-sm peer-focus:text-[rgb(99,115,129)] transition-all duration-300 bg-[rgb(22,28,36)] ${
@@ -117,7 +129,7 @@ const Review = ({ setOpen }: ReviewProps) => {
           Thêm
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -21,10 +21,14 @@ const HeaderClient = () => {
   const token = Cookies.get("token");
 
   const fetchProfile = async (email: string) => {
-    const res = await getProfile(email);
-    if (res.data.profile) {
-      setAvatar(res.data.profile?.profile?.avatar);
-      setName(res.data.profile?.firstName + " " + res.data.profile?.lastName);
+    try {
+      const res = await getProfile(email);
+      if (res.data.profile) {
+        setAvatar(res.data.profile?.profile?.avatar);
+        setName(res.data.profile?.firstName + " " + res.data.profile?.lastName);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

@@ -61,22 +61,24 @@ const Register = () => {
 
   const handleRegister = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const valid = validatorForm();
-    console.log(validatorMess);
-    console.log(valid);
+    try {
+      const valid = validatorForm();
 
-    if (!valid) {
-      try {
-        const newAcc = {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password,
-        };
-        await registerUser(newAcc, dispatch, router);
-      } catch (error) {
-        console.log(error);
+      if (!valid) {
+        try {
+          const newAcc = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+          };
+          await registerUser(newAcc, dispatch, router);
+        } catch (error) {
+          console.log(error);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 

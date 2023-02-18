@@ -97,14 +97,22 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   ];
 
   const fetchCart = async (id: string) => {
-    const res = await getProductCart(id);
-    setListProductBuy(res.data.result);
-    setCountCard(res.data.count);
+    try {
+      const res = await getProductCart(id);
+      setListProductBuy(res.data.result);
+      setCountCard(res.data.count);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchProfile = async (email: string) => {
-    const res = await getProfile(email);
-    setProfileUser(res.data.profile);
+    try {
+      const res = await getProfile(email);
+      setProfileUser(res.data.profile);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleMinus = async (
@@ -112,31 +120,43 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
     idUser: string,
     quantity: number
   ) => {
-    const productUpdate = { idProd, idUser };
-    if (quantity >= 1) {
-      const res = await miniusQuantityCart(productUpdate);
-      if (res.status === 200 && token) {
-        const decoded: any = jwt_decode(token);
-        fetchCart(decoded.id);
+    try {
+      const productUpdate = { idProd, idUser };
+      if (quantity >= 1) {
+        const res = await miniusQuantityCart(productUpdate);
+        if (res.status === 200 && token) {
+          const decoded: any = jwt_decode(token);
+          fetchCart(decoded.id);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const handlePlus = async (idProd: string, idUser: string) => {
-    const productUpdate = { idProd, idUser };
-    const res = await plusQuantityCart(productUpdate);
-    if (res.status === 200 && token) {
-      const decoded: any = jwt_decode(token);
-      fetchCart(decoded.id);
+    try {
+      const productUpdate = { idProd, idUser };
+      const res = await plusQuantityCart(productUpdate);
+      if (res.status === 200 && token) {
+        const decoded: any = jwt_decode(token);
+        fetchCart(decoded.id);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const handleDeleteProdCart = async (idProd: string, idUser: string) => {
-    const productDelete = { idProd, idUser };
-    const res = await deleteProdCart(productDelete);
-    if (res.status === 200 && token) {
-      const decoded: any = jwt_decode(token);
-      fetchCart(decoded.id);
+    try {
+      const productDelete = { idProd, idUser };
+      const res = await deleteProdCart(productDelete);
+      if (res.status === 200 && token) {
+        const decoded: any = jwt_decode(token);
+        fetchCart(decoded.id);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -277,10 +297,14 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   }, [listProductBuy]);
 
   const handleBoughtProd = async () => {
-    if (token) {
-      const decoded: any = jwt_decode(token);
-      await boughtProduct(String(decoded.id));
-      setOpenModalBought(true);
+    try {
+      if (token) {
+        const decoded: any = jwt_decode(token);
+        await boughtProduct(String(decoded.id));
+        setOpenModalBought(true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -335,7 +359,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                         )}
                       </span>
                       <span
-                        className={`text-sm font-semibold ${
+                        className={`text-xs md:text-sm font-semibold ${
                           currentTab === item || listTabOver.includes(item)
                             ? "text-white"
                             : ""
@@ -762,13 +786,19 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
               </div>
               <div className="flex items-center space-x-3 mt-3">
                 <Link href="/product">
-                  <p onClick={() =>setOpenModalBought(false)} className="text-white hover:bg-[rgba(145,158,171,0.08)] flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] border border-color-primary px-1 py-2 rounded-md">
+                  <p
+                    onClick={() => setOpenModalBought(false)}
+                    className="text-white hover:bg-[rgba(145,158,171,0.08)] flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] border border-color-primary px-1 py-2 rounded-md"
+                  >
                     <IoIosArrowBack />{" "}
                     <span className="font-bold text-sm">Tiếp Tục Mua Hàng</span>
                   </p>
                 </Link>
                 <Link href="/user/purchase">
-                  <p onClick={() =>setOpenModalBought(false)} className="text-white hover:bg-green-700 flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] bg-green-600 px-1 py-2 rounded-md">
+                  <p
+                    onClick={() => setOpenModalBought(false)}
+                    className="text-white hover:bg-green-700 flex items-center justify-center space-x-2 min-w-[162px] min-h-[38px] bg-green-600 px-1 py-2 rounded-md"
+                  >
                     <IoBagCheckOutline />
                     <span className="font-bold text-sm">Đơn mua</span>
                   </p>
