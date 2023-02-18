@@ -53,23 +53,35 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
   const token = Cookies.get("token");
 
   const fetchDetailProduct = async (id: string | string[]) => {
-    const res = await getDetailProduct(String(id));
-    setDataProduct(res.data.detail);
-    setSizeValue(res.data.detail.size[0]);
-    setColorCheck(res.data.detail.color[0]);
+    try {
+      const res = await getDetailProduct(String(id));
+      setDataProduct(res.data.detail);
+      setSizeValue(res.data.detail.size[0]);
+      setColorCheck(res.data.detail.color[0]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchCart = async (id: string) => {
-    const res = await getProductCart(id);
-    if (res.data.count) {
-      sessionStorage.setItem("count", res.data.count);
+    try {
+      const res = await getProductCart(id);
+      if (res.data.count) {
+        sessionStorage.setItem("count", res.data.count);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const fetchRating = async (id: string) => {
-    const res = await getRatingStarProd(id);
-    setRatingStar(res.data.rating);
-    setAverageStar(res.data.average);
+    try {
+      const res = await getRatingStarProd(id);
+      setRatingStar(res.data.rating);
+      setAverageStar(res.data.average);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

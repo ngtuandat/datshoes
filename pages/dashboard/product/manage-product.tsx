@@ -57,7 +57,6 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
       setTotalProduct(data.total);
     } catch (error) {
       console.log(error);
-    } finally {
     }
   };
 
@@ -105,10 +104,14 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
   };
 
   const handleDeleteProduct = async (id: string) => {
-    const res = await deleteProduct(id);
-    if (res.status === 200) {
-      toast.success("Xóa thành công");
-      fetchProducts();
+    try {
+      const res = await deleteProduct(id);
+      if (res.status === 200) {
+        toast.success("Xóa thành công");
+        fetchProducts();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

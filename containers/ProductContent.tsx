@@ -32,14 +32,17 @@ const ProductContent = () => {
       setTotalProduct(data.total);
     } catch (error) {
       console.log(error);
-    } finally {
     }
   };
 
   const fetchCart = async (id: string) => {
-    const res = await getProductCart(id);
-    if (res.data.count) {
-      sessionStorage.setItem("count", res.data.count);
+    try {
+      const res = await getProductCart(id);
+      if (res.data.count) {
+        sessionStorage.setItem("count", res.data.count);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

@@ -15,15 +15,23 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
   const token = Cookies.get("token");
 
   const fetchPurchase = async (id: string) => {
-    const res = await getPurchaseOrder(id);
-    setListPurchase(res.data.result);
+    try {
+      const res = await getPurchaseOrder(id);
+      setListPurchase(res.data.result);
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleDeletePurchase = async (id: string) => {
-    const res = await deletePurchase(id);
-    if (res.status === 200 && token) {
-      const decoded: any = jwt_decode(token);
-      fetchPurchase(decoded.id);
+    try {
+      const res = await deletePurchase(id);
+      if (res.status === 200 && token) {
+        const decoded: any = jwt_decode(token);
+        fetchPurchase(decoded.id);
+      }
+    } catch (error) {
+      console.log(error)
     }
   };
 

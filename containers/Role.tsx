@@ -15,20 +15,24 @@ const Role: React.FC<IProps> = (props) => {
   const [selectValue, setSelectValue] = useState<string>();
 
   const handleUpdate = async (option: string) => {
-    setSelectValue(option);
-    if (selectValue === "Admin") {
-      setSelected(true);
-    } else if (selectValue === "User") {
-      setSelected(false);
-    }
-    const user = {
-      id: id,
-      role: selected,
-    };
+    try {
+      setSelectValue(option);
+      if (selectValue === "Admin") {
+        setSelected(true);
+      } else if (selectValue === "User") {
+        setSelected(false);
+      }
+      const user = {
+        id: id,
+        role: selected,
+      };
 
-    const res = await updateAdmin(user);
-    if (res.status === 200) {
-      toast.success("Cập nhật quyền thành công!");
+      const res = await updateAdmin(user);
+      if (res.status === 200) {
+        toast.success("Cập nhật quyền thành công!");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   useEffect(() => {

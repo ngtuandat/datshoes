@@ -24,8 +24,6 @@ async function CreateAccount(res: NextApiResponse, user: newUser) {
                 email: user.email,
             },
         });
-        console.log('user', user)
-        console.log(users)
         if (users) {
             res.status(500).json('Email already exists')
         }

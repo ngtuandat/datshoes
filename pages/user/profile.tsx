@@ -56,8 +56,12 @@ const Profile = ({ loading }: { loading: Boolean }) => {
   const token = Cookies.get("token");
   const router = useRouter();
   const fetchProfile = async (email: string) => {
-    const res = await getProfile(email);
-    setProfileUser(res.data.profile);
+    try {
+      const res = await getProfile(email);
+      setProfileUser(res.data.profile);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleOnChangeImage = (changeEvent: any) => {
     const reader = new FileReader();
@@ -71,48 +75,56 @@ const Profile = ({ loading }: { loading: Boolean }) => {
   };
 
   const handleOnSubmit = async (event: any) => {
-    setLoadingUploadFiles(true);
     event.preventDefault();
-    const form = event.currentTarget;
-    const fileInput: any = Array.from(form.elements).find(
-      ({ name }: any) => name === "change-avt"
-    );
-    const formData = new FormData();
+    try {
+      setLoadingUploadFiles(true);
+      const form = event.currentTarget;
+      const fileInput: any = Array.from(form.elements).find(
+        ({ name }: any) => name === "change-avt"
+      );
+      const formData = new FormData();
 
-    for (const file of fileInput.files) {
-      formData.append("file", file);
-    }
-    formData.append("upload_preset", "e-commerce");
-
-    const data = await fetch(
-      "https://api.cloudinary.com/v1_1/dd4way43x/image/upload",
-      {
-        method: "POST",
-        body: formData,
+      for (const file of fileInput.files) {
+        formData.append("file", file);
       }
-    ).then((r) => r.json());
-    setUrlAvatar(data.url);
-    setLoadingUploadFiles(false);
+      formData.append("upload_preset", "e-commerce");
+
+      const data = await fetch(
+        "https://api.cloudinary.com/v1_1/dd4way43x/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      ).then((r) => r.json());
+      setUrlAvatar(data.url);
+      setLoadingUploadFiles(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleUpdateProfile = async () => {
-    const profileUpdate = {
-      firstName: firstName,
-      lastName: lastName,
-      phone: phoneNumber,
-      address: address,
-      city: city,
-      sex: checkSex,
-      birthDay: birthDay,
-      avatar: urlAvatar,
-      email: email,
-    };
-    const res = await updateProfile(profileUpdate);
-    if (token && res.status === 200) {
-      const decoded: any = jwt_decode(token);
-      fetchProfile(decoded.email);
+    try {
+      const profileUpdate = {
+        firstName: firstName,
+        lastName: lastName,
+        phone: phoneNumber,
+        address: address,
+        city: city,
+        sex: checkSex,
+        birthDay: birthDay,
+        avatar: urlAvatar,
+        email: email,
+      };
+      const res = await updateProfile(profileUpdate);
+      if (token && res.status === 200) {
+        const decoded: any = jwt_decode(token);
+        fetchProfile(decoded.email);
+      }
+      router.back();
+    } catch (error) {
+      console.log(error);
     }
-    router.back();
   };
 
   useEffect(() => {

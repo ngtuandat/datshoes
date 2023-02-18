@@ -35,7 +35,6 @@ const ManageAccount = ({ loading }: { loading: Boolean }) => {
       setTotalUsers(data.total);
     } catch (error) {
       console.log(error);
-    } finally {
     }
   };
 

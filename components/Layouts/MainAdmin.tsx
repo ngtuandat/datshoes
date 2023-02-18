@@ -73,31 +73,33 @@ const MainAdmin = ({ children }: ChildrenProps) => {
 
   return (
     <div className="bg-[rgb(22,28,36)]">
-      <div className="">
-        <header
-          className={`z-[9999] max-w-[1200px] mx-auto px-2 min-[1200px]:hidden fixed left-auto right-0 top-0 transition-all duration-300 w-full flex items-center justify-between ${headerChange}`}
-        >
-          <div onClick={() => setOpen(true)} className="cursor-pointer">
-            <IoMenuOutline className="text-[rgb(145,158,171)] text-xl " />
-          </div>
-          <HeaderAdmin />
-        </header>
-        <div>
-          <motion.div
-            onClick={() => setOpen(false)}
-            initial="close"
-            animate={open ? "open" : "closed"}
-            variants={backHeader}
-            className={`fixed inset-0 h-screen w-screen`}
-          />
-          <motion.div
-            initial="closed"
-            animate={open ? "open" : "closed"}
-            variants={menuHeader}
-            className="h-screen fixed z-[2100] bg-product shadow-xl w-64 top-0 bottom-0 right-0"
+      <div>
+        <div className="block min-[1200px]:hidden">
+          <header
+            className={`z-[9999] max-w-[1200px] mx-auto px-2 min-[1200px]:hidden fixed left-auto right-0 top-0 transition-all duration-300 w-full flex items-center justify-between ${headerChange}`}
           >
-            <NavAdmin setOpen={setOpen} />
-          </motion.div>
+            <div onClick={() => setOpen(true)} className="cursor-pointer">
+              <IoMenuOutline className="text-[rgb(145,158,171)] text-xl " />
+            </div>
+            <HeaderAdmin />
+          </header>
+          <div>
+            <motion.div
+              onClick={() => setOpen(false)}
+              initial="close"
+              animate={open ? "open" : "closed"}
+              variants={backHeader}
+              className={`fixed inset-0 h-screen w-screen`}
+            />
+            <motion.div
+              initial="closed"
+              animate={open ? "open" : "closed"}
+              variants={menuHeader}
+              className="h-screen fixed z-[2100] bg-product shadow-xl w-64 top-0 bottom-0 right-0"
+            >
+              <NavAdmin setOpen={setOpen} />
+            </motion.div>
+          </div>
         </div>
         <header
           className={`hidden min-[1200px]:block px-10 fixed left-auto right-0 top-0 transition-all duration-300 ${

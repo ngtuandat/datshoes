@@ -112,31 +112,35 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
   };
   const handleOnSubmitMultiple = async (event: any) => {
     event.preventDefault();
-    setLoadingUploadFiles(true);
-    const form = event.currentTarget;
-    const fileInput: any = Array.from(form.elements).find(
-      ({ name }: any) => name === "multiple-file"
-    );
-    const formData = new FormData();
-    let dataUrl: string[] = [];
+    try {
+      setLoadingUploadFiles(true);
+      const form = event.currentTarget;
+      const fileInput: any = Array.from(form.elements).find(
+        ({ name }: any) => name === "multiple-file"
+      );
+      const formData = new FormData();
+      let dataUrl: string[] = [];
 
-    for (const file of fileInput.files) {
-      formData.append("file", file);
-      formData.append("upload_preset", "e-commerce");
-      const data = await fetch(
-        "https://api.cloudinary.com/v1_1/dd4way43x/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      ).then((r) => r.json());
-      dataUrl.push(data.url);
+      for (const file of fileInput.files) {
+        formData.append("file", file);
+        formData.append("upload_preset", "e-commerce");
+        const data = await fetch(
+          "https://api.cloudinary.com/v1_1/dd4way43x/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        ).then((r) => r.json());
+        dataUrl.push(data.url);
+      }
+      setListImage(dataUrl);
+      if (dataUrl) {
+        toast.success("Đã tải ảnh lên!");
+      }
+      setLoadingUploadFiles(false);
+    } catch (error) {
+      console.log(error);
     }
-    setListImage(dataUrl);
-    if (dataUrl) {
-      toast.success("Đã tải ảnh lên!");
-    }
-    setLoadingUploadFiles(false);
   };
 
   const handleDeleteImage = (item: string) => {
