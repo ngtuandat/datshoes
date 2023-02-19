@@ -20,12 +20,13 @@ const Login = () => {
   const handleLogin = async (e: SyntheticEvent) => {
     e.preventDefault();
     try {
-      if (!(email && password)) return;
-      const userLogin = {
-        email,
-        password,
-      };
-      await loginUserCheck(userLogin, dispatch, router);
+      if (email && password) {
+        const userLogin = {
+          email,
+          password,
+        };
+        await loginUserCheck(userLogin, dispatch, router);
+      }
     } catch (error) {
       console.log(error);
     }

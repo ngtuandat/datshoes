@@ -38,8 +38,9 @@ const ProductContent = () => {
   const fetchCart = async (id: string) => {
     try {
       const res = await getProductCart(id);
-      if (!res.data.count) return
+      if (res.data.count) {
         sessionStorage.setItem("count", res.data.count);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -59,10 +60,14 @@ const ProductContent = () => {
 
   useEffect(() => {
     fetchProducts(router.query);
-    if (!token) return 
+  }, [router.isReady, router.query]);
+
+  useEffect(() => {
+    if (token) {
       const decoded: any = jwt_decode(token);
       fetchCart(decoded.id);
-  }, [router.isReady, router.query]);
+    }
+  }, []);
 
   return (
     <>

@@ -85,13 +85,14 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
   };
 
   useEffect(() => {
-    if (!token) return;
-    if (!router.query.product) return;
-    const decoded: any = jwt_decode(token);
-    fetchCart(decoded.id);
-    fetchDetailProduct(router.query.product);
-    fetchRating(String(router.query.product));
-  }, [router.query.product, openWriteReview]);
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      fetchCart(decoded.id);
+    }
+    if (router.query.product) {
+      fetchDetailProduct(router.query.product);
+    }
+  }, []);
 
   const handleMinus = () => {
     if (quantity > 1) {
@@ -110,20 +111,21 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
 
   const handleAddToCart = async () => {
     try {
-      if (!token) return;
-      const decoded: any = jwt_decode(token);
-      const productBuy = {
-        idUser: String(decoded.id),
-        id: dataProduct?.id,
-        name: dataProduct?.name,
-        size: sizeValue,
-        price: dataProduct?.price,
-        color: colorCheck,
-        quantity: quantity,
-        image: dataProduct?.listImage[0],
-      };
-      await addToCart(productBuy);
-      fetchCart(decoded.id);
+      if (token) {
+        const decoded: any = jwt_decode(token);
+        const productBuy = {
+          idUser: String(decoded.id),
+          id: dataProduct?.id,
+          name: dataProduct?.name,
+          size: sizeValue,
+          price: dataProduct?.price,
+          color: colorCheck,
+          quantity: quantity,
+          image: dataProduct?.listImage[0],
+        };
+        await addToCart(productBuy);
+        fetchCart(decoded.id);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -131,21 +133,22 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
 
   const handleBuyNow = async () => {
     try {
-      if (!token) return;
-      const decoded: any = jwt_decode(token);
-      const productBuy = {
-        idUser: String(decoded.id),
-        id: dataProduct?.id,
-        name: dataProduct?.name,
-        size: sizeValue,
-        price: dataProduct?.price,
-        color: colorCheck,
-        quantity: quantity,
-        image: dataProduct?.listImage[0],
-      };
-      await addToCart(productBuy);
-      fetchCart(decoded.id);
-      router.push("/checkout");
+      if (token) {
+        const decoded: any = jwt_decode(token);
+        const productBuy = {
+          idUser: String(decoded.id),
+          id: dataProduct?.id,
+          name: dataProduct?.name,
+          size: sizeValue,
+          price: dataProduct?.price,
+          color: colorCheck,
+          quantity: quantity,
+          image: dataProduct?.listImage[0],
+        };
+        await addToCart(productBuy);
+        fetchCart(decoded.id);
+        router.push("/checkout");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -396,7 +399,11 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
                       open={openWriteReview}
                       setOpen={setOpenWriteReview}
                     >
-                      <Review setOpen={setOpenWriteReview} />
+                      <Review
+                        fetchDetail={fetchDetailProduct}
+                        fetchRating={fetchRating}
+                        setOpen={setOpenWriteReview}
+                      />
                     </Modal>
                   </div>
                 </div>
