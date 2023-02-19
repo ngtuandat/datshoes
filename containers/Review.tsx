@@ -8,9 +8,11 @@ import Link from "next/link";
 
 interface ReviewProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  fetchDetail: (id: string | string[]) => Promise<void>;
+  fetchRating: (id: string) => Promise<void>;
 }
 
-const Review = ({ setOpen }: ReviewProps) => {
+const Review = ({ setOpen, fetchDetail, fetchRating }: ReviewProps) => {
   const token = Cookies.get("token");
 
   const router = useRouter();
@@ -43,6 +45,10 @@ const Review = ({ setOpen }: ReviewProps) => {
           content: contentReview,
         };
         await addReview(commentUser);
+      }
+      if (router.query.product) {
+        fetchDetail(router.query.product);
+        fetchRating(String(router.query.product));
       }
       setOpen(false);
     } catch (error) {

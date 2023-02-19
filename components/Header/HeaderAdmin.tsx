@@ -27,10 +27,11 @@ const HeaderAdmin = () => {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    if (!token) return;
-    const decoded: any = jwt_decode(token);
-    setName(decoded.firstName + "" + decoded.lastName);
-    setEmail(decoded.email);
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      setName(decoded.firstName + "" + decoded.lastName);
+      setEmail(decoded.email);
+    }
   }, [token]);
   return (
     <div className="flex items-center h-full text-[rgb(145,158,171)] select-none">

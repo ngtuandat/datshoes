@@ -229,16 +229,17 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   const handleChooseAddressOther = (tab: string) => {
     const valid = validatorFormAdress();
 
-    if (valid) return;
-    const chooseAddress = {
-      name: fullName,
-      address: address + ", " + city,
-      phone: phoneNumber,
-    };
-    setMailAddress(chooseAddress);
-    const index = tabs.indexOf(tab);
-    setCurrentTab(tabs[index + 1]);
-    setListTabOver([...listTabOver, tab]);
+    if (!valid) {
+      const chooseAddress = {
+        name: fullName,
+        address: address + ", " + city,
+        phone: phoneNumber,
+      };
+      setMailAddress(chooseAddress);
+      const index = tabs.indexOf(tab);
+      setCurrentTab(tabs[index + 1]);
+      setListTabOver([...listTabOver, tab]);
+    }
   };
 
   const dataSourceCart = useMemo(() => {
@@ -297,21 +298,23 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
 
   const handleBoughtProd = async () => {
     try {
-      if (!token) return;
-      const decoded: any = jwt_decode(token);
-      await boughtProduct(String(decoded.id));
-      setOpenModalBought(true);
+      if (token) {
+        const decoded: any = jwt_decode(token);
+        await boughtProduct(String(decoded.id));
+        setOpenModalBought(true);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (!token) return;
-    const decoded: any = jwt_decode(token);
-    fetchCart(decoded.id);
-    fetchProfile(decoded.email);
-  }, [token]);
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      fetchCart(decoded.id);
+      fetchProfile(decoded.email);
+    }
+  }, []);
 
   useEffect(() => {
     setValidatorMess(undefined);

@@ -80,9 +80,10 @@ const NavAdmin = ({
   const token = Cookies.get("token");
 
   useEffect(() => {
-    if (!token) return;
-    const decoded: any = jwt_decode(token);
-    setName(decoded.firstName + "" + decoded.lastName);
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      setName(decoded.firstName + "" + decoded.lastName);
+    }
   }, [token]);
 
   useEffect(() => {

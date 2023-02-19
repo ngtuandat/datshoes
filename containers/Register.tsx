@@ -64,17 +64,18 @@ const Register = () => {
     try {
       const valid = validatorForm();
 
-      if (valid) return;
-      try {
-        const newAcc = {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password,
-        };
-        await registerUser(newAcc, dispatch, router);
-      } catch (error) {
-        console.log(error);
+      if (!valid) {
+        try {
+          const newAcc = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+          };
+          await registerUser(newAcc, dispatch, router);
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.log(error);

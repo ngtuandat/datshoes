@@ -26,18 +26,20 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
   const handleDeletePurchase = async (id: string) => {
     try {
       const res = await deletePurchase(id);
-      if (!(res.status === 200 && token)) return;
-      const decoded: any = jwt_decode(token);
-      fetchPurchase(decoded.id);
+      if (res.status === 200 && token) {
+        const decoded: any = jwt_decode(token);
+        fetchPurchase(decoded.id);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (!token) return;
-    const decoded: any = jwt_decode(token);
-    fetchPurchase(decoded.id);
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      fetchPurchase(decoded.id);
+    }
   }, [token]);
 
   return (
