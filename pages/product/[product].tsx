@@ -148,6 +148,8 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
         await addToCart(productBuy);
         fetchCart(decoded.id);
         router.push("/checkout");
+      } else {
+        router.push("/sign-in");
       }
     } catch (error) {
       console.log(error);
