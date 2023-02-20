@@ -12,15 +12,14 @@ export default function Login(
 ) {
     if (req.method === "POST") {
         const user = req.body.user
-        if(!user) return
+        if (!user) return
         LoginUser(user, res)
     }
 }
 
 async function LoginUser(user: User, res: NextApiResponse) {
-    const secret = '12345'
-
     try {
+        const secret = '12345'
         const userCheck = await prisma.user.findFirst({
             where: {
                 email: user.email
@@ -36,25 +35,26 @@ async function LoginUser(user: User, res: NextApiResponse) {
         if (!validPassword)
             res.status(400).json("Mật khẩu không đúng");
 
-        const token = jwt.sign(
-            {
+        if (userCheck && validPassword) {
+            const token = jwt.sign(
+                {
+                    id: userCheck?.id,
+                    email: userCheck?.email,
+                    firstName: userCheck?.firstName,
+                    lastName: userCheck?.lastName,
+                    admin: userCheck?.admin
+                },
+                secret
+            );
+            res.setHeader("Set-Cookie", serialize("token", token, { path: "/" }));
+
+            res.status(200).json({
                 id: userCheck?.id,
                 email: userCheck?.email,
-                firstName: userCheck?.firstName,
-                lastName: userCheck?.lastName,
+                name: userCheck?.lastName,
                 admin: userCheck?.admin
-            },
-            secret
-        );
-        res.setHeader("Set-Cookie", serialize("token", token, { path: "/" }));
-
-        res.status(200).json({
-            id: userCheck?.id,
-            email: userCheck?.email,
-            name: userCheck?.lastName,
-            admin: userCheck?.admin
-        });
-
+            });
+        }
     } catch (error) {
         res.status(500).json(error)
     }
