@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import Link from "next/dist/client/link";
 import { useRouter } from "next/dist/client/router";
 import { SyntheticEvent, useEffect, useState } from "react";
@@ -19,6 +20,7 @@ const Register = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const token = Cookies.get("token");
 
   const errMail = useSelector(
     (state: any) => state.auth.register.error?.response.data
@@ -86,6 +88,12 @@ const Register = () => {
     setValidatorMess(undefined);
     dispatch(registerFailed(undefined));
   }, [firstName, lastName, email, password, password2]);
+
+  useEffect(() => {
+    if (token) {
+      router.push("/");
+    }
+  }, []);
 
   return (
     <>
