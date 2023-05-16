@@ -119,22 +119,22 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
     return product.map((item: ListProduct, index: number) => {
       return [
         <> {count === 0 ? index + 1 : count++}</>,
-        <p>{item.name}</p>,
+        <p>{item?.name}</p>,
         <div className="flex items-center">
           <div
-            dangerouslySetInnerHTML={{ __html: item.description.slice(0, 20) }}
+            dangerouslySetInnerHTML={{ __html: item?.description.slice(0, 20) }}
           />
           <p
             className="cursor-pointer"
-            onClick={() => handleMoreDesc(item.description)}
+            onClick={() => handleMoreDesc(item?.description)}
           >
             ... Xem thêm
           </p>
         </div>,
         <>
-          {item.size.map((size, idx) => (
+          {item?.size.map((size, idx) => (
             <p key={idx}>
-              {idx === item.size.length - 1 ? (
+              {idx === item?.size.length - 1 ? (
                 <span>{size}</span>
               ) : (
                 <span>{size},</span>
@@ -143,9 +143,9 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
           ))}
         </>,
         <>
-          {item.color.map((color, idx) => (
+          {item?.color.map((color, idx) => (
             <p key={idx}>
-              {idx === item.color.length - 1 ? (
+              {idx === item?.color.length - 1 ? (
                 <span>{color}</span>
               ) : (
                 <span>{color},</span>
@@ -153,10 +153,10 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
             </p>
           ))}
         </>,
-        <p>{item.category}</p>,
-        <p className="first-letter:uppercase">{item.gender}</p>,
+        <p>{item?.category}</p>,
+        <p className="first-letter:uppercase">{item?.gender}</p>,
         <>
-          {item.listImage.map((img) => (
+          {item?.listImage.map((img) => (
             <img
               key={img}
               className="w-1/2 cursor-pointer rounded-lg object-cover"
@@ -165,8 +165,8 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
             />
           ))}
         </>,
-        <p>{item.price.toLocaleString("vi")} đ</p>,
-        <>{dateFormat(item.createdAt, "HH:MM dd/mm/yyyy")}</>,
+        <p>{item?.price.toLocaleString("vi")} đ</p>,
+        <>{dateFormat(item?.createdAt, "HH:MM dd/mm/yyyy")}</>,
         <p className="w-full flex items-center justify-center">
           <span
             onClick={() => handleModalEdit(item)}
@@ -178,7 +178,7 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
         </p>,
         <p className="w-full flex items-center justify-center">
           <span
-            onClick={() => handleDeleteProduct(item.id)}
+            onClick={() => handleDeleteProduct(item?.id)}
             title="Xóa sản phẩm"
             className="text-xl cursor-pointer hover:text-red-500 rounded-full hover:bg-[rgba(145,158,171,0.08)] p-1"
           >

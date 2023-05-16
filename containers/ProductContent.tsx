@@ -75,22 +75,22 @@ const ProductContent = () => {
         <div className="grid grid-cols-4 gap-6 mb-10">
           {products.map((product, idx) => (
             <Link
-              href={`/product/${product.id}`}
+              href={`/product/${product?.id}`}
               className="bg-product col-span-4 lg:col-span-1 rounded-lg cursor-pointer hover:-translate-y-1 transition-all duration-200"
               key={idx}
             >
               <div className="p-2">
                 <img
                   className="rounded-lg"
-                  src={product.listImage[0]}
-                  alt={product.name}
+                  src={product?.listImage[0]}
+                  alt={product?.name}
                 />
               </div>
               <div className="py-6 px-2">
-                <h1 className="text-base font-semibold">{product.name}</h1>
+                <h1 className="text-base font-semibold">{product?.name}</h1>
                 <div className="flex items-center justify-between mt-5 px-3">
                   <div className="flex items-center">
-                    {product.color.map((col, idx) => (
+                    {product?.color.map((col, idx) => (
                       <div
                         className="h-3 w-3 rounded-full"
                         key={idx}
@@ -99,7 +99,7 @@ const ProductContent = () => {
                     ))}
                   </div>
                   <p className="text-base font-semibold">
-                    {product.price.toLocaleString("vi")} đ
+                    {product?.price.toLocaleString("vi")} đ
                   </p>
                 </div>
               </div>

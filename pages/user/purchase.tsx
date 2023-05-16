@@ -63,25 +63,25 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                   <div className="flex items-start space-x-5 lg:w-fit">
                     <img
                       className="w-20 h-20 object-cover rounded-md border border-dashed border-color-primary"
-                      src={item.imageProd}
-                      alt={item.nameProd}
+                      src={item?.imageProd}
+                      alt={item?.nameProd}
                     />
                     <div className="text-white">
                       <p className="text-base lg:text-xl font-bold">
-                        {item.nameProd}
+                        {item?.nameProd}
                       </p>
                       <p className="text-sm text-[rgb(145,158,171)]">
-                        Size: {item.sizeProd}
+                        Size: {item?.sizeProd}
                       </p>
                       <p className="text-sm text-[rgb(145,158,171)] flex items-center">
                         Màu sắc:{" "}
                         <span
                           className="ml-2 w-4 h-4 rounded-full block"
-                          style={{ backgroundColor: item.colorProd }}
+                          style={{ backgroundColor: item?.colorProd }}
                         />
                       </p>
                       <p className="text-sm font-semibold">
-                        x{item.quantityProd}
+                        x{item?.quantityProd}
                       </p>
                     </div>
                   </div>
@@ -89,14 +89,14 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                     <div className="flex items-center space-x-2 text-white">
                       <p className="text-sm font-semibold">Thành tiền:</p>
                       <p className="text-sm text-red-500 font-semibold">
-                        {(item.quantityProd * item.priceProd).toLocaleString(
+                        {(item?.quantityProd * item?.priceProd).toLocaleString(
                           "vi"
                         )}{" "}
                         đ
                       </p>
                     </div>
                     <button
-                      onClick={() => handleDeletePurchase(item.id)}
+                      onClick={() => handleDeletePurchase(item?.id)}
                       className="text-white hover:bg-red-700 hover:bg-opacity-10 max-w-[140px] flex items-center justify-center space-x-2 border border-color-primary px-1 py-2 rounded-md"
                     >
                       <span className="font-bold text-sm flex items-center space-x-1">

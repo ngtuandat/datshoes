@@ -81,18 +81,18 @@ const NavClientMb = ({
 
         <nav className="flex flex-col">
           {customerNav.map((item, index) => (
-            <Link href={item.url} key={index}>
+            <Link href={item?.url} key={index}>
               <div
                 onClick={() => setOpen(false)}
                 key={index}
                 className={`h-12 px-4 py-1.5 flex space-x-3 items-center text-sm font-semibold relative ${
-                  pathSelected === item.url
+                  pathSelected === item?.url
                     ? " text-primary bg-[rgba(0,171,85,0.16)]"
                     : "text-[rgb(145,158,171)]"
                 }`}
               >
-                {item.icon}
-                <p>{item.label}</p>
+                {item?.icon}
+                <p>{item?.label}</p>
               </div>
             </Link>
           ))}
@@ -110,18 +110,18 @@ const NavClientMb = ({
             </div>
             <nav className="flex flex-col">
               {userNav.map((item, index) => (
-                <Link href={item.url} key={index}>
+                <Link href={item?.url} key={index}>
                   <div
                     onClick={() => setOpen(false)}
                     key={index}
                     className={`h-12 px-4 py-1.5 flex space-x-3 items-center text-sm font-semibold relative ${
-                      pathSelected === item.url
+                      pathSelected === item?.url
                         ? " text-primary bg-[rgba(0,171,85,0.16)]"
                         : "text-[rgb(145,158,171)]"
                     }`}
                   >
-                    {item.icon}
-                    <p>{item.label}</p>
+                    {item?.icon}
+                    <p>{item?.label}</p>
                   </div>
                 </Link>
               ))}
@@ -138,18 +138,18 @@ const NavClientMb = ({
         ) : (
           <nav className="flex flex-col">
             {noSign.map((item, index) => (
-              <Link href={item.url} key={index}>
+              <Link href={item?.url} key={index}>
                 <div
                   onClick={() => setOpen(false)}
                   key={index}
                   className={`h-12 px-4 py-1.5 flex space-x-3 items-center text-sm font-semibold relative ${
-                    pathSelected === item.url
+                    pathSelected === item?.url
                       ? " text-primary bg-[rgba(0,171,85,0.16)]"
                       : "text-[rgb(145,158,171)]"
                   }`}
                 >
-                  {item.icon}
-                  <p>{item.label}</p>
+                  {item?.icon}
+                  <p>{item?.label}</p>
                 </div>
               </Link>
             ))}

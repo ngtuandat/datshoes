@@ -70,11 +70,11 @@ const ManageAccount = ({ loading }: { loading: Boolean }) => {
     return users.map((item: ListUser, index: number) => {
       return [
         <> {count === 0 ? index + 1 : count++}</>,
-        item.firstName + " " + item.lastName,
-        item.email,
-        <>{dateFormat(item.createdAt, "HH:MM dd/mm/yyyy")}</>,
+        item?.firstName + " " + item?.lastName,
+        item?.email,
+        <>{dateFormat(item?.createdAt, "HH:MM dd/mm/yyyy")}</>,
         <>
-          <Role role={item.admin} id={item.id} />
+          <Role role={item?.admin} id={item?.id} />
         </>,
       ];
     });

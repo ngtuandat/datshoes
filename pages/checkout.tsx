@@ -248,46 +248,46 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
         <div className="flex items-center space-x-2">
           <img
             className="w-16 h-16 rounded-lg"
-            src={item.imageProd}
-            alt={item.nameProd}
+            src={item?.imageProd}
+            alt={item?.nameProd}
           />
           <div className="flex flex-col space-y-3">
-            <span className="text-sm font-semibold">{item.nameProd}</span>
+            <span className="text-sm font-semibold">{item?.nameProd}</span>
             <div className="flex items-center space-x-2">
               <span className="space-x-1 text-[rgb(145,158,171)]">
                 <span>size: </span>
                 <span className="text-white p-1 bg-[rgba(145,158,171,0.16)] text-xs font-medium rounded-md">
-                  {item.sizeProd}
+                  {item?.sizeProd}
                 </span>
               </span>
               <hr className="border h-4 border-[rgba(145,158,171,0.24)]" />
               <span
                 className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: item.colorProd }}
+                style={{ backgroundColor: item?.colorProd }}
               />
             </div>
           </div>
         </div>,
-        <div>{item.priceProd.toLocaleString("vi")} đ</div>,
+        <div>{item?.priceProd.toLocaleString("vi")} đ</div>,
         <div className="relative hover:border-white select-none flex items-center rounded-lg w-[78px] py-1 justify-around border border-[rgba(145,158,171,0.32)]">
           <button>
             <BiMinus
               onClick={() =>
-                handleMinus(item.idProd, item.userId, item.quantityProd)
+                handleMinus(item?.idProd, item?.userId, item?.quantityProd)
               }
             />
           </button>
-          {item.quantityProd}
+          {item?.quantityProd}
           <button>
             {" "}
-            <BiPlus onClick={() => handlePlus(item.idProd, item.userId)} />
+            <BiPlus onClick={() => handlePlus(item?.idProd, item?.userId)} />
           </button>
         </div>,
         <div>
-          {(item.priceProd * item.quantityProd).toLocaleString("vi")} đ
+          {(item?.priceProd * item?.quantityProd).toLocaleString("vi")} đ
         </div>,
         <div
-          onClick={() => handleDeleteProdCart(item.idProd, item.userId)}
+          onClick={() => handleDeleteProdCart(item?.idProd, item?.userId)}
           className="hover:bg-[rgba(145,158,171,0.08)] p-2 rounded-full text-base cursor-pointer"
         >
           <RiDeleteBinLine className="text-[rgb(145,158,171)]" />
@@ -602,23 +602,23 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                     {shipping.map((item, idx) => (
                       <div
                         key={idx}
-                        onClick={() => handleDeliveryOption(item.title)}
+                        onClick={() => handleDeliveryOption(item?.title)}
                         className={`cursor-pointer flex items-center select-none space-x-6 p-5 border border-color-primary rounded-lg ${
-                          optionDelivery === item.title && "shadow-md"
+                          optionDelivery === item?.title && "shadow-md"
                         }`}
                       >
                         <div
                           className={`w-5 h-5 border border-[rgb(145,158,171)] flex items-center justify-center rounded-full ${
-                            optionDelivery === item.title &&
+                            optionDelivery === item?.title &&
                             "bg-green-600 border-none"
                           }`}
                         >
                           <BsCheck className="text-[rgb(33,43,54)] text-lg" />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold">{item.title}</p>
+                          <p className="text-sm font-semibold">{item?.title}</p>
                           <span className="text-sm text-[rgb(145,158,171)]">
-                            {item.date}
+                            {item?.date}
                           </span>
                         </div>
                       </div>
@@ -631,25 +631,25 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                     {payment.map((item, idx) => (
                       <div
                         key={idx}
-                        onClick={() => setOptionPayment(item.title)}
+                        onClick={() => setOptionPayment(item?.title)}
                         className={`cursor-pointer flex items-center select-none space-x-6 p-5 border border-color-primary rounded-lg ${
-                          optionDelivery === item.title && "shadow-md"
+                          optionDelivery === item?.title && "shadow-md"
                         }`}
                       >
                         <div
                           className={`w-5 h-5 border border-[rgb(145,158,171)] flex items-center justify-center rounded-full ${
-                            optionPayment === item.title &&
+                            optionPayment === item?.title &&
                             "bg-green-600 border-none"
                           }`}
                         >
-                          {optionPayment === item.title && (
+                          {optionPayment === item?.title && (
                             <BsCheck className="text-[rgb(33,43,54)] text-lg" />
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold">{item.title}</p>
+                          <p className="text-sm font-semibold">{item?.title}</p>
                           <span className="text-sm text-[rgb(145,158,171)]">
-                            {item.des}
+                            {item?.des}
                           </span>
                         </div>
                       </div>

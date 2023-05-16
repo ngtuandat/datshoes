@@ -49,7 +49,7 @@ const Logged = ({ name, avatar }: LoggedProps) => {
           {menuUser.map((item, index) => (
             <Menu.Item key={index}>
               {({ active }) => (
-                <Link href={item.href}>
+                <Link href={item?.href}>
                   <button
                     className={`${
                       active
@@ -57,9 +57,9 @@ const Logged = ({ name, avatar }: LoggedProps) => {
                         : ""
                     } group flex w-full items-center text-white rounded-md px-2 py-2 space-x-2 text-sm `}
                   >
-                    {item.icon}
+                    {item?.icon}
                     <p className="w-full min-w-fit flex justify-start">
-                      {item.title}
+                      {item?.title}
                     </p>
                   </button>
                 </Link>

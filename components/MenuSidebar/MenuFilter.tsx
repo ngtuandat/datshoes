@@ -190,38 +190,38 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
         </div>
         <div className="p-5 space-y-6">
           {filterCheck.map((section) => (
-            <div key={section.id}>
+            <div key={section?.id}>
               <span className="text-base font-semibold block mb-3">
-                {section.name}
+                {section?.name}
               </span>
               <div className="space-y-3">
-                {section.options.map((option, optionIdx) => (
+                {section?.options?.map((option, optionIdx) => (
                   <label
-                    key={option.value}
-                    htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                    key={option?.value}
+                    htmlFor={`filter-mobile-${section?.id}-${optionIdx}`}
                     className="select-none flex relative group items-center space-x-2 text-white text-sm font-normal cursor-pointer"
                   >
                     <input
-                      id={`filter-mobile-${section.id}-${optionIdx}`}
-                      name={`${section.id}[]`}
-                      onChange={() => handleCheckBox(option.value)}
-                      defaultValue={option.value}
+                      id={`filter-mobile-${section?.id}-${optionIdx}`}
+                      name={`${section?.id}[]`}
+                      onChange={() => handleCheckBox(option?.value)}
+                      defaultValue={option?.value}
                       type="checkbox"
                       className={`w-5 h-5 appearance-none transition-all border-2 group-hover:border-green-400 border-gray-500 rounded-md cursor-pointer ${
-                        valueCheck.includes(option.value)
+                        valueCheck.includes(option?.value)
                           ? "bg-green-500 border-none"
                           : ""
                       }`}
                     />
                     <BsCheck
                       className={`absolute text-[rgb(33,43,54)] transition-all -left-1.5 text-base  ${
-                        valueCheck.includes(option.value)
+                        valueCheck.includes(option?.value)
                           ? "text-opacity-100"
                           : "text-opacity-0"
                       }`}
                     />
 
-                    <span> {option.label}</span>
+                    <span> {option?.label}</span>
                   </label>
                 ))}
               </div>
@@ -229,34 +229,34 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
           ))}
 
           {filterRadio.map((section) => (
-            <div key={section.id}>
+            <div key={section?.id}>
               <span className="text-base font-semibold block mb-3">
-                {section.name}
+                {section?.name}
               </span>
               <div className="space-y-3">
-                {section.options.map((option, optionIdx) => (
+                {section?.options.map((option, optionIdx) => (
                   <label
-                    key={option.value}
-                    htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                    key={option?.value}
+                    htmlFor={`filter-mobile-${section?.id}-${optionIdx}`}
                     className="select-none flex relative group items-center space-x-2 text-white text-sm font-normal cursor-pointer"
                   >
                     <input
-                      id={`filter-mobile-${section.id}-${optionIdx}`}
-                      name={`${section.id}[]`}
-                      defaultValue={option.value}
-                      onChange={() => handleCheckCategory(option.value)}
+                      id={`filter-mobile-${section?.id}-${optionIdx}`}
+                      name={`${section?.id}[]`}
+                      defaultValue={option?.value}
+                      onChange={() => handleCheckCategory(option?.value)}
                       type="radio"
                       className={`w-5 h-5 transition-all appearance-none border-2 group-hover:border-green-400 border-gray-500 rounded-full cursor-pointer ${
-                        dfCheck === option.value ? "border-green-500" : ""
+                        dfCheck === option?.value ? "border-green-500" : ""
                       }`}
                     />
                     <div
                       className={`absolute w-3 h-3 transition-all rounded-full -left-1 ${
-                        dfCheck === option.value ? "bg-green-500" : ""
+                        dfCheck === option?.value ? "bg-green-500" : ""
                       }`}
                     ></div>
 
-                    <span> {option.label}</span>
+                    <span> {option?.label}</span>
                   </label>
                 ))}
               </div>

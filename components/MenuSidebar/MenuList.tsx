@@ -59,7 +59,7 @@ const MenuList = () => {
       {menuList.map((item, index) => (
         <motion.li variants={liVariant} key={index} className="space-y-3">
           <h2 className="text-xs font-semibold text-[rgb(145,158,171)]">
-            {item.title}
+            {item?.title}
           </h2>
           <motion.div className=" grid grid-cols-2 gap-2">
             {item.icons.map((icon, index) => (

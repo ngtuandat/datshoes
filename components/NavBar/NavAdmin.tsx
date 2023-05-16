@@ -91,10 +91,10 @@ const NavAdmin = ({
   }, [path]);
 
   const handleSelectMenu = (label: string) => {
-    if (!openMenu.includes(label)) {
+    if (!openMenu?.includes(label)) {
       setOpenMenu([...openMenu, label]);
     } else {
-      const res = openMenu.filter((item) => item !== label);
+      const res = openMenu?.filter((item) => item !== label);
       setOpenMenu(res);
     }
   };
@@ -147,45 +147,45 @@ const NavAdmin = ({
           <div className="space-y-1 relative">
             {menuAdmin.map((menu, idx) => (
               <div key={idx}>
-                {menu.href ? (
+                {menu?.href ? (
                   <Link
                     onClick={handleNavigation}
                     className={`block ${
                       zoomOutMenu ? "text-[10px]" : "text-sm"
                     }`}
-                    href={menu.href}
+                    href={menu?.href}
                   >
                     <div
                       className={`cursor-pointer flex items-center ${
                         zoomOutMenu ? "flex-col space-y-1" : "space-x-3"
                       }  py-3 pl-4 pr-3 rounded-md 
                     ${
-                      pathSelected === menu.href
+                      pathSelected === menu?.href
                         ? "text-[rgb(91,229,132)] bg-[rgba(0,171,85,0.16)] font-semibold"
                         : "font-medium text-[rgb(145,158,171)] hover:bg-[rgba(145,158,171,0.08)]"
                     }`}
                     >
                       <div className={`${zoomOutMenu ? "text-lg" : "text-lg"}`}>
-                        {menu.icon}
+                        {menu?.icon}
                       </div>
-                      <p>{menu.label}</p>
+                      <p>{menu?.label}</p>
                     </div>
                   </Link>
                 ) : (
                   <div
-                    onMouseEnter={(e) => handleShowMenu(e, menu.menuChildren)}
+                    onMouseEnter={(e) => handleShowMenu(e, menu?.menuChildren)}
                     onMouseLeave={() => setDisplayMenu("hidden")}
-                    onClick={() => handleSelectMenu(menu.label)}
+                    onClick={() => handleSelectMenu(menu?.label)}
                     className={`block  ${
                       zoomOutMenu
                         ? "text-[10px] relative hover:after:cursor-pointer hover:after:absolute hover:after:w-10 hover:after:h-full hover:after:-right-10 hover:after:top-0"
                         : "text-sm"
-                    } ${menu.label}`}
+                    } ${menu?.label}`}
                   >
                     <div
                       className={`cursor-pointer relative flex items-center py-3 pl-4 pr-3 rounded-md 
                     ${
-                      menu.menuChildren?.find(
+                      menu?.menuChildren?.find(
                         (ele) => ele.href === pathSelected
                       )
                         ? "text-[rgb(91,229,132)] bg-[rgba(0,171,85,0.16)] font-semibold"
@@ -200,16 +200,16 @@ const NavAdmin = ({
                         <div
                           className={`${zoomOutMenu ? "text-lg" : "text-lg"}`}
                         >
-                          {menu.icon}
+                          {menu?.icon}
                         </div>
-                        <p>{menu.label}</p>
+                        <p>{menu?.label}</p>
                       </div>
                       <div
                         className={`absolute text-base select-none pointer-events-none ${
                           zoomOutMenu ? "right-0 top-3" : "right-4"
                         } transition-all duration-300`}
                       >
-                        {openMenu.includes(menu.label) ? (
+                        {openMenu?.includes(menu?.label) ? (
                           <MdOutlineKeyboardArrowDown />
                         ) : (
                           <MdOutlineKeyboardArrowRight />
@@ -221,32 +221,34 @@ const NavAdmin = ({
                 {!zoomOutMenu && (
                   <motion.div
                     initial="closed"
-                    animate={openMenu.includes(menu.label) ? "open" : "closed"}
+                    animate={
+                      openMenu?.includes(menu?.label) ? "open" : "closed"
+                    }
                     variants={menuChildrenVariant}
                     className="mt-1 overflow-hidden"
                   >
-                    {menu.menuChildren?.map((item, idex) => (
+                    {menu?.menuChildren?.map((item, idex) => (
                       <Link
                         key={idex}
-                        href={item.href}
-                        onClick={() => handleNavigationChild(menu.label)}
+                        href={item?.href}
+                        onClick={() => handleNavigationChild(menu?.label)}
                       >
                         <div className="flex items-center py-2 pl-4 pr-3 rounded-md text-[rgb(145,158,171)] hover:bg-[rgba(145,158,171,0.08)]">
                           <RxDotFilled
                             className={`${
-                              pathSelected === item.href
+                              pathSelected === item?.href
                                 ? "text-green-500 scale-105"
                                 : ""
                             }`}
                           />
                           <p
                             className={`text-sm ml-3.5 ${
-                              pathSelected === item.href
+                              pathSelected === item?.href
                                 ? " font-semibold text-white"
                                 : "font-normal"
                             }`}
                           >
-                            {item.title}
+                            {item?.title}
                           </p>
                         </div>
                       </Link>
@@ -267,16 +269,16 @@ const NavAdmin = ({
         >
           {listMenuHover &&
             listMenuHover.map((item, idx) => (
-              <Link key={idx} href={item.href}>
+              <Link key={idx} href={item?.href}>
                 <div className="flex items-center py-2 pl-4 pr-3 rounded-md text-[rgb(145,158,171)] hover:bg-[rgba(145,158,171,0.08)]">
                   <p
                     className={`text-sm ml-3.5 ${
-                      pathSelected === item.href
+                      pathSelected === item?.href
                         ? " font-semibold text-white"
                         : "font-normal"
                     }`}
                   >
-                    {item.title}
+                    {item?.title}
                   </p>
                 </div>
               </Link>

@@ -374,16 +374,16 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
                         className="flex items-center space-x-4 mt-3"
                       >
                         <p className="flex items-center font-semibold min-w-[30px]">
-                          <span className="text-sm">{item.star}</span>
+                          <span className="text-sm">{item?.star}</span>
                           <TiStarFullOutline className="text-yellow-500 ml-1" />
                         </p>
                         <RatingBar
                           percent={
-                            (item.total / dataProduct.review.length) * 100
+                            (item?.total / dataProduct.review.length) * 100
                           }
                         />
                         <p className="text-sm text-[rgb(145,158,171)] min-w-[80px]">
-                          {item.total} đánh giá
+                          {item?.total} đánh giá
                         </p>
                       </div>
                     ))}
@@ -418,21 +418,21 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
                       <div className="flex lg:flex-col items-center mb-4 lg:mb-0 space-x-4 lg:space-x-0 text-center">
                         <LetterAvatar
                           className="w-14 h-14"
-                          name={item.nameUser}
+                          name={item?.nameUser}
                         />
                         <p className="flex flex-col items-start lg:items-center lg:mt-4">
                           <span className="text-sm font-semibold">
-                            {item.nameUser}
+                            {item?.nameUser}
                           </span>
                           <span className="text-xs text-[rgb(145,158,171)] font-normal mt-1">
-                            {new Date(item.createdAt).toDateString()}
+                            {new Date(item?.createdAt).toDateString()}
                           </span>
                         </p>
                       </div>
                       <div>
-                        <RatingStar className="text-lg" star={item.rating} />
+                        <RatingStar className="text-lg" star={item?.rating} />
                         <span className="block text-base font-medium mt-2">
-                          {item.content}
+                          {item?.content}
                         </span>
                       </div>
                     </div>

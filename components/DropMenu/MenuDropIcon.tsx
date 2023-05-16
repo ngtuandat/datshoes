@@ -44,7 +44,7 @@ const MenuDropIcon = ({
         )}
         <div className="my-1 space-y-1">
           {menu.map((item, index) => (
-            <Link key={index} href={item.href}>
+            <Link key={index} href={item?.href}>
               <Menu.Item as="div" className="w-full">
                 {({ active }) => (
                   <button
@@ -54,9 +54,9 @@ const MenuDropIcon = ({
                         : ""
                     } group flex w-full items-center text-white rounded-md px-2 py-2 space-x-2 text-sm `}
                   >
-                    <p className="text-sm">{item.icon}</p>
+                    <p className="text-sm">{item?.icon}</p>
                     <p className="w-full min-w-fit flex justify-start">
-                      {item.title}
+                      {item?.title}
                     </p>
                   </button>
                 )}

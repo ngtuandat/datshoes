@@ -33,9 +33,9 @@ const FilterContent = () => {
   const router = useRouter();
 
   const handleSort = (option: SortOption) => {
-    setSortOption(option.name);
-    setSortValue(option.value);
-    const query = { ...router.query, sort: option.value };
+    setSortOption(option?.name);
+    setSortValue(option?.value);
+    const query = { ...router.query, sort: option?.value };
 
     router.push({ pathname: "/product", query }, undefined, {
       shallow: true,
@@ -116,12 +116,12 @@ const FilterContent = () => {
                           className={`cursor-pointer rounded-md block py-1.5 px-2 text-sm font-medium text-white ${
                             active ? "bg-[rgba(145,158,171,0.10)]" : ""
                           } ${
-                            sortValue === option.value
+                            sortValue === option?.value
                               ? "bg-[rgba(145,158,171,0.16)]"
                               : ""
                           }`}
                         >
-                          {option.name}
+                          {option?.name}
                         </p>
                       )}
                     </Menu.Item>
