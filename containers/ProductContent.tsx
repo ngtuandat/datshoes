@@ -81,7 +81,7 @@ const ProductContent = () => {
             >
               <div className="p-2">
                 <img
-                  className="rounded-lg"
+                  className="rounded-lg w-[262px] h-[262px] object-cover"
                   src={product?.listImage[0]}
                   alt={product?.name}
                 />

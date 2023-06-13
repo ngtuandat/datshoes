@@ -34,7 +34,7 @@ const DEFAULT_PRODUCTS_LIMIT = 5;
 
 const ManageProduct = ({ loading }: { loading: Boolean }) => {
   const router = useRouter();
-  let count = DEFAULT_PRODUCTS_LIMIT * (Number(router.query.page) - 1) + 1;
+  let count = DEFAULT_PRODUCTS_LIMIT * (Number(router.query.page ?? 1) - 1) + 1;
   const [limitValue, setLimitValue] = useState(DEFAULT_PRODUCTS_LIMIT);
   const [product, setProduct] = useState([]);
   const [totalProduct, setTotalProduct] = useState(0);
@@ -117,6 +117,8 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
 
   const dataSourceProd = useMemo(() => {
     return product.map((item: ListProduct, index: number) => {
+      console.log("count", count);
+      console.log("count1", index);
       return [
         <> {count === 0 ? index + 1 : count++}</>,
         <p>{item?.name}</p>,

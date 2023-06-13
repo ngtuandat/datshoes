@@ -26,13 +26,11 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const startLoading = () => {
       setLoading(true);
       document.body.style.overflow = "hidden";
-
     };
 
     const stopLoading = () => {
       setLoading(false);
       document.body.style.overflow = "unset";
-
     };
 
     router.events.on("routeChangeStart", startLoading);

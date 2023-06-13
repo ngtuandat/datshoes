@@ -2,6 +2,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import React from "react";
+import Underline from '@tiptap/extension-underline'
 import {
   AiOutlineBold,
   AiOutlineEnter,
