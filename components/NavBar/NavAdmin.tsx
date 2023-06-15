@@ -22,21 +22,21 @@ const menuAdmin = [
   },
 
   {
-    label: "Sản Phẩm",
+    label: "Quản Lý Sản Phẩm",
     icon: <GiConverseShoe />,
     menuChildren: [
       {
-        title: "Danh Sách",
+        title: "Quản Lý Danh Sách Sản Phẩm",
         href: "/dashboard/product/manage-product",
       },
       {
-        title: "Tạo",
+        title: "Tạo Sản Phẩm",
         href: "/dashboard/product/create",
       },
     ],
   },
   {
-    label: "Tài Khoản",
+    label: "Quản Lý Tài Khoản",
     href: "/dashboard/manage-account",
     icon: <FaUserCog />,
   },

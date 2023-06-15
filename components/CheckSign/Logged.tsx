@@ -13,16 +13,16 @@ interface LoggedProps {
 }
 
 const menuUser = [
-  {
-    icon: <BsFilePerson />,
-    title: "Trang cá nhân",
-    href: "/user/profile",
-  },
-  {
-    icon: <BiPurchaseTagAlt />,
-    title: "Đơn mua",
-    href: "/user/purchase",
-  },
+  // {
+  //   icon: <BsFilePerson />,
+  //   title: "Trang cá nhân",
+  //   href: "/user/profile",
+  // },
+  // {
+  //   icon: <BiPurchaseTagAlt />,
+  //   title: "Đơn mua",
+  //   href: "/user/purchase",
+  // },
 ];
 
 const Logged = ({ name, avatar }: LoggedProps) => {
@@ -46,7 +46,7 @@ const Logged = ({ name, avatar }: LoggedProps) => {
           <div className="text-white font-semibold">{name}</div>
         </Menu.Button>
         <Menu.Items className="absolute bg-dark shadow-md top-[130%] rounded-lg w-40 p-1">
-          {menuUser.map((item, index) => (
+          {/* {menuUser.map((item, index) => (
             <Menu.Item key={index}>
               {({ active }) => (
                 <Link href={item?.href}>
@@ -65,7 +65,7 @@ const Logged = ({ name, avatar }: LoggedProps) => {
                 </Link>
               )}
             </Menu.Item>
-          ))}
+          ))} */}
           <Menu.Item as="div" className="w-full">
             {({ active }) => (
               <button

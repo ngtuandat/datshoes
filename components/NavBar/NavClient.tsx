@@ -18,7 +18,19 @@ const NavClient = () => {
     },
     {
       url: "/product",
-      label: "Sản Phẩm",
+      label: "Xem Sản Phẩm",
+    },
+    {
+      url: "/checkout",
+      label: "Xem Giỏ Hàng",
+    },
+    {
+      url: "/user/profile",
+      label: "Quản Lý Thông Tin Cá Nhân",
+    },
+    {
+      url: "/user/purchase",
+      label: "Quản Lý Đơn Hàng",
     },
   ];
   return (
