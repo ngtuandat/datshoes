@@ -13,6 +13,7 @@ import {
 import { RxDotFilled } from "react-icons/rx";
 import { motion } from "framer-motion";
 import { ListMenuHover } from "../../interfaces/main";
+import { BiPurchaseTagAlt } from "react-icons/bi";
 
 const menuAdmin = [
   {
@@ -39,6 +40,11 @@ const menuAdmin = [
     label: "Quản Lý Tài Khoản",
     href: "/dashboard/manage-account",
     icon: <FaUserCog />,
+  },
+  {
+    label: "Quản Lý Sản Phẩm Đã Bán",
+    href: "/dashboard/purchase",
+    icon: <BiPurchaseTagAlt />,
   },
 ];
 
