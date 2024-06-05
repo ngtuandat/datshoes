@@ -34,7 +34,8 @@ import Review from "../../containers/Review";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import LoadingPage from "../../components/Loading/LoadingPage";
-
+import toast from "react-hot-toast";
+import LoadingBtn from "../../components/Loading/LoadingBtn";
 const tabs = ["description", "review"];
 
 const ProductDetail = ({ loading }: { loading: Boolean }) => {
@@ -48,6 +49,7 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
   const [openWriteReview, setOpenWriteReview] = useState(false);
   const [ratingStar, setRatingStar] = useState<RatingStarProps[]>([]);
   const [averageStar, setAverageStar] = useState<number>();
+  const [loadAddProd, setLoadAddProd] = useState(false);
 
   const router = useRouter();
   const token = Cookies.get("token");
@@ -112,6 +114,7 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
   const handleAddToCart = async () => {
     try {
       if (token) {
+        setLoadAddProd(true);
         const decoded: any = jwt_decode(token);
         const productBuy = {
           idUser: String(decoded.id),
@@ -125,6 +128,8 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
         };
         await addToCart(productBuy);
         fetchCart(decoded.id);
+        toast.success("Đã thêm sản phẩm");
+        setLoadAddProd(false);
       }
     } catch (error) {
       console.log(error);
@@ -308,10 +313,11 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
             </div>
             <div className="flex items-center space-x-3">
               <button
+                disabled={loadAddProd}
                 onClick={handleAddToCart}
                 className="flex items-center space-x-1 px-5 py-3 text-base font-bold rounded-lg text-[rgb(33,43,54)] bg-[rgb(255,171,0)] hover:shadow-[0_15px_20px_-15px_rgb(255,171,0)]"
               >
-                <MdOutlineAddShoppingCart />
+                {loadAddProd ? <LoadingBtn /> : <MdOutlineAddShoppingCart />}
                 <p>Thêm vào giỏ hàng</p>
               </button>
               <button
