@@ -31,7 +31,6 @@ const HeaderClient = () => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     if (!openHeader) {
       document.body.style.overflow = "unset";
