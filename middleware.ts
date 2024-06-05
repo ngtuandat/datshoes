@@ -33,8 +33,8 @@ export function middleware(request: NextRequest) {
     if (pathname.startsWith("/user/profile")) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
-    if (pathname.startsWith("/user/purchase")) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
-    }
+    // if (pathname.startsWith("/user/purchase")) {
+    //   return NextResponse.redirect(new URL("/sign-in", request.url));
+    // }
   }
 }
