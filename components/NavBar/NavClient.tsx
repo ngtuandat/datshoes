@@ -14,24 +14,24 @@ const NavClient = () => {
   const customerNav = [
     {
       url: "/",
-      label: "Trang Chủ",
+      label: "Trang chủ",
     },
     {
       url: "/product",
-      label: "Xem Sản Phẩm",
+      label: "Xem sản phẩm",
     },
     {
       url: "/checkout",
-      label: "Xem Giỏ Hàng",
+      label: "Xem giỏ hàng",
     },
-    {
-      url: "/user/profile",
-      label: "Quản Lý Thông Tin Cá Nhân",
-    },
-    {
-      url: "/user/purchase",
-      label: "Quản Lý Đơn Hàng",
-    },
+    // {
+    //   url: "/user/profile",
+    //   label: "Quản lý thông tin cá nhân",
+    // },
+    // {
+    //   url: "/user/purchase",
+    //   label: "Quản lý đơn hàng",
+    // },
   ];
   return (
     <div>

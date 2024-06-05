@@ -1,13 +1,14 @@
 import axios from "axios";
 import { newUser, ProfileUpdate, Role, User } from "../../interfaces/user";
-import { GetUsersQuery } from './../../interfaces/user.d';
+import { GetUsersQuery } from "./../../interfaces/user.d";
 
 export function CreateAcc(user: newUser) {
+  console.log({ user });
   return axios.post("/api/user/register", { user });
 }
 
 export function LoginUser(user: User) {
-  return axios.post('api/user/login', { user })
+  return axios.post("api/user/login", { user });
 }
 
 export const getAllUser = async (query: GetUsersQuery) => {
@@ -23,5 +24,5 @@ export const getProfile = async (email: string) => {
 };
 
 export const updateProfile = async (profileUpdate: ProfileUpdate) => {
-  return await axios.put("/api/user/profile", { profileUpdate })
-}
+  return await axios.put("/api/user/profile", { profileUpdate });
+};

@@ -4,10 +4,12 @@ import jwt_decode from "jwt-decode";
 
 export function middleware(request: NextRequest) {
   const cookie = request.cookies.getAll();
+  console.log({ cookie });
   const { pathname } = request.nextUrl;
 
   if (cookie.length > 0) {
     const token = cookie.map((item) => item.value);
+    if (!token) return;
     const decoded: any = jwt_decode(token.toString());
 
     if (pathname.startsWith("/dashboard") && decoded.admin === false) {
