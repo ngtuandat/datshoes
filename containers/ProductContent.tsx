@@ -67,7 +67,7 @@ const ProductContent = () => {
       const decoded: any = jwt_decode(token);
       fetchCart(decoded.id);
     }
-  }, []);
+  }, [token]);
 
   return (
     <>

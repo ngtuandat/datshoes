@@ -17,32 +17,32 @@ import { BiPurchaseTagAlt } from "react-icons/bi";
 
 const menuAdmin = [
   {
-    label: "Thống Kê",
+    label: "Thống kê",
     href: "/dashboard",
     icon: <SiGoogleanalytics />,
   },
 
   {
-    label: "Quản Lý Sản Phẩm",
+    label: "Sản phẩm",
     icon: <GiConverseShoe />,
     menuChildren: [
       {
-        title: "Quản Lý Danh Sách Sản Phẩm",
+        title: "Danh sách sản phẩm",
         href: "/dashboard/product/manage-product",
       },
       {
-        title: "Tạo Sản Phẩm",
+        title: "Tạo sản phẩm",
         href: "/dashboard/product/create",
       },
     ],
   },
   {
-    label: "Quản Lý Tài Khoản",
+    label: "Quản lý tài khoản",
     href: "/dashboard/manage-account",
     icon: <FaUserCog />,
   },
   {
-    label: "Quản Lý Sản Phẩm Đã Bán",
+    label: "Sản phẩm đã bán",
     href: "/dashboard/purchase",
     icon: <BiPurchaseTagAlt />,
   },

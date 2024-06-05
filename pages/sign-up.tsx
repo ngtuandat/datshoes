@@ -8,7 +8,7 @@ import Register from "../containers/Register";
 const SignUp = ({ loading }: { loading: Boolean }) => {
   return (
     <>
-          {loading && <LoadingPage />}
+      {loading && <LoadingPage />}
       <CustomHeader>
         <title>Register | Cuc Shoes</title>
       </CustomHeader>
