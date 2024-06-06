@@ -22,6 +22,7 @@ export interface ButtonProps {
    * html submit form
    */
   submit?: boolean;
+  variant?: "primary" | "outline";
 }
 
 const Button = ({
@@ -30,17 +31,25 @@ const Button = ({
   className,
   submit,
   onClick,
+  variant = "primary",
 }: ButtonProps): JSX.Element => {
   return (
     <button
       type={submit ? "submit" : "button"}
       onClick={onClick}
-      className={`flex items-center space-x-2 ${
+      className={`flex items-center justify-center space-x-2 ${
         loading && "pointer-events-none"
-      } ${className}`}
+      } ${className}
+      ${
+        variant === "primary"
+          ? "bg-green-600 hover:bg-green-700 text-white"
+          : "text-white  bg-[rgba(145,158,171,0.44)] hover:bg-[rgba(145,158,171,0.6)]"
+      }
+      px-4 py-2 rounded-md font-semibold 
+      `}
     >
-      <p>{label}</p>
       {loading && <LoadingBtn />}
+      <p>{label}</p>
     </button>
   );
 };

@@ -65,7 +65,7 @@ const Modal = ({ children, open, setOpen, title, classClose }: ModalProps) => {
                     onClick={closeModal}
                   />
                   {title ? (
-                    <div className="text-lg mb-3 font-semibold text-white">
+                    <div className="text-xl mb-8 font-semibold text-white text-center">
                       {title}
                     </div>
                   ) : null}

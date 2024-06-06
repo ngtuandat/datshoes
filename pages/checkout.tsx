@@ -30,6 +30,9 @@ import DropMenu from "../components/DropMenu";
 import { BsCheck } from "react-icons/bs";
 import { IoBagCheckOutline } from "react-icons/io5";
 import LoadingPage from "../components/Loading/LoadingPage";
+import ModalCancel from "../components/Modal/ModalCancel";
+import Button from "../components/Button";
+import toast from "react-hot-toast";
 
 const tabs = ["Giỏ hàng", "Địa chỉ và thông tin", "Thanh toán"];
 const column = ["Sản phẩm", "Giá", "Số lượng", "Tổng tiền", ""];
@@ -75,7 +78,9 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   const [optionPayment, setOptionPayment] = useState<string>(
     "Thanh toán khi nhận hàng"
   );
-
+  const [openModalCancelProduct, setOpenModalCancelProduct] = useState(false);
+  const [itemCancel, setItemCancel] = useState<listProductBuyProps>();
+  const [loadingCancel, setLoadingCancel] = useState(false);
   const token = Cookies.get("token");
   const shipFree = new Date();
   shipFree.setDate(shipFree.getDate() + 5);
@@ -148,16 +153,21 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   };
 
   const handleDeleteProdCart = async (idProd: string, idUser: string) => {
+    setLoadingCancel(true);
+
     try {
       const productDelete = { idProd, idUser };
       const res = await deleteProdCart(productDelete);
       if (res.status === 200 && token) {
         const decoded: any = jwt_decode(token);
-        fetchCart(decoded.id);
+        setOpenModalCancelProduct(false);
+        await fetchCart(decoded.id);
+        toast.success("Đã xoá sản phẩm");
       }
     } catch (error) {
       console.log(error);
     }
+    setLoadingCancel(false);
   };
 
   const handleNextTab = () => {
@@ -287,7 +297,11 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
           {(item?.priceProd * item?.quantityProd).toLocaleString("vi")} đ
         </div>,
         <div
-          onClick={() => handleDeleteProdCart(item?.idProd, item?.userId)}
+          // onClick={() => handleDeleteProdCart(item?.idProd, item?.userId)}
+          onClick={() => {
+            setOpenModalCancelProduct(true);
+            setItemCancel(item);
+          }}
           className="hover:bg-[rgba(145,158,171,0.08)] p-2 rounded-full text-base cursor-pointer"
         >
           <RiDeleteBinLine className="text-[rgb(145,158,171)]" />
@@ -326,6 +340,29 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
       <CustomHeader title="Checkout">
         <title>Checkout | Cuc Shoes</title>
       </CustomHeader>
+      <ModalCancel
+        open={openModalCancelProduct}
+        setOpen={setOpenModalCancelProduct}
+        title="Xoá sản phẩm này?"
+      >
+        <div className="flex items-center justify-center gap-10 mt-10">
+          <Button
+            onClick={() => setOpenModalCancelProduct(false)}
+            className="w-40"
+            label="Huỷ"
+            variant="outline"
+          />
+          <Button
+            onClick={() => {
+              itemCancel &&
+                handleDeleteProdCart(itemCancel?.idProd, itemCancel?.userId);
+            }}
+            className="w-40"
+            label="Xoá"
+            loading={loadingCancel}
+          />
+        </div>
+      </ModalCancel>
       <section className="pb-10">
         <div className="text-white grid grid-cols-12 mb-10">
           <div className="col-span-12 lg:col-span-8">
