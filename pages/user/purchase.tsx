@@ -8,12 +8,17 @@ import { PurchaseProps } from "../../interfaces/product";
 import { BsTruck } from "react-icons/bs";
 import { MdOutlineDeleteSweep } from "react-icons/md";
 import LoadingPage from "../../components/Loading/LoadingPage";
+import ModalCancel from "../../components/Modal/ModalCancel";
+import Button from "../../components/Button";
+import toast from "react-hot-toast";
 
 const Purchase = ({ loading }: { loading: Boolean }) => {
   const [listPurchase, setListPurchase] = useState<PurchaseProps[]>();
 
   const token = Cookies.get("token");
-
+  const [openModalCancel, setOpenModalCancel] = useState(false);
+  const [itemCancel, setItemCancel] = useState<PurchaseProps>();
+  const [loadingCancel, setLoadingCancel] = useState(false);
   const fetchPurchase = async (id: string) => {
     try {
       const res = await getPurchaseOrder(id);
@@ -24,15 +29,19 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
   };
 
   const handleDeletePurchase = async (id: string) => {
+    setLoadingCancel(true);
     try {
       const res = await deletePurchase(id);
       if (res.status === 200 && token) {
         const decoded: any = jwt_decode(token);
-        fetchPurchase(decoded.id);
+        await fetchPurchase(decoded.id);
+        setOpenModalCancel(false);
+        toast.success("Đã huỷ đơn hàng");
       }
     } catch (error) {
       console.log(error);
     }
+    setLoadingCancel(false);
   };
 
   useEffect(() => {
@@ -48,6 +57,28 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
       <CustomHeader title="Đơn mua">
         <title>Đơn mua | Cuc Shoes</title>
       </CustomHeader>
+      <ModalCancel
+        open={openModalCancel}
+        setOpen={setOpenModalCancel}
+        title="Huỷ đơn hàng này?"
+      >
+        <div className="flex items-center justify-center gap-10 mt-10">
+          <Button
+            onClick={() => setOpenModalCancel(false)}
+            className="w-40"
+            label="Không"
+            variant="outline"
+          />
+          <Button
+            onClick={() => {
+              itemCancel && handleDeletePurchase(itemCancel?.id);
+            }}
+            className="w-40"
+            label="Huỷ đơn"
+            loading={loadingCancel}
+          />
+        </div>
+      </ModalCancel>
       <div className="w-full lg:w-2/3 mx-auto pb-8">
         {listPurchase && listPurchase?.length > 0 ? (
           <div>
@@ -67,7 +98,7 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                       alt={item?.nameProd}
                     />
                     <div className="text-white">
-                      <p className="text-base lg:text-xl font-bold">
+                      <p className="text-base lg:text-xl font-bold w-[90%]">
                         {item?.nameProd}
                       </p>
                       <p className="text-sm text-[rgb(145,158,171)]">
@@ -87,8 +118,10 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                   </div>
                   <div className="flex lg:flex-col lg:w-fit w-full mt-5 lg:mt-0 justify-between items-center lg:items-end lg:space-y-5">
                     <div className="flex items-center space-x-2 text-white">
-                      <p className="text-sm font-semibold">Thành tiền:</p>
-                      <p className="text-sm text-red-500 font-semibold">
+                      <p className="text-sm font-semibold whitespace-nowrap">
+                        Thành tiền:
+                      </p>
+                      <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
                         {(item?.quantityProd * item?.priceProd).toLocaleString(
                           "vi"
                         )}{" "}
@@ -96,7 +129,11 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                       </p>
                     </div>
                     <button
-                      onClick={() => handleDeletePurchase(item?.id)}
+                      // onClick={() => handleDeletePurchase(item?.id)}
+                      onClick={() => {
+                        setItemCancel(item);
+                        setOpenModalCancel(true);
+                      }}
                       className="text-white hover:bg-red-700 hover:bg-opacity-10 max-w-[140px] flex items-center justify-center space-x-2 border border-color-primary px-1 py-2 rounded-md"
                     >
                       <span className="font-bold text-sm flex items-center space-x-1">
