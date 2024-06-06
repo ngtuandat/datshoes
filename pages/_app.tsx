@@ -9,6 +9,7 @@ import store from "../redux/store";
 import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
+import { CartProvider } from "../contexts/cart/CartContext";
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -46,23 +47,25 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return getLayout(
     <Provider store={store}>
-      <ToastContainer
-        toastStyle={{
-          backgroundColor: "rgb(33,43,54)",
-          color: "white",
-        }}
-      />
-      <Toaster
-        toastOptions={{
-          className: "",
-          style: {
-            borderRadius: "50px",
+      <CartProvider>
+        <ToastContainer
+          toastStyle={{
             backgroundColor: "rgb(33,43,54)",
             color: "white",
-          },
-        }}
-      />
-      <Component {...pageProps} loading={loading} />
+          }}
+        />
+        <Toaster
+          toastOptions={{
+            className: "",
+            style: {
+              borderRadius: "50px",
+              backgroundColor: "rgb(33,43,54)",
+              color: "white",
+            },
+          }}
+        />
+        <Component {...pageProps} loading={loading} />
+      </CartProvider>
     </Provider>
   );
 }
