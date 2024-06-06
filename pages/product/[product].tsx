@@ -36,6 +36,8 @@ import jwt_decode from "jwt-decode";
 import LoadingPage from "../../components/Loading/LoadingPage";
 import toast from "react-hot-toast";
 import LoadingBtn from "../../components/Loading/LoadingBtn";
+import { useCountCart } from "../../hooks/useCountCart";
+import { useCart } from "../../contexts/cart/CartContext";
 const tabs = ["description", "review"];
 
 const ProductDetail = ({ loading }: { loading: Boolean }) => {
@@ -53,6 +55,7 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
 
   const router = useRouter();
   const token = Cookies.get("token");
+  const { count, fetchCart } = useCart();
 
   const fetchDetailProduct = async (id: string | string[]) => {
     try {
@@ -60,17 +63,6 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
       setDataProduct(res.data.detail);
       setSizeValue(res.data.detail.size[0]);
       setColorCheck(res.data.detail.color[0]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchCart = async (id: string) => {
-    try {
-      const res = await getProductCart(id);
-      if (res.data.count) {
-        sessionStorage.setItem("count", res.data.count);
-      }
     } catch (error) {
       console.log(error);
     }
@@ -112,9 +104,9 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
   };
 
   const handleAddToCart = async () => {
+    setLoadAddProd(true);
     try {
       if (token) {
-        setLoadAddProd(true);
         const decoded: any = jwt_decode(token);
         const productBuy = {
           idUser: String(decoded.id),
@@ -126,14 +118,16 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
           quantity: quantity,
           image: dataProduct?.listImage[0],
         };
+
         await addToCart(productBuy);
-        fetchCart(decoded.id);
+        await fetchCart(decoded.id);
+        await Cookies.set("updateCart", Math.random().toString());
         toast.success("Đã thêm sản phẩm");
-        setLoadAddProd(false);
       }
     } catch (error) {
       console.log(error);
     }
+    setLoadAddProd(false);
   };
 
   const handleBuyNow = async () => {

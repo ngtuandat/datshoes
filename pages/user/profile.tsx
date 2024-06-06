@@ -11,6 +11,8 @@ import Button from "../../components/Button";
 import DropMenu from "../../components/DropMenu";
 import { useRouter } from "next/router";
 import LoadingPage from "../../components/Loading/LoadingPage";
+import { useProfile } from "../../hooks/useProfile";
+import LoadingBtn from "../../components/Loading/LoadingBtn";
 
 const sex = [
   {
@@ -39,7 +41,6 @@ const listCity = [
   "Quảng Ninh",
 ];
 const Profile = ({ loading }: { loading: Boolean }) => {
-  const [profileUser, setProfileUser] = useState<ProfileProps>();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -52,17 +53,13 @@ const Profile = ({ loading }: { loading: Boolean }) => {
   const [loadingUploadFiles, setLoadingUploadFiles] = useState(false);
   const [sizeImage, setSizeImage] = useState<string>();
   const [urlAvatar, setUrlAvatar] = useState<string>();
+  const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false);
 
   const token = Cookies.get("token");
   const router = useRouter();
-  const fetchProfile = async (email: string) => {
-    try {
-      const res = await getProfile(email);
-      setProfileUser(res.data.profile);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+  const { fetchProfile, profile } = useProfile();
+
   const handleOnChangeImage = (changeEvent: any) => {
     const reader = new FileReader();
 
@@ -104,6 +101,7 @@ const Profile = ({ loading }: { loading: Boolean }) => {
   };
 
   const handleUpdateProfile = async () => {
+    setLoadingUpdateProfile(true);
     try {
       const profileUpdate = {
         firstName: firstName,
@@ -119,12 +117,14 @@ const Profile = ({ loading }: { loading: Boolean }) => {
       const res = await updateProfile(profileUpdate);
       if (token && res.status === 200) {
         const decoded: any = jwt_decode(token);
-        fetchProfile(decoded.email);
+        await fetchProfile(decoded.email);
+        Cookies.set("updateProfile", Math.random().toString());
         router.back();
       }
     } catch (error) {
       console.log(error);
     }
+    setLoadingUpdateProfile(false);
   };
 
   useEffect(() => {
@@ -135,18 +135,18 @@ const Profile = ({ loading }: { loading: Boolean }) => {
   }, [token]);
 
   useEffect(() => {
-    if (profileUser) {
-      setFirstName(profileUser.firstName);
-      setLastName(profileUser.lastName);
-      setEmail(profileUser.email);
-      setAddress(profileUser.profile.address);
-      setCity(profileUser.profile.city);
-      setPhoneNumber(profileUser.profile.phoneNumber);
-      setCheckSex(profileUser.profile.sex);
-      setBirthDay(profileUser.profile.birthDay);
-      setUrlAvatar(profileUser.profile.avatar);
+    if (profile) {
+      setFirstName(profile.firstName);
+      setLastName(profile.lastName);
+      setEmail(profile.email);
+      setAddress(profile.profile.address);
+      setCity(profile.profile.city);
+      setPhoneNumber(profile.profile.phoneNumber);
+      setCheckSex(profile.profile.sex);
+      setBirthDay(profile.profile.birthDay);
+      setUrlAvatar(profile.profile.avatar);
     }
-  }, [profileUser]);
+  }, [profile]);
 
   return (
     <>
@@ -335,8 +335,9 @@ const Profile = ({ loading }: { loading: Boolean }) => {
             </div>
             <button
               onClick={handleUpdateProfile}
-              className="text-white border border-color-primary rounded-md text-sm font-semibold px-4 py-2 hover:bg-green-500 hover:bg-opacity-10 cursor-pointer mr-2"
+              className="text-white border flex items-center gap-1 border-color-primary rounded-md text-sm font-semibold px-4 py-2 hover:bg-green-500 hover:bg-opacity-10 cursor-pointer mr-2"
             >
+              {loadingUpdateProfile && <LoadingBtn />}
               Lưu thay đổi
             </button>
           </div>

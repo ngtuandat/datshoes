@@ -10,27 +10,18 @@ import Link from "next/link";
 import { getProfile } from "../../services/user";
 import { IoMenuOutline } from "react-icons/io5";
 import HeaderMobile from "../MenuSidebar/HeaderMobile";
+import { useProfile } from "../../hooks/useProfile";
 
 const HeaderClient = () => {
   const { scrollYProgress } = useScroll();
   const [headerChange, setHeaderChange] = useState("h-[88px]");
-  const [name, setName] = useState<string>();
-  const [avatar, setAvatar] = useState<string>();
   const [openHeader, setOpenHeader] = useState(false);
 
   const token = Cookies.get("token");
+  const isUpdate = Cookies.get("updateProfile");
 
-  const fetchProfile = async (email: string) => {
-    try {
-      const res = await getProfile(email);
-      if (res.data.profile) {
-        setAvatar(res.data.profile?.profile?.avatar);
-        setName(res.data.profile?.firstName + " " + res.data.profile?.lastName);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { avatar, fetchProfile, name } = useProfile();
+
   useEffect(() => {
     if (!openHeader) {
       document.body.style.overflow = "unset";
@@ -42,10 +33,9 @@ const HeaderClient = () => {
   useEffect(() => {
     if (token) {
       const decoded: any = jwt_decode(token);
-      setName(decoded.firstName + " " + decoded.lastName);
       fetchProfile(decoded.email);
     }
-  }, [token]);
+  }, [token, isUpdate]);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
