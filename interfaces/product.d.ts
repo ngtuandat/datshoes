@@ -109,4 +109,5 @@ export interface PurchaseProps {
   userId: string;
   boughtAt: string;
   updatedAt: any;
+  status: string;
 }
