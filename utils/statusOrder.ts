@@ -4,17 +4,17 @@ export const getStatusColor = (status: string) => {
   console.log({ OrderStatus: OrderStatus.Pending });
   switch (status) {
     case OrderStatus.Pending:
-      return "bg-yellow-500 text-white";
+      return "text-yellow-500";
     case OrderStatus.Processing:
-      return "bg-blue-500 text-white";
+      return "text-blue-500";
     case OrderStatus.Shipped:
-      return "bg-purple-500 text-white";
+      return "text-purple-500";
     case OrderStatus.Delivered:
-      return "bg-green-500 text-white";
+      return "text-green-500";
     case OrderStatus.Cancelled:
-      return "bg-red-500 text-white";
+      return "text-red-500";
     default:
-      return "bg-gray-500 text-white";
+      return "text-gray-500";
   }
 };
 

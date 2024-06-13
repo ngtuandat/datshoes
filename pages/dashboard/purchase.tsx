@@ -14,6 +14,7 @@ import {
   getOrderStatusInVietnamese,
   getStatusColor,
 } from "../../utils/statusOrder";
+import DropDown from "../../components/DropDown";
 
 const columnPurchase = [
   "Số thứ tự",
@@ -28,11 +29,11 @@ const columnPurchase = [
 ];
 
 const listStatus = [
-  "Đang chờ",
-  "Đang xử lý",
-  "Đã giao hàng",
-  "Đã giao thành công",
-  "Đã hủy",
+  { title: "Đang chờ", value: "pending" },
+  { title: "Đang xử lý", value: "processing" },
+  { title: "Đang giao hàng", value: "shipped" },
+  { title: "Đã giao thành công", value: "delivered" },
+  { title: "Đã hủy", value: "cancelled" },
 ];
 const DEFAULT_PRODUCTS_LIMIT = 5;
 
@@ -75,11 +76,14 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
         <p>{item.quantityProd}</p>,
         <>{dateFormat(item?.updatedAt, "HH:MM dd/mm/yyyy")}</>,
         <span
-          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-            item.status
-          )}`}
+          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold `}
         >
-          {getOrderStatusInVietnamese(item.status)}
+          <DropDown
+            listData={listStatus}
+            selectValue={selectValue}
+            setSelectValue={setSelectValue}
+            defaultValue={item.status}
+          />
         </span>,
       ];
     });

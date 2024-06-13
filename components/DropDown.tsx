@@ -1,43 +1,39 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { RiArrowDropDownLine } from "react-icons/ri";
-interface DropdownOption {
-  name: string;
+import { IoIosArrowDown } from "react-icons/io";
+import { IoCheckmark } from "react-icons/io5";
+
+interface DropDownProps {
+  listData: {
+    title: string;
+    value: string;
+  }[];
+  selectValue: any;
+  setSelectValue: any;
+  defaultValue: any;
 }
 
-interface DropdownListProps {
-  options: DropdownOption[];
-  defaultSelected?: DropdownOption;
-  onChange?: (selected: DropdownOption) => void;
-}
-
-const DropdownList: React.FC<DropdownListProps> = ({
-  options,
-  defaultSelected,
-  onChange,
-}) => {
-  const [selected, setSelected] = useState<DropdownOption>(
-    defaultSelected || options[0]
-  );
-
-  const handleChange = (option: DropdownOption) => {
-    setSelected(option);
-    if (onChange) {
-      onChange(option);
-    }
-  };
-
+export default function DropDown({
+  listData,
+  selectValue,
+  setSelectValue,
+  defaultValue,
+}: DropDownProps) {
+  const [selected, setSelected] = useState<any>();
+  useEffect(() => {
+    const defaultItem: any = listData.find(
+      (item) => item.value === defaultValue
+    );
+    setSelected(defaultItem || listData[0]);
+  }, [listData, defaultValue]);
   return (
-    <div className="fixed top-16 w-72">
-      <Listbox value={selected} onChange={handleChange}>
+    <div className="w-30`">
+      <Listbox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
-          <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-            <span className="block truncate">{selected.name}</span>
+          <Listbox.Button className="relative w-full cursor-default rounded-xl  py-2 pl-3 pr-10 text-left border border-white/20 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+            <span className="block truncate">{selected?.title}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-              <RiArrowDropDownLine
-                className="h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
+              <IoIosArrowDown />
             </span>
           </Listbox.Button>
           <Transition
@@ -46,31 +42,26 @@ const DropdownList: React.FC<DropdownListProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-              {options.map((option, optionIdx) => (
+            <Listbox.Options className="z-50 w-fit p-0 absolute mt-1 max-h-60 overflow-auto rounded-xl bg-[#2A3943] py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+              {listData.map((person, personIdx) => (
                 <Listbox.Option
-                  key={optionIdx}
+                  key={personIdx}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-amber-100 text-amber-900" : "text-gray-900"
+                    `relative cursor-default select-none list-none py-2 px-4 text-white rounded-lg s ${
+                      active ? "bg-white/10 " : ""
                     }`
                   }
-                  value={option}
+                  value={person}
                 >
                   {({ selected }) => (
                     <>
                       <span
                         className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
+                          selected ? "font-medium text-primary" : "font-normal"
                         }`}
                       >
-                        {option.name}
+                        {person.title}
                       </span>
-                      {/* {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                        </span>
-                      ) : null} */}
                     </>
                   )}
                 </Listbox.Option>
@@ -81,6 +72,4 @@ const DropdownList: React.FC<DropdownListProps> = ({
       </Listbox>
     </div>
   );
-};
-
-export default DropdownList;
+}
