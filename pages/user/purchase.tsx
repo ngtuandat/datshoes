@@ -98,7 +98,7 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                       alt={item?.nameProd}
                     />
                     <div className="text-white">
-                      <p className="text-base lg:text-xl font-bold w-[90%]">
+                      <p className="text-base lg:text-xl font-bold">
                         {item?.nameProd}
                       </p>
                       <p className="text-sm text-[rgb(145,158,171)]">
