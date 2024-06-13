@@ -167,14 +167,16 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
     <div>
       <motion.div
         onClick={handleClose}
-        initial="close"
-        animate={open ? "open" : "closed"}
+        initial="open"
+        // animate={open ? "open" : "closed"}
+        animate="open"
         variants={backFilter}
         className={`fixed inset-0 `}
       />
       <motion.div
-        initial="closed"
-        animate={open ? "open" : "closed"}
+        initial="open"
+        // animate={open ? "open" : "closed"}
+        animate="open"
         variants={menuFilter}
         className="fixed z-[2500] bg-product shadow-xl w-64 top-0 bottom-0 right-0"
       >

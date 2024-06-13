@@ -38,6 +38,7 @@ import toast from "react-hot-toast";
 import LoadingBtn from "../../components/Loading/LoadingBtn";
 import { useCountCart } from "../../hooks/useCountCart";
 import { useCart } from "../../contexts/cart/CartContext";
+import PaginationClient from "../../components/Pagination/PaginationClient";
 const tabs = ["description", "review"];
 
 const ProductDetail = ({ loading }: { loading: Boolean }) => {
@@ -129,6 +130,8 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
     }
     setLoadAddProd(false);
   };
+
+  const onChangePage = (page: number) => {};
 
   const handleBuyNow = async () => {
     try {
@@ -323,7 +326,7 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
             </div>
           </div>
         </div>
-        <div className="bg-[rgb(33,43,54)] mt-20 rounded-xl overflow-hidden">
+        <div className="bg-[rgb(33,43,54)] mt-20 rounded-xl overflow-hidden mb-5">
           <div className="bg-[rgba(145,158,171,0.16)] relative min-h-[48px] flex items-center space-x-8 px-6 text-sm font-semibold">
             {tabs.map((item, idx) => (
               <button
@@ -442,6 +445,12 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
             )}
           </div>
         </div>
+        <PaginationClient
+          current={Number(router.query.page || 1)}
+          pageSize={1}
+          total={1}
+          onChange={onChangePage}
+        />
       </section>
     </>
   );
