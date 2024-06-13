@@ -10,6 +10,11 @@ import ModalImg from "../../components/Modal/ModalImg";
 import { useRouter } from "next/router";
 import { PurchaseProps } from "../../interfaces/product";
 import dateFormat from "dateformat";
+import {
+  getOrderStatusInVietnamese,
+  getStatusColor,
+} from "../../utils/statusOrder";
+import DropDown from "../../components/DropDown";
 
 const columnPurchase = [
   "Số thứ tự",
@@ -22,10 +27,19 @@ const columnPurchase = [
   "Ngày bán",
   "Trạng thái",
 ];
+
+const listStatus = [
+  { title: "Đang chờ", value: "pending" },
+  { title: "Đang xử lý", value: "processing" },
+  { title: "Đang giao hàng", value: "shipped" },
+  { title: "Đã giao thành công", value: "delivered" },
+  { title: "Đã hủy", value: "cancelled" },
+];
 const DEFAULT_PRODUCTS_LIMIT = 5;
 
 const Purchase = ({ loading }: { loading: Boolean }) => {
   const [dataPurchase, setDataPurchase] = useState<PurchaseProps[]>([]);
+  const [selectValue, setSelectValue] = useState();
 
   const router = useRouter();
 
@@ -43,6 +57,9 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
   useEffect(() => {
     fetchAllPurchase();
   }, []);
+  const handleItemSelected = (selectedItem: any) => {
+    console.log(`Selected item: ${selectedItem.name}`);
+  };
 
   const dataSourcePurchase = useMemo(() => {
     return dataPurchase.map((item, index) => {
@@ -58,7 +75,16 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
         <p>{item?.priceProd.toLocaleString("vi")} đ</p>,
         <p>{item.quantityProd}</p>,
         <>{dateFormat(item?.updatedAt, "HH:MM dd/mm/yyyy")}</>,
-        <p className="text-green-500">Đang giao hàng</p>,
+        <span
+          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold `}
+        >
+          <DropDown
+            listData={listStatus}
+            selectValue={selectValue}
+            setSelectValue={setSelectValue}
+            defaultValue={item.status}
+          />
+        </span>,
       ];
     });
   }, [dataPurchase]);
