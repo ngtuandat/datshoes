@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
 
 const NavClient = () => {
   const router = useRouter();
@@ -22,7 +23,7 @@ const NavClient = () => {
     },
     {
       url: "/checkout",
-      label: "Xem giỏ hàng",
+      label: <FaShoppingCart />,
     },
     // {
     //   url: "/user/profile",

@@ -59,7 +59,15 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
   const [loadingUploadFiles, setLoadingUploadFiles] = useState(false);
   const [nameProduct, setNameProduct] = useState<string>("");
   const [descProduct, setDescProduct] = useState<string>("");
+
+  console.log(descProduct, "descProduct");
+  if (descProduct == "") {
+    console.log(123);
+  }
   const [descProductEdit, setDescProductEdit] = useState<string>("");
+
+  console.log(descProductEdit.length, "descProductEdit");
+
   const [idProductEdit, setIdProductEdit] = useState<string>("");
   const [priceProduct, setPriceProduct] = useState<number>(0);
   const [validatorMess, setValidatorMess] = useState<ProductValidator>();
@@ -192,7 +200,12 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
         const product = {
           id: idProductEdit,
           name: nameProduct,
-          desc: descProduct,
+          desc:
+            descProductEdit.length === 0
+              ? descProduct
+              : descProductEdit.includes("important")
+              ? descProductEdit
+              : descProduct,
           image: listImage,
           gender: dfCheck,
           category: categoryValue,
@@ -200,6 +213,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
           price: priceProduct,
           size: sizeSelected,
         };
+        console.log(product, "productxxx");
         if (productEdit) {
           const res = await UpdateProduct(product);
           if (res.status === 200) {
