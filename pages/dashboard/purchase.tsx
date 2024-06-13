@@ -5,19 +5,17 @@ import LoadingPage from "../../components/Loading/LoadingPage";
 import ContentHeader from "../../components/Header/ContentHeader";
 import Card from "../../components/Card";
 import Table from "../../components/Table";
-import { Pagination } from "swiper";
 import ModalImg from "../../components/Modal/ModalImg";
 import { useRouter } from "next/router";
 import { PurchaseProps } from "../../interfaces/product";
 import dateFormat from "dateformat";
-import {
-  getOrderStatusInVietnamese,
-  getStatusColor,
-} from "../../utils/statusOrder";
 import DropDown from "../../components/DropDown";
+import { updateStatus } from "../../services/purchase";
+import toast from "react-hot-toast";
 
 const columnPurchase = [
   "Số thứ tự",
+  "Người mua",
   "Tên sản phẩm",
   "Size",
   "Màu sắc",
@@ -39,15 +37,12 @@ const DEFAULT_PRODUCTS_LIMIT = 5;
 
 const Purchase = ({ loading }: { loading: Boolean }) => {
   const [dataPurchase, setDataPurchase] = useState<PurchaseProps[]>([]);
-  const [selectValue, setSelectValue] = useState();
-
   const router = useRouter();
-
   let count = DEFAULT_PRODUCTS_LIMIT * (Number(router.query.page ?? 1) - 1) + 1;
+
   const fetchAllPurchase = async () => {
     try {
       const res = await getPurchaseAll();
-      console.log("res", res);
       setDataPurchase(res.data.result);
     } catch (error) {
       console.log(error);
@@ -57,14 +52,29 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
   useEffect(() => {
     fetchAllPurchase();
   }, []);
-  const handleItemSelected = (selectedItem: any) => {
-    console.log(`Selected item: ${selectedItem.name}`);
+
+  const handleItemSelected = async (
+    selectedItem: { title: string; value: string },
+    id: string
+  ) => {
+    try {
+      const res = await updateStatus({ id, status: selectedItem.value });
+      if (res.status === 200) {
+        toast.success("Cập nhật trạng thái đơn hàng thành công!");
+        fetchAllPurchase();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const dataSourcePurchase = useMemo(() => {
     return dataPurchase.map((item, index) => {
       return [
         <> {count === 0 ? index + 1 : count++}</>,
+        <div className="text-primary font-bold">
+          {item.user.firstName} {item.user.lastName}
+        </div>,
         <div>{item.nameProd}</div>,
         <div>{item.sizeProd}</div>,
         <div>{item.colorProd}</div>,
@@ -76,13 +86,13 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
         <p>{item.quantityProd}</p>,
         <>{dateFormat(item?.updatedAt, "HH:MM dd/mm/yyyy")}</>,
         <span
-          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold `}
+          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold`}
         >
           <DropDown
+            onChange={handleItemSelected}
             listData={listStatus}
-            selectValue={selectValue}
-            setSelectValue={setSelectValue}
             defaultValue={item.status}
+            itemId={item.id}
           />
         </span>,
       ];
@@ -100,13 +110,6 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
         <Card.Content>
           <Table columns={columnPurchase} dataSource={dataSourcePurchase} />
         </Card.Content>
-        {/* <Pagination
-          current={Number(router.query.page || 1)}
-          pageSize={limitValue}
-          total={totalProduct}
-          onChange={onChangePage}
-          setLimitValue={setLimitValue}
-        /> */}
       </Card>
     </>
   );

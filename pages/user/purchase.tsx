@@ -11,6 +11,7 @@ import LoadingPage from "../../components/Loading/LoadingPage";
 import ModalCancel from "../../components/Modal/ModalCancel";
 import Button from "../../components/Button";
 import toast from "react-hot-toast";
+import { getOrderStatusInVietnamese } from "../../utils/statusOrder";
 
 const Purchase = ({ loading }: { loading: Boolean }) => {
   const [listPurchase, setListPurchase] = useState<PurchaseProps[]>();
@@ -88,7 +89,7 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                 key={idx}
               >
                 <div className="mb-3 flex items-center justify-end space-x-2 text-green-500 text-sm">
-                  <BsTruck /> <p>Đơn hàng đang giao</p>
+                  <BsTruck /> <p>{getOrderStatusInVietnamese(item.status)}</p>
                 </div>
                 <div className="flex flex-col lg:flex-row items-start justify-between">
                   <div className="flex items-start space-x-5 lg:w-fit">

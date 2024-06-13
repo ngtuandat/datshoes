@@ -4,33 +4,39 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IoCheckmark } from "react-icons/io5";
 
 interface DropDownProps {
-  listData: {
-    title: string;
-    value: string;
-  }[];
-  selectValue: any;
-  setSelectValue: any;
-  defaultValue: any;
+  listData: { title: string; value: string }[];
+  defaultValue: string;
+  onChange?: (item: { title: string; value: string }, id: string) => void;
+  itemId: string;
 }
 
 export default function DropDown({
   listData,
-  selectValue,
-  setSelectValue,
   defaultValue,
+  itemId,
+  onChange,
 }: DropDownProps) {
-  const [selected, setSelected] = useState<any>();
+  const [selected, setSelected] = useState<
+    { title: string; value: string } | undefined
+  >();
+
   useEffect(() => {
-    const defaultItem: any = listData.find(
-      (item) => item.value === defaultValue
-    );
+    const defaultItem = listData.find((item) => item.value === defaultValue);
     setSelected(defaultItem || listData[0]);
   }, [listData, defaultValue]);
+
+  const handleChange = (value: { title: string; value: string }) => {
+    setSelected(value);
+    if (onChange && itemId) {
+      onChange(value, itemId);
+    }
+  };
+
   return (
-    <div className="w-30`">
-      <Listbox value={selected} onChange={setSelected}>
+    <div className="w-30">
+      <Listbox value={selected} onChange={handleChange}>
         <div className="relative mt-1">
-          <Listbox.Button className="relative w-full cursor-default rounded-xl  py-2 pl-3 pr-10 text-left border border-white/20 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+          <Listbox.Button className="relative w-full cursor-default rounded-xl py-2 pl-3 pr-10 text-left border border-white/20 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
             <span className="block truncate">{selected?.title}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <IoIosArrowDown />
@@ -47,8 +53,8 @@ export default function DropDown({
                 <Listbox.Option
                   key={personIdx}
                   className={({ active }) =>
-                    `relative cursor-default select-none list-none py-2 px-4 text-white rounded-lg s ${
-                      active ? "bg-white/10 " : ""
+                    `relative cursor-default select-none list-none py-2 px-4 text-white rounded-lg ${
+                      active ? "bg-white/10" : ""
                     }`
                   }
                   value={person}
