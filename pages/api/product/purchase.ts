@@ -14,6 +14,12 @@ export default function Purchase(req: NextApiRequest, res: NextApiResponse) {
     if (!id) return;
     deletePurchaseOrder(res, id);
   }
+
+  if (req.method === "PATCH") {
+    const { id, status } = req.body;
+    if (!id || !status) return;
+    updateOrderStatus(res, id, status);
+  }
 }
 
 async function getListProductPurchase(res: NextApiResponse, id: string) {
@@ -41,6 +47,26 @@ async function deletePurchaseOrder(res: NextApiResponse, id: string) {
       },
     });
     res.status(200).json("Delete Successful");
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
+
+async function updateOrderStatus(
+  res: NextApiResponse,
+  id: string,
+  status: string
+) {
+  try {
+    await prisma.cart.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status: status,
+      },
+    });
+    res.status(200).json("Update Successful");
   } catch (error) {
     res.status(500).json(error);
   }
