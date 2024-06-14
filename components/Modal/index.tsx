@@ -45,7 +45,7 @@ const Modal = ({ children, open, setOpen, title, classClose }: ModalProps) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 w-full bg-black bg-opacity-25" />
+            <div className="fixed inset-0 w-full bg-black bg-opacity-25 backdrop-blur-[2px]" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -59,7 +59,7 @@ const Modal = ({ children, open, setOpen, title, classClose }: ModalProps) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-fit h-fit transform overflow-hidden rounded-2xl bg-[rgb(22,28,36)] px-6 py-10 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-fit h-fit transform overflow-hidden rounded-2xl bg-[rgb(22,28,36)] px-6 py-10 text-left align-middle shadow-2xl transition-all">
                   <IoMdClose
                     className={`absolute top-3 right-6 text-white hover:text-red-500 text-xl cursor-pointer ${classClose}`}
                     onClick={closeModal}
