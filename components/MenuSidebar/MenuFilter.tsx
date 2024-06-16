@@ -171,7 +171,7 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
         // animate={open ? "open" : "closed"}
         animate="open"
         variants={backFilter}
-        className={`fixed inset-0 `}
+        // className={`fixed inset-0 `}
       />
       <motion.div
         initial="open"
