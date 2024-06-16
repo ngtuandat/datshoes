@@ -98,16 +98,28 @@ export interface ValidatorAddress {
 }
 
 export interface PurchaseProps {
-  colorProd: string;
-  idProd: string;
-  imageProd: string;
-  nameProd: string;
-  priceProd: number;
-  quantityProd: number;
-  sizeProd: number;
   id: string;
+  idProd: string;
+  nameProd: string;
+  sizeProd: number;
+  priceProd: number;
+  colorProd: string;
+  quantityProd: number;
+  imageProd: string;
   userId: string;
-  boughtAt: string;
-  updatedAt: any;
-  status: string;
+  bought: boolean;
+  status: "pending" | "processing" | "cancelled" | "delivered";
+  createdAt: string;
+  updatedAt: string;
+  finalPrice?: number;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    admin: boolean;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }

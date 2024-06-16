@@ -14,6 +14,7 @@ import { RxDotFilled } from "react-icons/rx";
 import { motion } from "framer-motion";
 import { ListMenuHover } from "../../interfaces/main";
 import { BiPurchaseTagAlt } from "react-icons/bi";
+import { HiOutlineTicket } from "react-icons/hi2";
 
 const menuAdmin = [
   {
@@ -45,6 +46,11 @@ const menuAdmin = [
     label: "Sản phẩm đã bán",
     href: "/dashboard/purchase",
     icon: <BiPurchaseTagAlt />,
+  },
+  {
+    label: "Quản lý voucher",
+    href: "/dashboard/voucher",
+    icon: <HiOutlineTicket />,
   },
 ];
 

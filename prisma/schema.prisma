@@ -8,16 +8,17 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   firstName String
   lastName  String
-  email     String   @unique
-  admin     Boolean  @default(false)
+  email     String        @unique
+  admin     Boolean       @default(false)
   password  String
   profile   Profile?
   cart      Cart[]
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  vouchers  UserVoucher[]
+  createdAt DateTime      @default(now()) @map(name: "created_at")
+  updatedAt DateTime      @updatedAt @map(name: "updated_at")
 
   @@map(name: "users")
 }
@@ -54,6 +55,7 @@ model Cart {
   nameProd     String
   sizeProd     Int
   priceProd    Int
+  finalPrice   Int?
   colorProd    String
   quantityProd Int
   imageProd    String
@@ -77,4 +79,25 @@ model Profile {
   city        String?
   createdAt   DateTime  @default(now()) @map(name: "created_at")
   updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+}
+
+model Voucher {
+  id           String        @id @default(cuid())
+  code         String        @unique
+  discount     Int
+  expiryDate   String
+  userVouchers UserVoucher[]
+  createdAt    DateTime      @default(now()) @map(name: "created_at")
+  updatedAt    DateTime      @updatedAt @map(name: "updated_at")
+}
+
+model UserVoucher {
+  id        String  @id @default(cuid())
+  userId    String
+  voucherId String
+  used      Boolean @default(false)
+  user      User    @relation(fields: [userId], references: [id])
+  voucher   Voucher @relation(fields: [voucherId], references: [id])
+
+  @@unique([userId, voucherId])
 }

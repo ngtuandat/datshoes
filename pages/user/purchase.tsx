@@ -11,6 +11,7 @@ import LoadingPage from "../../components/Loading/LoadingPage";
 import ModalCancel from "../../components/Modal/ModalCancel";
 import Button from "../../components/Button";
 import toast from "react-hot-toast";
+import { getOrderStatusInVietnamese } from "../../utils/statusOrder";
 
 const Purchase = ({ loading }: { loading: Boolean }) => {
   const [listPurchase, setListPurchase] = useState<PurchaseProps[]>();
@@ -88,7 +89,7 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                 key={idx}
               >
                 <div className="mb-3 flex items-center justify-end space-x-2 text-green-500 text-sm">
-                  <BsTruck /> <p>Đơn hàng đang giao</p>
+                  <BsTruck /> <p>{getOrderStatusInVietnamese(item.status)}</p>
                 </div>
                 <div className="flex flex-col lg:flex-row items-start justify-between">
                   <div className="flex items-start space-x-5 lg:w-fit">
@@ -117,16 +118,25 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                     </div>
                   </div>
                   <div className="flex lg:flex-col lg:w-fit w-full mt-5 lg:mt-0 justify-between items-center lg:items-end lg:space-y-5">
-                    <div className="flex items-center space-x-2 text-white">
+                    <div className="flex items-start space-x-2 text-white">
                       <p className="text-sm font-semibold whitespace-nowrap">
                         Thành tiền:
                       </p>
-                      <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
-                        {(item?.quantityProd * item?.priceProd).toLocaleString(
-                          "vi"
-                        )}{" "}
-                        đ
-                      </p>
+                      <div className="flex flex-col gap-1">
+                        <p
+                          className={`text-base text-red-500 font-semibold whitespace-nowrap ${
+                            item.finalPrice !== item.priceProd && "line-through"
+                          }`}
+                        >
+                          {(
+                            item?.quantityProd * item?.priceProd
+                          ).toLocaleString("vi")}{" "}
+                          đ
+                        </p>
+                        <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
+                          {item.finalPrice?.toLocaleString("vi")} đ
+                        </p>
+                      </div>
                     </div>
                     <button
                       // onClick={() => handleDeletePurchase(item?.id)}

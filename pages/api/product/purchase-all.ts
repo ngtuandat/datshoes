@@ -14,6 +14,9 @@ async function getAllPurchase(res: NextApiResponse) {
       orderBy: {
         updatedAt: "desc",
       },
+      include: {
+        user: true,
+      },
     });
     res.status(200).json({ result });
   } catch (error) {

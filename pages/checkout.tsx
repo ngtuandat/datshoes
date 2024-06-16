@@ -5,6 +5,8 @@ import { GoPrimitiveDot } from "react-icons/go";
 import Table from "../components/Table";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
+import dateFormat from "dateformat";
+
 import {
   boughtProduct,
   deleteProdCart,
@@ -33,6 +35,8 @@ import LoadingPage from "../components/Loading/LoadingPage";
 import ModalCancel from "../components/Modal/ModalCancel";
 import Button from "../components/Button";
 import toast from "react-hot-toast";
+import { GetVoucherClient, UserUsedVoucher } from "../services/voucher";
+import { DataVoucherProps } from "../interfaces/voucher";
 
 const tabs = ["Giỏ hàng", "Địa chỉ và thông tin", "Thanh toán"];
 const column = ["Sản phẩm", "Giá", "Số lượng", "Tổng tiền", ""];
@@ -72,6 +76,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   const [city, setCity] = useState<string>("");
   const [mailAddress, setMailAddress] = useState<ChooseAddress>();
   const [validatorMess, setValidatorMess] = useState<ValidatorAddress>();
+  const [voucherUsed, setVoucherUsed] = useState<DataVoucherProps>();
   const [optionDelivery, setOptionDelivery] = useState<string>(
     "Giao hàng tiêu chuẩn (Miễn Phí)"
   );
@@ -81,7 +86,10 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   const [openModalCancelProduct, setOpenModalCancelProduct] = useState(false);
   const [itemCancel, setItemCancel] = useState<listProductBuyProps>();
   const [loadingCancel, setLoadingCancel] = useState(false);
+  const [listVoucher, setListVoucher] =
+    useState<{ voucher: DataVoucherProps }[]>();
   const token = Cookies.get("token");
+
   const shipFree = new Date();
   shipFree.setDate(shipFree.getDate() + 5);
   const dateShipFree = new Date(shipFree).toLocaleDateString("de");
@@ -262,7 +270,9 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
             alt={item?.nameProd}
           />
           <div className="flex flex-col space-y-3">
-            <span className="text-sm font-semibold">{item?.nameProd}</span>
+            <span className="text-sm font-semibold w-full whitespace-pre-wrap">
+              {item?.nameProd}
+            </span>
             <div className="flex items-center space-x-2">
               <span className="space-x-1 text-[rgb(145,158,171)]">
                 <span>size: </span>
@@ -313,8 +323,15 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   const handleBoughtProd = async () => {
     try {
       if (token) {
+        console.log("voucherUsed");
         const decoded: any = jwt_decode(token);
-        await boughtProduct(String(decoded.id));
+        await boughtProduct(String(decoded.id), voucherUsed?.id);
+        if (voucherUsed) {
+          await UserUsedVoucher({
+            userId: decoded.id,
+            code: voucherUsed?.code,
+          });
+        }
         setOpenModalBought(true);
       }
     } catch (error) {
@@ -333,6 +350,29 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   useEffect(() => {
     setValidatorMess(undefined);
   }, [openModalAddress]);
+
+  const handleGetVoucherList = async () => {
+    if (token) {
+      const decoded: any = jwt_decode(token);
+      console.log({ decoded });
+      const res = await GetVoucherClient(decoded.id);
+      setListVoucher(res.data);
+    }
+  };
+  useEffect(() => {
+    handleGetVoucherList();
+  }, [token]);
+
+  const totalPriceOrder = useMemo(() => {
+    return Math.max(
+      listProductBuy.reduce(
+        (acc, cur: listProductBuyProps) =>
+          acc + cur.priceProd * cur.quantityProd,
+        optionDelivery === "Giao hàng nhanh (30.000đ)" ? 30000 : 0
+      ) - (voucherUsed ? voucherUsed.discount : 0),
+      0
+    );
+  }, [listProductBuy, optionDelivery, voucherUsed]);
 
   return (
     <>
@@ -729,6 +769,64 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                 </div>
               </div>
             )}
+            {currentTab === tabs[0] && (
+              <div className="bg-[rgb(33,43,54)] rounded-xl p-6 mb-3 overflow-hidden">
+                <p className="text-lg font-bold">Voucher của bạn</p>
+                <div
+                  className={`h-[200px] mt-6 overflow-y-auto ${
+                    listVoucher?.length === 0 &&
+                    "flex items-center justify-center"
+                  }`}
+                >
+                  {listVoucher?.length === 0 ? (
+                    <div className="font-semibold text-sm text-green-500/60">
+                      Bạn không còn voucher nào!
+                    </div>
+                  ) : (
+                    <div className=" space-y-3 py-2 pr-1">
+                      {listVoucher?.map((item, idx) => {
+                        const today = new Date();
+                        const expiryDate = new Date(item.voucher.expiryDate);
+                        const timeDiff = expiryDate.getTime() - today.getTime();
+                        const daysRemaining = Math.ceil(
+                          timeDiff / (1000 * 60 * 60 * 24)
+                        );
+                        return (
+                          <div
+                            key={idx}
+                            className="rounded-lg border-green-400/40 border p-2 flex items-center justify-between"
+                          >
+                            <div className="space-y-3">
+                              <div className="font-medium">
+                                Giảm{" "}
+                                {item.voucher.discount.toLocaleString("vi")}đ
+                              </div>
+                              <div className="text-white/60 text-sm">
+                                Hạn sử dụng còn {daysRemaining} ngày
+                              </div>
+                            </div>
+                            <Button
+                              onClick={() => setVoucherUsed(item.voucher)}
+                              className="rounded-xl text-sm"
+                              label={
+                                voucherUsed?.code === item.voucher.code
+                                  ? "Đã dùng"
+                                  : "Dùng"
+                              }
+                              variant={
+                                voucherUsed?.code === item.voucher.code
+                                  ? "outline"
+                                  : "primary"
+                              }
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="bg-[rgb(33,43,54)] rounded-xl p-6">
               <div className="flex items-center justify-between">
                 <p className="text-lg font-bold">Tóm Tắt Đơn Hàng</p>
@@ -764,18 +862,19 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                       : "Miễn phí"}
                   </span>
                 </p>
+                {voucherUsed && (
+                  <p className="flex justify-between items-center">
+                    <span className="text-[rgb(145,158,171)]">Giảm giá</span>{" "}
+                    <span className="font-semibold">
+                      - {voucherUsed?.discount.toLocaleString("vi")}đ
+                    </span>
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between mt-4">
                 <p className="font-bold">Tổng đơn hàng</p>
                 <span className="font-semibold text-red-500">
-                  {listProductBuy
-                    .reduce(
-                      (acc, cur: listProductBuyProps) =>
-                        acc + cur.priceProd * cur.quantityProd,
-                      optionDelivery === "Giao hàng nhanh (30.000đ)" ? 30000 : 0
-                    )
-                    .toLocaleString("vi")}{" "}
-                  đ
+                  {totalPriceOrder.toLocaleString("vi")} đ
                 </span>
               </div>
             </div>
