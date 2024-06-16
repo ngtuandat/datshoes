@@ -111,6 +111,7 @@ export interface PurchaseProps {
   status: "pending" | "processing" | "cancelled" | "delivered";
   createdAt: string;
   updatedAt: string;
+  finalPrice?: number;
   user: {
     id: string;
     firstName: string;

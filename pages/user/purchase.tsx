@@ -118,16 +118,25 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                     </div>
                   </div>
                   <div className="flex lg:flex-col lg:w-fit w-full mt-5 lg:mt-0 justify-between items-center lg:items-end lg:space-y-5">
-                    <div className="flex items-center space-x-2 text-white">
+                    <div className="flex items-start space-x-2 text-white">
                       <p className="text-sm font-semibold whitespace-nowrap">
                         Thành tiền:
                       </p>
-                      <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
-                        {(item?.quantityProd * item?.priceProd).toLocaleString(
-                          "vi"
-                        )}{" "}
-                        đ
-                      </p>
+                      <div className="flex flex-col gap-1">
+                        <p
+                          className={`text-base text-red-500 font-semibold whitespace-nowrap ${
+                            item.finalPrice !== item.priceProd && "line-through"
+                          }`}
+                        >
+                          {(
+                            item?.quantityProd * item?.priceProd
+                          ).toLocaleString("vi")}{" "}
+                          đ
+                        </p>
+                        <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
+                          {item.finalPrice?.toLocaleString("vi")} đ
+                        </p>
+                      </div>
                     </div>
                     <button
                       // onClick={() => handleDeletePurchase(item?.id)}

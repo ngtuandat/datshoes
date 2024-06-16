@@ -33,3 +33,20 @@ export const DeleteVoucher = async (id: string) => {
     console.error("Error deleting voucher:", error);
   }
 };
+
+export const GetVoucherClient = async (userId: string) => {
+  return await axios.get("/api/voucher/client", { params: { userId } });
+};
+
+export const UserUsedVoucher = async ({
+  userId,
+  code,
+}: {
+  userId: string;
+  code: string;
+}) => {
+  return await axios.patch("/api/voucher", {
+    userId,
+    code,
+  });
+};
