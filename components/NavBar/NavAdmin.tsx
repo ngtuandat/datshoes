@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 import { ListMenuHover } from "../../interfaces/main";
 import { BiPurchaseTagAlt } from "react-icons/bi";
 import { HiOutlineTicket } from "react-icons/hi2";
-
+import { FaPenAlt } from "react-icons/fa";
 const menuAdmin = [
   {
     label: "Thống kê",
@@ -51,6 +51,11 @@ const menuAdmin = [
     label: "Quản lý voucher",
     href: "/dashboard/voucher",
     icon: <HiOutlineTicket />,
+  },
+  {
+    label: "Quản lý đánh giá",
+    href: "/dashboard/review",
+    icon: <FaPenAlt />,
   },
 ];
 

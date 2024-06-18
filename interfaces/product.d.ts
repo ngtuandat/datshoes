@@ -123,3 +123,14 @@ export interface PurchaseProps {
     updatedAt: string;
   };
 }
+
+interface ReviewProps {
+  id: string;
+  nameUser: string;
+  content: string;
+  rating: number;
+  productId: string;
+  createdAt: string;
+  updatedAt: string;
+  product: ProductProps;
+}
