@@ -22,10 +22,10 @@ export default function Cart(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === "PUT") {
-    const { id, idVoucher } = req.body;
+    const { id, idVoucher, isPay } = req.body;
     console.log("req.body", req.body);
     if (!id) return;
-    updateBoughtProd(res, id, idVoucher);
+    updateBoughtProd(res, id, idVoucher, isPay);
   }
 }
 
@@ -118,10 +118,11 @@ async function deleteProd(res: NextApiResponse, product: IdProdCart) {
 async function updateBoughtProd(
   res: NextApiResponse,
   id: string,
-  idVoucher?: string
+  idVoucher?: string,
+  isPay?: boolean
 ) {
   try {
-    console.log("idVoucher", idVoucher);
+    console.log("isPay", isPay);
 
     // Fetch cart items and voucher details
     const cartItems = await prisma.cart.findMany({
@@ -130,6 +131,26 @@ async function updateBoughtProd(
         bought: false,
       },
     });
+    if (isPay) {
+      const updatedCartItems = cartItems.map((cartItem) => {
+        return {
+          id: cartItem.id,
+          bought: true,
+          finalPrice: 0,
+        };
+      });
+      for (const item of updatedCartItems) {
+        await prisma.cart.update({
+          where: { id: item.id },
+          data: {
+            bought: true,
+            finalPrice: item.finalPrice,
+          },
+        });
+      }
+      res.status(200).json("Bought Successful");
+      return;
+    }
 
     if (!idVoucher) {
       const updatedCartItems = cartItems.map((cartItem) => {

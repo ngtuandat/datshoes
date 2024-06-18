@@ -133,9 +133,11 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                           ).toLocaleString("vi")}{" "}
                           đ
                         </p>
-                        <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
-                          {item.finalPrice?.toLocaleString("vi")} đ
-                        </p>
+                        {item.finalPrice !== item.priceProd && (
+                          <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
+                            {item.finalPrice?.toLocaleString("vi")} đ
+                          </p>
+                        )}
                       </div>
                     </div>
                     <button

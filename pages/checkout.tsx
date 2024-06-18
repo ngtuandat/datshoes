@@ -37,6 +37,8 @@ import Button from "../components/Button";
 import toast from "react-hot-toast";
 import { GetVoucherClient, UserUsedVoucher } from "../services/voucher";
 import { DataVoucherProps } from "../interfaces/voucher";
+import PaymentForm from "../components/PaymentForm";
+import { useRouter } from "next/router";
 
 const tabs = ["Giỏ hàng", "Địa chỉ và thông tin", "Thanh toán"];
 const column = ["Sản phẩm", "Giá", "Số lượng", "Tổng tiền", ""];
@@ -44,6 +46,10 @@ const payment = [
   {
     title: "Thanh toán khi nhận hàng",
     des: "Thanh toán bằng tiền mặt khi đơn đặt hàng của bạn được giao.",
+  },
+  {
+    title: "Thanh toán bằng VNPAY",
+    des: "Thanh toán bằng ví VNPAY.",
   },
 ];
 const listCity = [
@@ -63,6 +69,8 @@ const listCity = [
 ];
 
 const Checkout = ({ loading }: { loading: Boolean }) => {
+  const router = useRouter();
+
   const [currentTab, setCurrentTab] = useState(tabs[0]);
   const [listProductBuy, setListProductBuy] = useState([]);
   const [listTabOver, setListTabOver] = useState<string[]>([]);
@@ -86,12 +94,13 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   const [openModalCancelProduct, setOpenModalCancelProduct] = useState(false);
   const [itemCancel, setItemCancel] = useState<listProductBuyProps>();
   const [loadingCancel, setLoadingCancel] = useState(false);
+  const [openModalPayment, setOpenModalPayment] = useState(false);
   const [listVoucher, setListVoucher] =
     useState<{ voucher: DataVoucherProps }[]>();
   const token = Cookies.get("token");
 
   const shipFree = new Date();
-  shipFree.setDate(shipFree.getDate() + 5);
+  shipFree.setDate(shipFree.getDate() + 2);
   const dateShipFree = new Date(shipFree).toLocaleDateString("de");
 
   const shipFast = new Date();
@@ -103,10 +112,10 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
       title: "Giao hàng tiêu chuẩn (Miễn Phí)",
       date: `Giao hàng vào ${dateShipFree}`,
     },
-    {
-      title: "Giao hàng nhanh (30.000đ)",
-      date: `Giao hàng vào ${dateshipFast}`,
-    },
+    // {
+    //   title: "Giao hàng nhanh (30.000đ)",
+    //   date: `Giao hàng vào ${dateshipFast}`,
+    // },
   ];
 
   const fetchCart = async (id: string) => {
@@ -259,6 +268,18 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
       setListTabOver([...listTabOver, tab]);
     }
   };
+  console.log({ qweqwe: router.query.voucher });
+  useEffect(() => {
+    if (router.query.voucher !== "undefined") {
+      const voucherValue = (router.query.voucher as any) ?? "{}";
+      setVoucherUsed(JSON.parse(voucherValue));
+    }
+    if (router.query.tab === "3" && router.query.vnp_ResponseCode === "00") {
+      handleBoughtProd({ isPay: true });
+    }
+  }, [router.query]);
+
+  console.log({ voucherUsed });
 
   const dataSourceCart = useMemo(() => {
     return listProductBuy.map((item: listProductBuyProps, idx) => {
@@ -320,12 +341,13 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
     });
   }, [listProductBuy]);
 
-  const handleBoughtProd = async () => {
+  const handleBoughtProd = async ({ isPay }: { isPay?: boolean }) => {
     try {
       if (token) {
         console.log("voucherUsed");
         const decoded: any = jwt_decode(token);
-        await boughtProduct(String(decoded.id), voucherUsed?.id);
+        console.log({ isPayCheck: isPay });
+        await boughtProduct(String(decoded.id), voucherUsed?.id, isPay);
         if (voucherUsed) {
           await UserUsedVoucher({
             userId: decoded.id,
@@ -337,6 +359,10 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handlePayment = async () => {
+    setOpenModalPayment(true);
   };
 
   useEffect(() => {
@@ -675,7 +701,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
               <div className="text-white">
                 <div className="bg-[rgb(33,43,54)] p-6 rounded-xl">
                   <p className="text-lg font-bold">Phương thức giao hàng</p>
-                  <div className="grid grid-cols-2 gap-6 mt-6">
+                  <div className="grid grid-cols-1 gap-6 mt-6">
                     {shipping.map((item, idx) => (
                       <div
                         key={idx}
@@ -704,7 +730,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                 </div>
                 <div className="select-none bg-[rgb(33,43,54)] p-6 rounded-xl mt-6">
                   <p className="text-lg font-bold">Phương thức thanh toán</p>
-                  <div className="mt-6">
+                  <div className="mt-6 space-y-4">
                     {payment.map((item, idx) => (
                       <div
                         key={idx}
@@ -866,7 +892,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                   <p className="flex justify-between items-center">
                     <span className="text-[rgb(145,158,171)]">Giảm giá</span>{" "}
                     <span className="font-semibold">
-                      - {voucherUsed?.discount.toLocaleString("vi")}đ
+                      - {voucherUsed?.discount?.toLocaleString("vi")}đ
                     </span>
                   </p>
                 )}
@@ -892,14 +918,18 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
             )}
             {currentTab === tabs[2] && (
               <button
-                onClick={handleBoughtProd}
+                onClick={() => {
+                  optionPayment.includes("VNPAY")
+                    ? handlePayment()
+                    : handleBoughtProd({ isPay: false });
+                }}
                 className={`${
                   countCard === 0
                     ? "text-[rgba(145,158,171,0.8)] cursor-default pointer-events-none select-none bg-[rgba(145,158,171,0.24)]"
                     : "bg-green-600 hover:bg-green-700 text-white"
                 }  w-full py-3 rounded-md font-semibold mt-4`}
               >
-                Đặt Hàng
+                {optionPayment.includes("VNPAY") ? "Thanh toán" : "Đặt Hàng"}
               </button>
             )}
           </div>
@@ -944,6 +974,13 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
           </Modal>
         </div>
       </section>
+      <Modal
+        open={openModalPayment}
+        setOpen={setOpenModalPayment}
+        title="Thanh toán đơn hàng"
+      >
+        <PaymentForm price={totalPriceOrder} voucher={voucherUsed} />
+      </Modal>
     </>
   );
 };
