@@ -33,12 +33,10 @@ const listStatus = [
   { title: "Đã giao thành công", value: "delivered" },
   { title: "Đã hủy", value: "cancelled" },
 ];
-const DEFAULT_PRODUCTS_LIMIT = 5;
 
 const Purchase = ({ loading }: { loading: Boolean }) => {
   const [dataPurchase, setDataPurchase] = useState<PurchaseProps[]>([]);
   const router = useRouter();
-  let count = DEFAULT_PRODUCTS_LIMIT * (Number(router.query.page ?? 1) - 1) + 1;
 
   const fetchAllPurchase = async () => {
     try {
@@ -71,7 +69,7 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
   const dataSourcePurchase = useMemo(() => {
     return dataPurchase.map((item, index) => {
       return [
-        <> {count === 0 ? index + 1 : count++}</>,
+        <> {index + 1}</>,
         <div className="text-primary font-bold">
           {item.user.firstName} {item.user.lastName}
         </div>,

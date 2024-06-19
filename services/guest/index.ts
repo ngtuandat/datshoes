@@ -29,3 +29,17 @@ export const getOrderGuestByPhone = async (phone: string) => {
 export const deleteOrderGuest = async (id: string) => {
   return await axios.delete("/api/guest-order", { data: { id } });
 };
+
+export const getOrderGuestAll = async () => {
+  return await axios.get("/api/guest-order-all");
+};
+
+export const updateStatusGuest = async ({
+  id,
+  status,
+}: {
+  id: string;
+  status: string;
+}) => {
+  return await axios.patch("/api/guest-order", { id, status });
+};

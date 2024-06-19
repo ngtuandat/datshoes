@@ -55,6 +55,22 @@ export default async function handler(
       console.error(error);
       res.status(500).json({ error: "Có lỗi xảy ra khi hủy đơn hàng." });
     }
+  } else if (req.method === "PATCH") {
+    const { id, status } = req.body;
+
+    try {
+      await prisma.guestOrder.update({
+        where: {
+          id: id,
+        },
+        data: {
+          status: status,
+        },
+      });
+      res.status(200).json("Update Successful");
+    } catch (error) {
+      res.status(500).json(error);
+    }
   } else {
     res.status(405).json({ error: "Phương thức không được hỗ trợ." });
   }

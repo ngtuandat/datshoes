@@ -16,6 +16,7 @@ import { ListMenuHover } from "../../interfaces/main";
 import { BiPurchaseTagAlt } from "react-icons/bi";
 import { HiOutlineTicket } from "react-icons/hi2";
 import { FaPenAlt } from "react-icons/fa";
+import { FaUserTag } from "react-icons/fa";
 const menuAdmin = [
   {
     label: "Thống kê",
@@ -46,6 +47,11 @@ const menuAdmin = [
     label: "Sản phẩm đã bán",
     href: "/dashboard/purchase",
     icon: <BiPurchaseTagAlt />,
+  },
+  {
+    label: "Quản lý khách vãng lai",
+    href: "/dashboard/guest",
+    icon: <FaUserTag />,
   },
   {
     label: "Quản lý voucher",
