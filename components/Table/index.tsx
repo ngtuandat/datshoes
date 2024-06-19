@@ -17,6 +17,7 @@ interface TableProps {
 }
 
 const Table = ({ dataSource, columns, loading, className }: TableProps) => {
+  console.log({ dataSource });
   return (
     <div>
       <div className={`flex flex-col ${className}`}>

@@ -2,6 +2,7 @@ import React, {
   ReactElement,
   SyntheticEvent,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -16,6 +17,7 @@ import Button from "../../components/Button";
 import Radio from "../../components/Radio";
 import DropMenu from "../../components/DropMenu";
 import { ListProduct, ProductValidator } from "./../../interfaces/product.d";
+import { getFullCategory } from "../../services/category";
 
 const gender = [
   {
@@ -28,8 +30,6 @@ const gender = [
     ],
   },
 ];
-
-const category = ["Shoes", "Accessories"];
 
 const color = [
   "Red",
@@ -49,7 +49,8 @@ interface ProductUploadProps {
 }
 const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
   const [dfCheck, setDfCheck] = useState("kids");
-  const [categoryValue, setCategoryValue] = useState<string>("Shoes");
+  const [categoryList, setCategoryList] = useState<any[]>();
+  const [categoryValue, setCategoryValue] = useState<string>("");
   const [colorValue, setColorValue] = useState<string>("Black");
   const [colorSelected, setColorSelected] = useState<string[]>([]);
   const [sizeSelected, setSizeSelected] = useState<number[]>([]);
@@ -181,6 +182,11 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
     }
   };
 
+  const handleGetCategory = async () => {
+    const res = await getFullCategory();
+    setCategoryList(res.data);
+  };
+
   const handleProduct = async () => {
     try {
       validatorForm();
@@ -235,7 +241,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
   useEffect(() => {
     if (productEdit) {
       setDfCheck(String(productEdit.gender).toLocaleLowerCase());
-      setCategoryValue(productEdit.category);
+      setCategoryValue(productEdit.category.name);
       setColorSelected(productEdit.color);
       setSizeSelected(productEdit.size);
       setPreview(productEdit.listImage);
@@ -246,6 +252,21 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
       setIdProductEdit(productEdit.id);
     }
   }, [productEdit]);
+
+  console.log({ productEdit });
+
+  useEffect(() => {
+    handleGetCategory();
+  }, []);
+
+  const category = useMemo(() => {
+    if (categoryList) {
+      setCategoryValue(categoryList[0].name);
+      return categoryList.map((item) => item.name);
+    } else {
+      return [];
+    }
+  }, [categoryList]);
 
   return (
     <>

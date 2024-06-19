@@ -27,9 +27,9 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
-    if (pathname.startsWith("/checkout")) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
-    }
+    // if (pathname.startsWith("/checkout")) {
+    //   return NextResponse.redirect(new URL("/sign-in", request.url));
+    // }
     if (pathname.startsWith("/user/profile")) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }

@@ -16,7 +16,7 @@ export interface ProductProps {
 }
 
 export interface ListProduct {
-  category: string;
+  category: any;
   color: string[];
   description: string;
   id: string;
@@ -122,4 +122,15 @@ export interface PurchaseProps {
     createdAt: string;
     updatedAt: string;
   };
+}
+
+interface ReviewProps {
+  id: string;
+  nameUser: string;
+  content: string;
+  rating: number;
+  productId: string;
+  createdAt: string;
+  updatedAt: string;
+  product: ProductProps;
 }

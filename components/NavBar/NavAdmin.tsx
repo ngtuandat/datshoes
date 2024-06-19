@@ -15,6 +15,9 @@ import { motion } from "framer-motion";
 import { ListMenuHover } from "../../interfaces/main";
 import { BiPurchaseTagAlt } from "react-icons/bi";
 import { HiOutlineTicket } from "react-icons/hi2";
+import { FaPenAlt } from "react-icons/fa";
+import { FaUserTag } from "react-icons/fa";
+import { MdCategory } from "react-icons/md";
 
 const menuAdmin = [
   {
@@ -48,9 +51,24 @@ const menuAdmin = [
     icon: <BiPurchaseTagAlt />,
   },
   {
+    label: "Quản lý khách vãng lai",
+    href: "/dashboard/guest",
+    icon: <FaUserTag />,
+  },
+  {
     label: "Quản lý voucher",
     href: "/dashboard/voucher",
     icon: <HiOutlineTicket />,
+  },
+  {
+    label: "Quản lý phân loại",
+    href: "/dashboard/category",
+    icon: <MdCategory />,
+  },
+  {
+    label: "Quản lý đánh giá",
+    href: "/dashboard/review",
+    icon: <FaPenAlt />,
   },
 ];
 

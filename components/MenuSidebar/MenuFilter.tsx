@@ -1,9 +1,17 @@
-import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { BsCheck } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
 import { ImBin } from "react-icons/im";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { getFullCategory } from "../../services/category";
 
 const filterCheck = [
   {
@@ -13,17 +21,6 @@ const filterCheck = [
       { value: "men", label: "Men" },
       { value: "women", label: "Women" },
       { value: "kids", label: "Kids" },
-    ],
-  },
-];
-const filterRadio = [
-  {
-    id: "category",
-    name: "Category",
-    options: [
-      { value: "all", label: "All" },
-      { value: "shoes", label: "Shoes" },
-      { value: "accessories", label: "Accessories" },
     ],
   },
 ];
@@ -75,6 +72,7 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
   const [colorCheck, setColorCheck] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState<number>();
   const [maxPrice, setMaxPrice] = useState<number>();
+  const [listCategory, setListCategory] = useState<any[]>();
 
   const router = useRouter();
   const handleCheckBox = (value: string) => {
@@ -162,7 +160,44 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
       shallow: true,
     });
   };
+  const filterRadio = useMemo(() => {
+    if (!listCategory) return [];
+    const options = [
+      { value: "all", label: "All" },
+      ...listCategory.map((item) => ({
+        value: String(item.name).toLowerCase(),
+        label: item.name,
+      })),
+    ];
 
+    return [
+      {
+        id: "category",
+        name: "Category",
+        options,
+      },
+    ];
+  }, [listCategory]);
+  const handleGetCategory = async () => {
+    const res = await getFullCategory();
+    setListCategory(res.data);
+  };
+
+  useEffect(() => {
+    handleGetCategory();
+  }, []);
+  // const filterRadio = [
+  //   {
+  //     id: "category",
+  //     name: "Category",
+  //     options: [
+  //       { value: "all", label: "All" },
+  //       { value: "shoes", label: "Shoes" },
+  //       { value: "accessories", label: "Accessories" },
+  //     ],
+  //   },
+  // ];
+  console.log({ filterRadio });
   return (
     <div>
       <motion.div
