@@ -17,6 +17,8 @@ import { BiPurchaseTagAlt } from "react-icons/bi";
 import { HiOutlineTicket } from "react-icons/hi2";
 import { FaPenAlt } from "react-icons/fa";
 import { FaUserTag } from "react-icons/fa";
+import { MdCategory } from "react-icons/md";
+
 const menuAdmin = [
   {
     label: "Thống kê",
@@ -57,6 +59,11 @@ const menuAdmin = [
     label: "Quản lý voucher",
     href: "/dashboard/voucher",
     icon: <HiOutlineTicket />,
+  },
+  {
+    label: "Quản lý phân loại",
+    href: "/dashboard/category",
+    icon: <MdCategory />,
   },
   {
     label: "Quản lý đánh giá",

@@ -15,6 +15,9 @@ export interface VoucherValidator {
   expiryDate: string;
   quantity: number;
 }
+export interface CategoryValidator {
+  name: string;
+}
 
 export interface DataVoucherProps {
   id: string;

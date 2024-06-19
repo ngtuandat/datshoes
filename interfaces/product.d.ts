@@ -16,7 +16,7 @@ export interface ProductProps {
 }
 
 export interface ListProduct {
-  category: string;
+  category: any;
   color: string[];
   description: string;
   id: string;

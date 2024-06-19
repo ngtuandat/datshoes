@@ -28,7 +28,8 @@ model Product {
   name        String
   price       Int
   color       String[]
-  category    String
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String
   description String
   size        Int[]
   gender      String
@@ -114,4 +115,12 @@ model GuestOrder {
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
 }

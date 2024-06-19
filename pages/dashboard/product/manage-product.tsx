@@ -53,6 +53,8 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
         page: query?.page ? query?.page : 1,
       });
 
+      console.log({ data });
+
       setProduct(data.product);
       setTotalProduct(data.total);
     } catch (error) {
@@ -116,6 +118,9 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
   };
 
   const dataSourceProd = useMemo(() => {
+    if (!product) {
+      return [[]];
+    }
     return product.map((item: ListProduct, index: number) => {
       console.log("count", count);
       console.log("count1", index);
@@ -124,7 +129,9 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
         <p>{item?.name}</p>,
         <div className="flex items-center">
           <div
-            dangerouslySetInnerHTML={{ __html: item?.description.slice(0, 20) }}
+            dangerouslySetInnerHTML={{
+              __html: item?.description?.slice(0, 20),
+            }}
           />
           <p
             className="cursor-pointer"
@@ -134,7 +141,7 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
           </p>
         </div>,
         <>
-          {item?.size.map((size, idx) => (
+          {item?.size?.map((size, idx) => (
             <p key={idx}>
               {idx === item?.size.length - 1 ? (
                 <span>{size}</span>
@@ -155,7 +162,7 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
             </p>
           ))}
         </>,
-        <p>{item?.category}</p>,
+        <p>{item?.category.name}</p>,
         <p className="first-letter:uppercase">{item?.gender}</p>,
         <>
           {item?.listImage.map((img) => (
