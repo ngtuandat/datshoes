@@ -20,15 +20,16 @@ interface VnpParams {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
+    console.log({ ewdfqw: process.env.NEXT_PUBLIC_DOMAIN });
     const { amount, bankCode, orderDescription, orderType, language, voucher } =
       req.body;
     const config = {
       vnp_TmnCode: "0NXKCVF7",
       vnp_HashSecret: "QOCBHRD17NCZQCNJZ0L6NEEPC48FWW4F",
       vnp_Url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
-      vnp_ReturnUrl: `http://localhost:3000/checkout?tab=3&voucher=${JSON.stringify(
-        voucher
-      )}`,
+      vnp_ReturnUrl: `${
+        process.env.NEXT_PUBLIC_DOMAIN
+      }/checkout?tab=3&voucher=${JSON.stringify(voucher)}`,
     };
     console.log({ voucherReq: voucher });
     const ipAddr =

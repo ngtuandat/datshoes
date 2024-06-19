@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import Button from "./Button";
 import { DataVoucherProps } from "../interfaces/voucher";
+import Cookies from "js-cookie";
 
 export default function PaymentForm({
   price,

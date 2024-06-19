@@ -12,14 +12,17 @@ import ModalCancel from "../../components/Modal/ModalCancel";
 import Button from "../../components/Button";
 import toast from "react-hot-toast";
 import { getOrderStatusInVietnamese } from "../../utils/statusOrder";
+import { deleteOrderGuest, getOrderGuestByPhone } from "../../services/guest";
 
 const Purchase = ({ loading }: { loading: Boolean }) => {
   const [listPurchase, setListPurchase] = useState<PurchaseProps[]>();
+  const [listPurchaseGuest, setListPurchaseGuest] = useState<any[]>();
 
   const token = Cookies.get("token");
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [itemCancel, setItemCancel] = useState<PurchaseProps>();
   const [loadingCancel, setLoadingCancel] = useState(false);
+  const [phoneFind, setPhoneFind] = useState("");
   const fetchPurchase = async (id: string) => {
     try {
       const res = await getPurchaseOrder(id);
@@ -32,18 +35,38 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
   const handleDeletePurchase = async (id: string) => {
     setLoadingCancel(true);
     try {
-      const res = await deletePurchase(id);
-      if (res.status === 200 && token) {
-        const decoded: any = jwt_decode(token);
-        await fetchPurchase(decoded.id);
-        setOpenModalCancel(false);
-        toast.success("Đã huỷ đơn hàng");
+      if (token) {
+        const res = await deletePurchase(id);
+        if (res.status === 200 && token) {
+          const decoded: any = jwt_decode(token);
+          await fetchPurchase(decoded.id);
+          setOpenModalCancel(false);
+          toast.success("Đã huỷ đơn hàng");
+        }
+      } else {
+        const res = await deleteOrderGuest(id);
+        if (res.status === 200) {
+          await handleFindOrderGuest();
+          setOpenModalCancel(false);
+          toast.success("Đã huỷ đơn hàng");
+        }
       }
     } catch (error) {
       console.log(error);
     }
     setLoadingCancel(false);
   };
+
+  const handleFindOrderGuest = async () => {
+    const res = await getOrderGuestByPhone(phoneFind.slice(1));
+    if (res.data.error) {
+      toast.error(res.data.error);
+    } else {
+      setListPurchaseGuest(res.data);
+    }
+  };
+
+  console.log({ listPurchaseGuest });
 
   useEffect(() => {
     if (token) {
@@ -80,91 +103,202 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
           />
         </div>
       </ModalCancel>
-      <div className="w-full lg:w-2/3 mx-auto pb-8">
-        {listPurchase && listPurchase?.length > 0 ? (
-          <div>
-            {listPurchase?.map((item, idx) => (
-              <div
-                className="bg-[rgb(33,43,54)] rounded-xl mb-4 last:mb-0 p-6 "
-                key={idx}
-              >
-                <div className="mb-3 flex items-center justify-end space-x-2 text-green-500 text-sm">
-                  <BsTruck /> <p>{getOrderStatusInVietnamese(item.status)}</p>
-                </div>
-                <div className="flex flex-col lg:flex-row items-start justify-between">
-                  <div className="flex items-start space-x-5 lg:w-fit">
-                    <img
-                      className="w-20 h-20 object-cover rounded-md border border-dashed border-color-primary"
-                      src={item?.imageProd}
-                      alt={item?.nameProd}
-                    />
-                    <div className="text-white">
-                      <p className="text-base lg:text-xl font-bold">
-                        {item?.nameProd}
-                      </p>
-                      <p className="text-sm text-[rgb(145,158,171)]">
-                        Size: {item?.sizeProd}
-                      </p>
-                      <p className="text-sm text-[rgb(145,158,171)] flex items-center">
-                        Màu sắc:{" "}
-                        <span
-                          className="ml-2 w-4 h-4 rounded-full block"
-                          style={{ backgroundColor: item?.colorProd }}
-                        />
-                      </p>
-                      <p className="text-sm font-semibold">
-                        x{item?.quantityProd}
-                      </p>
-                    </div>
+      {!token && (
+        <div className="flex items-center justify-center gap-2 mb-5">
+          <input
+            className="bg-transparent border-white/20 border px-4 py-2 text-white rounded-lg"
+            placeholder="Số điện thoại"
+            onChange={(e) => setPhoneFind(e.target.value)}
+            type="text"
+          />
+          <Button onClick={handleFindOrderGuest} label="Tìm" />
+        </div>
+      )}
+      {token ? (
+        <div className="w-full lg:w-2/3 mx-auto pb-8">
+          {listPurchase && listPurchase?.length > 0 ? (
+            <div>
+              {listPurchase?.map((item, idx) => (
+                <div
+                  className="bg-[rgb(33,43,54)] rounded-xl mb-4 last:mb-0 p-6 "
+                  key={idx}
+                >
+                  <div className="mb-3 flex items-center justify-end space-x-2 text-green-500 text-sm">
+                    <BsTruck /> <p>{getOrderStatusInVietnamese(item.status)}</p>
                   </div>
-                  <div className="flex lg:flex-col lg:w-fit w-full mt-5 lg:mt-0 justify-between items-center lg:items-end lg:space-y-5">
-                    <div className="flex items-start space-x-2 text-white">
-                      <p className="text-sm font-semibold whitespace-nowrap">
-                        Thành tiền:
-                      </p>
-                      <div className="flex flex-col gap-1">
-                        <p
-                          className={`text-base text-red-500 font-semibold whitespace-nowrap ${
-                            item.finalPrice !== item.priceProd && "line-through"
-                          }`}
-                        >
-                          {(
-                            item?.quantityProd * item?.priceProd
-                          ).toLocaleString("vi")}{" "}
-                          đ
+                  <div className="flex flex-col lg:flex-row items-start justify-between">
+                    <div className="flex items-start space-x-5 lg:w-fit">
+                      <img
+                        className="w-20 h-20 object-cover rounded-md border border-dashed border-color-primary"
+                        src={item?.imageProd}
+                        alt={item?.nameProd}
+                      />
+                      <div className="text-white">
+                        <p className="text-base lg:text-xl font-bold">
+                          {item?.nameProd}
                         </p>
-                        {item.finalPrice !== item.priceProd && (
-                          <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
-                            {item.finalPrice?.toLocaleString("vi")} đ
-                          </p>
-                        )}
+                        <p className="text-sm text-[rgb(145,158,171)]">
+                          Size: {item?.sizeProd}
+                        </p>
+                        <p className="text-sm text-[rgb(145,158,171)] flex items-center">
+                          Màu sắc:{" "}
+                          <span
+                            className="ml-2 w-4 h-4 rounded-full block"
+                            style={{ backgroundColor: item?.colorProd }}
+                          />
+                        </p>
+                        <p className="text-sm font-semibold">
+                          x{item?.quantityProd}
+                        </p>
                       </div>
                     </div>
-                    <button
-                      // onClick={() => handleDeletePurchase(item?.id)}
-                      onClick={() => {
-                        setItemCancel(item);
-                        setOpenModalCancel(true);
-                      }}
-                      className="text-white hover:bg-red-700 hover:bg-opacity-10 max-w-[140px] flex items-center justify-center space-x-2 border border-color-primary px-1 py-2 rounded-md"
-                    >
-                      <span className="font-bold text-sm flex items-center space-x-1">
-                        <MdOutlineDeleteSweep /> <p>Hủy đơn</p>
-                      </span>
-                    </button>
+                    <div className="flex lg:flex-col lg:w-fit w-full mt-5 lg:mt-0 justify-between items-center lg:items-end lg:space-y-5">
+                      <div className="flex items-start space-x-2 text-white">
+                        <p className="text-sm font-semibold whitespace-nowrap">
+                          Thành tiền:
+                        </p>
+                        <div className="flex flex-col gap-1">
+                          <p
+                            className={`text-base text-red-500 font-semibold whitespace-nowrap ${
+                              item.finalPrice !== item.priceProd &&
+                              "line-through"
+                            }`}
+                          >
+                            {(
+                              item?.quantityProd * item?.priceProd
+                            ).toLocaleString("vi")}{" "}
+                            đ
+                          </p>
+                          {item.finalPrice !== item.priceProd && (
+                            <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
+                              {item.finalPrice?.toLocaleString("vi")} đ
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        // onClick={() => handleDeletePurchase(item?.id)}
+                        onClick={() => {
+                          setItemCancel(item);
+                          setOpenModalCancel(true);
+                        }}
+                        className="text-white hover:bg-red-700 hover:bg-opacity-10 max-w-[140px] flex items-center justify-center space-x-2 border border-color-primary px-1 py-2 rounded-md"
+                      >
+                        <span className="font-bold text-sm flex items-center space-x-1">
+                          <MdOutlineDeleteSweep /> <p>Hủy đơn</p>
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div>
-            <p className="flex text-white w-full justify-center items-center text-xl sm:text-2xl font-bold py-40 opacity-50">
-              Bạn chưa từng mua đơn hàng nào!!
-            </p>
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p className="flex text-white w-full justify-center items-center text-xl sm:text-2xl font-bold py-40 opacity-50">
+                {token
+                  ? "Bạn chưa từng mua đơn hàng nào!!"
+                  : "Tra cứu đơn của bạn"}
+              </p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="w-full lg:w-2/3 mx-auto pb-8">
+          {listPurchaseGuest && listPurchaseGuest?.length > 0 ? (
+            <div>
+              {listPurchaseGuest?.map((item, idx) => {
+                const product = JSON.parse(item.products);
+                return (
+                  <div
+                    className="bg-[rgb(33,43,54)] rounded-xl mb-4 last:mb-0 p-6 "
+                    key={idx}
+                  >
+                    <div className="mb-3 flex items-center justify-end space-x-2 text-green-500 text-sm">
+                      <BsTruck />{" "}
+                      <p>{getOrderStatusInVietnamese(item.status)}</p>
+                    </div>
+                    <div className="flex flex-col lg:flex-row items-start justify-between">
+                      <div className="flex items-start space-x-5 lg:w-fit">
+                        <img
+                          className="w-20 h-20 object-cover rounded-md border border-dashed border-color-primary"
+                          src={product?.image}
+                          alt={product?.name}
+                        />
+                        <div className="text-white">
+                          <p className="text-base lg:text-xl font-bold">
+                            {product?.name}
+                          </p>
+                          <p className="text-sm text-[rgb(145,158,171)]">
+                            Size: {product?.size}
+                          </p>
+                          <p className="text-sm text-[rgb(145,158,171)] flex items-center">
+                            Màu sắc:{" "}
+                            <span
+                              className="ml-2 w-4 h-4 rounded-full block"
+                              style={{ backgroundColor: product?.color }}
+                            />
+                          </p>
+                          <p className="text-sm font-semibold">
+                            x{product?.quantity}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex lg:flex-col lg:w-fit w-full mt-5 lg:mt-0 justify-between items-center lg:items-end lg:space-y-5">
+                        <div className="flex items-start space-x-2 text-white">
+                          <p className="text-sm font-semibold whitespace-nowrap">
+                            Thành tiền:
+                          </p>
+                          <div className="flex flex-col gap-1">
+                            <p
+                              className={`text-base text-red-500 font-semibold whitespace-nowrap ${
+                                item.finalPrice !==
+                                  product.price * product.quantity &&
+                                "line-through"
+                              }`}
+                            >
+                              {(
+                                product?.quantity * product?.price
+                              ).toLocaleString("vi")}{" "}
+                              đ
+                            </p>
+                            {item.finalPrice !==
+                              product.price * product.quantity && (
+                              <p className="text-sm text-red-500 font-semibold whitespace-nowrap">
+                                {item.finalPrice?.toLocaleString("vi")} đ
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <button
+                          // onClick={() => handleDeletePurchase(item?.id)}
+                          onClick={() => {
+                            setItemCancel(item);
+                            setOpenModalCancel(true);
+                          }}
+                          className="text-white hover:bg-red-700 hover:bg-opacity-10 max-w-[140px] flex items-center justify-center space-x-2 border border-color-primary px-1 py-2 rounded-md"
+                        >
+                          <span className="font-bold text-sm flex items-center space-x-1">
+                            <MdOutlineDeleteSweep /> <p>Hủy đơn</p>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div>
+              <p className="flex text-white w-full justify-center items-center text-xl sm:text-2xl font-bold py-40 opacity-50">
+                {token
+                  ? "Bạn chưa từng mua đơn hàng nào!!"
+                  : "Tra cứu đơn của bạn"}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

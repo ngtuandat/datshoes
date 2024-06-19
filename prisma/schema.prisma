@@ -101,3 +101,17 @@ model UserVoucher {
 
   @@unique([userId, voucherId])
 }
+
+model GuestOrder {
+  id         String @id @default(cuid())
+  products   Json
+  finalPrice Int?
+
+  buyerName    String?
+  buyerAddress String?
+  buyerPhone   String?
+  status       String  @default("pending")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+}

@@ -107,6 +107,9 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
   const handleAddToCart = async () => {
     setLoadAddProd(true);
     try {
+      if (!token) {
+        router.push("/sign-in");
+      }
       if (token) {
         const decoded: any = jwt_decode(token);
         const productBuy = {
@@ -151,7 +154,17 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
         fetchCart(decoded.id);
         router.push("/checkout");
       } else {
-        router.push("/sign-in");
+        const productBuy = {
+          id: dataProduct?.id,
+          name: dataProduct?.name,
+          size: sizeValue,
+          price: dataProduct?.price,
+          color: colorCheck,
+          quantity: quantity,
+          image: dataProduct?.listImage[0],
+        };
+        sessionStorage.setItem("guest-prod", JSON.stringify([productBuy]));
+        router.push("/checkout");
       }
     } catch (error) {
       console.log(error);

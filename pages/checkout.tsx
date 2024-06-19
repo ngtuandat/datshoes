@@ -39,6 +39,7 @@ import { GetVoucherClient, UserUsedVoucher } from "../services/voucher";
 import { DataVoucherProps } from "../interfaces/voucher";
 import PaymentForm from "../components/PaymentForm";
 import { useRouter } from "next/router";
+import { createOrderGuest } from "../services/guest";
 
 const tabs = ["Giỏ hàng", "Địa chỉ và thông tin", "Thanh toán"];
 const column = ["Sản phẩm", "Giá", "Số lượng", "Tổng tiền", ""];
@@ -72,7 +73,8 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   const router = useRouter();
 
   const [currentTab, setCurrentTab] = useState(tabs[0]);
-  const [listProductBuy, setListProductBuy] = useState([]);
+  const [listProductBuy, setListProductBuy] = useState<any[]>([]);
+  const [quantityProdGuest, setQuantityProdGuest] = useState(1);
   const [listTabOver, setListTabOver] = useState<string[]>([]);
   const [countCard, setCountCard] = useState<number>();
   const [profileUser, setProfileUser] = useState<ProfileProps>();
@@ -268,18 +270,21 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
       setListTabOver([...listTabOver, tab]);
     }
   };
-  console.log({ qweqwe: router.query.voucher });
-  useEffect(() => {
-    if (router.query.voucher !== "undefined") {
-      const voucherValue = (router.query.voucher as any) ?? "{}";
-      setVoucherUsed(JSON.parse(voucherValue));
-    }
-    if (router.query.tab === "3" && router.query.vnp_ResponseCode === "00") {
-      handleBoughtProd({ isPay: true });
-    }
-  }, [router.query]);
 
-  console.log({ voucherUsed });
+  const previewPrice = useMemo(() => {
+    if (token) {
+      return listProductBuy.reduce(
+        (acc, cur: listProductBuyProps) =>
+          acc + cur.priceProd * cur.quantityProd,
+        0
+      );
+    } else {
+      return listProductBuy.reduce(
+        (acc, cur: any) => acc + cur.price * cur.quantity,
+        0
+      );
+    }
+  }, [listProductBuy, token]);
 
   const dataSourceCart = useMemo(() => {
     return listProductBuy.map((item: listProductBuyProps, idx) => {
@@ -309,7 +314,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
             </div>
           </div>
         </div>,
-        <div>{item?.priceProd.toLocaleString("vi")} đ</div>,
+        <div>{item?.priceProd?.toLocaleString("vi")} đ</div>,
         <div className="relative hover:border-white select-none flex items-center rounded-lg w-[78px] py-1 justify-around border border-[rgba(145,158,171,0.32)]">
           <button>
             <BiMinus
@@ -341,12 +346,83 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
     });
   }, [listProductBuy]);
 
+  const handleIncreaseQuantity = () => {
+    const updatedProducts = [...listProductBuy];
+    updatedProducts[0].quantity += 1;
+    setListProductBuy(updatedProducts);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("guest-prod", JSON.stringify(updatedProducts));
+    }
+  };
+
+  const handleDecreaseQuantity = () => {
+    const updatedProducts = [...listProductBuy];
+    if (updatedProducts[0].quantity > 1) {
+      updatedProducts[0].quantity -= 1;
+      setListProductBuy(updatedProducts);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("guest-prod", JSON.stringify(updatedProducts));
+      }
+    }
+  };
+  const dataSourceCartGuest = useMemo(() => {
+    return listProductBuy.map((item: any, idx) => {
+      return [
+        <div className="flex items-center space-x-2">
+          <img
+            className="w-16 h-16 rounded-lg"
+            src={item?.image}
+            alt={item?.name}
+          />
+          <div className="flex flex-col space-y-3">
+            <span className="text-sm font-semibold w-full whitespace-pre-wrap">
+              {item?.name}
+            </span>
+            <div className="flex items-center space-x-2">
+              <span className="space-x-1 text-[rgb(145,158,171)]">
+                <span>size: </span>
+                <span className="text-white p-1 bg-[rgba(145,158,171,0.16)] text-xs font-medium rounded-md">
+                  {item?.size}
+                </span>
+              </span>
+              <hr className="border h-4 border-[rgba(145,158,171,0.24)]" />
+              <span
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: item?.color }}
+              />
+            </div>
+          </div>
+        </div>,
+        <div>{item?.price?.toLocaleString("vi")} đ</div>,
+        <div className="relative hover:border-white select-none flex items-center rounded-lg w-[78px] py-1 justify-around border border-[rgba(145,158,171,0.32)]">
+          <button>
+            <BiMinus onClick={() => handleDecreaseQuantity()} />
+          </button>
+          {item?.quantity}
+          <button>
+            {" "}
+            <BiPlus onClick={handleIncreaseQuantity} />
+          </button>
+        </div>,
+        <div>{(item?.price * item?.quantity).toLocaleString("vi")} đ</div>,
+        <div
+          // onClick={() => handleDeleteProdCart(item?.idProd, item?.userId)}
+          onClick={() => {
+            setOpenModalCancelProduct(true);
+            setItemCancel(item);
+          }}
+          className="hover:bg-[rgba(145,158,171,0.08)] p-2 rounded-full text-base cursor-pointer"
+        >
+          <RiDeleteBinLine className="text-[rgb(145,158,171)]" />
+        </div>,
+      ];
+    });
+  }, [listProductBuy]);
+
   const handleBoughtProd = async ({ isPay }: { isPay?: boolean }) => {
     try {
       if (token) {
-        console.log("voucherUsed");
         const decoded: any = jwt_decode(token);
-        console.log({ isPayCheck: isPay });
         await boughtProduct(String(decoded.id), voucherUsed?.id, isPay);
         if (voucherUsed) {
           await UserUsedVoucher({
@@ -355,11 +431,30 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
           });
         }
         setOpenModalBought(true);
+      } else {
+        console.log({ mailAddress });
+        const res = await createOrderGuest({
+          buyerAddress: mailAddress?.address ?? "",
+          buyerName: mailAddress?.name ?? "",
+          buyerPhone: String(mailAddress?.phone ?? ""),
+          finalPrice: isPay
+            ? 0
+            : listProductBuy[0].price * listProductBuy[0].quantity,
+          products: JSON.stringify(listProductBuy[0]),
+        });
+        if (res.status === 200) {
+          if (typeof window !== "undefined") {
+            sessionStorage.removeItem("guest-prod");
+          }
+          setOpenModalBought(true);
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log({ listProductBuy });
 
   const handlePayment = async () => {
     setOpenModalPayment(true);
@@ -371,34 +466,90 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
       fetchCart(decoded.id);
       fetchProfile(decoded.email);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     setValidatorMess(undefined);
   }, [openModalAddress]);
 
+  useEffect(() => {
+    if (!token && mailAddress && typeof window !== "undefined") {
+      sessionStorage.setItem("guest-address", JSON.stringify(mailAddress));
+    }
+  }, [token, mailAddress]);
+
   const handleGetVoucherList = async () => {
     if (token) {
       const decoded: any = jwt_decode(token);
-      console.log({ decoded });
       const res = await GetVoucherClient(decoded.id);
       setListVoucher(res.data);
     }
   };
   useEffect(() => {
     handleGetVoucherList();
+    if (token && typeof window !== "undefined") {
+      sessionStorage.removeItem("guest-prod");
+    }
   }, [token]);
 
+  useEffect(() => {
+    if (!token && typeof window !== "undefined") {
+      const listGuestProd = sessionStorage.getItem("guest-prod");
+      const address = sessionStorage.getItem("guest-address");
+      if (listGuestProd) {
+        setListProductBuy(JSON.parse(listGuestProd));
+      }
+      if (address) {
+        setMailAddress(JSON.parse(address));
+      }
+    }
+  }, [token]);
+  useEffect(() => {
+    if (router.query.voucher !== "undefined") {
+      const voucherValue = (router.query.voucher as any) ?? "{}";
+      setVoucherUsed(JSON.parse(voucherValue));
+    }
+    if (router.query.tab === "3" && router.query.vnp_ResponseCode === "00") {
+      if (!token && typeof window !== "undefined") {
+        const address = sessionStorage.getItem("guest-address");
+        console.log({ address });
+        if (address) {
+          setMailAddress(JSON.parse(address));
+        }
+      }
+      handleBoughtProd({ isPay: true });
+    }
+  }, [router.query, token]);
+
   const totalPriceOrder = useMemo(() => {
-    return Math.max(
-      listProductBuy.reduce(
-        (acc, cur: listProductBuyProps) =>
-          acc + cur.priceProd * cur.quantityProd,
-        optionDelivery === "Giao hàng nhanh (30.000đ)" ? 30000 : 0
-      ) - (voucherUsed ? voucherUsed.discount : 0),
-      0
+    const isValidOptionDelivery = !isNaN(
+      optionDelivery === "Giao hàng nhanh (30.000đ)" ? 30000 : 0
     );
-  }, [listProductBuy, optionDelivery, voucherUsed]);
+    const isValidDiscount = !isNaN(voucherUsed?.discount || 0);
+
+    if (isValidOptionDelivery && isValidDiscount) {
+      if (token) {
+        return Math.max(
+          listProductBuy.reduce(
+            (acc, cur: listProductBuyProps) =>
+              acc + cur.priceProd * cur.quantityProd,
+            optionDelivery === "Giao hàng nhanh (30.000đ)" ? 30000 : 0
+          ) - (voucherUsed?.discount || 0),
+          0
+        );
+      } else {
+        return Math.max(
+          listProductBuy.reduce(
+            (acc, cur: any) => acc + cur.price * cur.quantity,
+            optionDelivery === "Giao hàng nhanh (30.000đ)" ? 30000 : 0
+          ) - (voucherUsed?.discount || 0),
+          0
+        );
+      }
+    }
+
+    return 0;
+  }, [listProductBuy, optionDelivery, voucherUsed?.discount, token]);
 
   return (
     <>
@@ -488,7 +639,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                       Giỏ hàng{" "}
                     </span>
                     <span className="text-[rgb(145,158,171)] text-sm">
-                      ({countCard} sản phẩm)
+                      ({token ? countCard : 1} sản phẩm)
                     </span>
                   </div>
                   {countCard === 0 ? (
@@ -506,7 +657,10 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                       </span>
                     </div>
                   ) : (
-                    <Table columns={column} dataSource={dataSourceCart} />
+                    <Table
+                      columns={column}
+                      dataSource={token ? dataSourceCart : dataSourceCartGuest}
+                    />
                   )}
                 </div>
                 <Link href="/product">
@@ -549,18 +703,32 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                 ) : (
                   <div className="bg-[rgb(33,43,54)] rounded-xl text-center py-8 space-y-3">
                     <p className="text-xl font-semibold">
-                      Không tìm thấy địa chỉ của bạn
+                      {token
+                        ? "Không tìm thấy địa chỉ của bạn"
+                        : "Vui lòng nhập địa chỉ của bạn"}
                     </p>
-                    <p className="text-sm text text-[rgb(145,158,171)]">
-                      Vui lòng{" "}
-                      <Link
-                        href="/user/profile"
-                        className="text-green-500 underline"
-                      >
-                        cập nhật
-                      </Link>{" "}
-                      địa chỉ của bạn!
-                    </p>
+                    {token ? (
+                      <p className="text-sm text text-[rgb(145,158,171)]">
+                        Vui lòng{" "}
+                        <Link
+                          href="/user/profile"
+                          className="text-green-500 underline"
+                        >
+                          cập nhật
+                        </Link>{" "}
+                        địa chỉ của bạn!
+                      </p>
+                    ) : (
+                      <div className="flex items-center justify-center gap-1 text-sm text text-[rgb(145,158,171)]">
+                        <div>Nhập địa chỉ</div>{" "}
+                        <div
+                          onClick={() => setOpenModalAddress(true)}
+                          className="text-green-500 underline cursor-pointer"
+                        >
+                          tại đây
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
                 <div className="mt-8 pb-10 flex items-center justify-between">
@@ -573,15 +741,17 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                       Quay lại
                     </span>
                   </div>
-                  <button
-                    onClick={() => setOpenModalAddress(true)}
-                    className="flex items-center space-x-2 bg-[rgba(0,171,85,0.16)] hover:bg-[rgba(0,171,85,0.32)] px-2 py-1 mr-2 rounded-md text-[rgb(91,229,132)]"
-                  >
-                    <FaRegAddressCard />
-                    <span className="font-bold text-sm">
-                      Gửi đến địa chỉ khác
-                    </span>
-                  </button>
+                  {token && (
+                    <button
+                      onClick={() => setOpenModalAddress(true)}
+                      className="flex items-center space-x-2 bg-[rgba(0,171,85,0.16)] hover:bg-[rgba(0,171,85,0.32)] px-2 py-1 mr-2 rounded-md text-[rgb(91,229,132)]"
+                    >
+                      <FaRegAddressCard />
+                      <span className="font-bold text-sm">
+                        Gửi đến địa chỉ khác
+                      </span>
+                    </button>
+                  )}
                   <Modal
                     open={openModalAddress}
                     setOpen={setOpenModalAddress}
@@ -800,11 +970,11 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                 <p className="text-lg font-bold">Voucher của bạn</p>
                 <div
                   className={`h-[200px] mt-6 overflow-y-auto ${
-                    listVoucher?.length === 0 &&
-                    "flex items-center justify-center"
+                    listVoucher?.length === 0 ||
+                    (!token && "flex items-center justify-center")
                   }`}
                 >
-                  {listVoucher?.length === 0 ? (
+                  {listVoucher?.length === 0 || !token ? (
                     <div className="font-semibold text-sm text-green-500/60">
                       Bạn không còn voucher nào!
                     </div>
@@ -870,14 +1040,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                 <p className="flex justify-between items-center">
                   <span className="text-[rgb(145,158,171)]">Tổng phụ thu</span>
                   <span className="font-semibold">
-                    {listProductBuy
-                      .reduce(
-                        (acc, cur: listProductBuyProps) =>
-                          acc + cur.priceProd * cur.quantityProd,
-                        0
-                      )
-                      .toLocaleString("vi")}{" "}
-                    đ
+                    {previewPrice.toLocaleString("vi")} đ
                   </span>
                 </p>
                 <p className="flex justify-between items-center">
@@ -888,7 +1051,7 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
                       : "Miễn phí"}
                   </span>
                 </p>
-                {voucherUsed && (
+                {voucherUsed && Object.keys(voucherUsed).length !== 0 && (
                   <p className="flex justify-between items-center">
                     <span className="text-[rgb(145,158,171)]">Giảm giá</span>{" "}
                     <span className="font-semibold">
