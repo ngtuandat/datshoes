@@ -26,6 +26,40 @@ const BackHome = () => {
 
   const [products, setProducts] = useState<ListProduct[]>();
   const [totalProduct, setTotalProduct] = useState(0);
+  const images = [
+    // "./images/logo.png",
+    // "./images/logo1.jpg",
+    // "./images/bannerhotel.jpeg",
+    "./images/anh1.jpg",
+    "./images/anh2.jpg",
+    // "./images/anh3.jpg",
+    // "./images/anh4.jpg",
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  console.log(currentImageIndex, "currentImageIndex");
+
+  const goToPreviousImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex - 1 >= 0 ? prevIndex - 1 : images.length - 1
+    );
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex + 1 < images.length ? prevIndex + 1 : 0
+    );
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex + 1 < images.length ? prevIndex + 1 : 0
+      );
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const router = useRouter();
   const fetchProducts = async (query?: GetUsersQuery): Promise<void> => {
@@ -118,6 +152,28 @@ const BackHome = () => {
           </div>
           <div />
         </form>
+        <div className="grid grid-cols-10">
+          <div className="col-span-7">
+            <img
+              className="w-full"
+              src={images[currentImageIndex]}
+              alt="Slideshow"
+            />
+            <div className="slideshow-controls mt-4">
+              <button
+                className="hover:cursor-pointer mr-2"
+                onClick={goToPreviousImage}
+              >
+                Previous
+              </button>
+              <button onClick={goToNextImage}>Next</button>
+            </div>
+          </div>
+          <div className="col-span-3">
+            <img src="./images/anh2.jpg" alt="" />
+            <img src="./images/anh2.jpg" alt="" />
+          </div>
+        </div>
         {products && products?.length > 0 ? (
           <div className="grid grid-cols-4 gap-6 mb-10">
             {products.map((product, idx) => (
@@ -134,7 +190,9 @@ const BackHome = () => {
                   />
                 </div>
                 <div className="py-6 px-2">
-                  <h1 className="text-base font-semibold">{product?.name}</h1>
+                  <h1 className="text-base font-semibold text-white">
+                    {product?.name}
+                  </h1>
                   <div className="flex items-center justify-between mt-5 px-3">
                     <div className="flex items-center">
                       {product?.color.map((col, idx) => (
@@ -145,7 +203,7 @@ const BackHome = () => {
                         />
                       ))}
                     </div>
-                    <p className="text-base font-semibold">
+                    <p className="text-base font-semibold text-white">
                       {product?.price.toLocaleString("vi")} đ
                     </p>
                   </div>
