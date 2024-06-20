@@ -13,8 +13,8 @@ const Home = ({ loading }: { loading: Boolean }) => {
       <CustomHeader>
         <title>Trang Chủ | Cuc Shoes</title>
       </CustomHeader>
-      <BackHome />
-      <div className="bg-dark w-full z-[1200] relative mt-[100vh] ">
+      {/* <BackHome /> */}
+      <div className="bg-dark w-full z-[1200] relative  ">
         <ContentHome />
       </div>
     </div>
