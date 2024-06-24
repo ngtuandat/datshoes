@@ -77,7 +77,7 @@ const FilterContent = () => {
           <div />
         </form>
       </div>
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center space-x-1 lg:mr-64 xl:mr-40 2xl:mr-24">
         <button
           onClick={() => setOpenFilter(true)}
           className="flex items-center font-bold space-x-1 px-2 py-1.5 rounded-md hover:bg-[rgba(145,158,171,0.08)]"

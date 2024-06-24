@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import LoadingPage from "../components/Loading/LoadingPage";
 
-const DEFAULT_PRODUCTS_LIMIT = 5;
+const DEFAULT_PRODUCTS_LIMIT = 16;
 
 const ProductContent = () => {
   const [limitValue, setLimitValue] = useState(DEFAULT_PRODUCTS_LIMIT);
