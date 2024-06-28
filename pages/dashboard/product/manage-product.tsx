@@ -15,6 +15,8 @@ import Modal from "../../../components/Modal";
 import ProductUpload from "../../../containers/Uploads/ProductUpload";
 import { toast } from "react-toastify";
 import LoadingPage from "../../../components/Loading/LoadingPage";
+import ModalCancel from "../../../components/Modal/ModalCancel";
+import Button from "../../../components/Button";
 
 const columnProduct = [
   "Số thứ tự",
@@ -23,6 +25,7 @@ const columnProduct = [
   "Size",
   "Màu sắc",
   "Loại hàng",
+  "Số lượng hàng",
   "Giới tính",
   "Ảnh",
   "Giá",
@@ -44,6 +47,9 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
   const [openMoreDesc, setOpenMoreDesc] = useState(false);
   const [descModal, setdescModal] = useState("");
   const [itemEditModal, setItemEditModal] = useState<ListProduct>();
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [itemDelete, setItemDelete] = useState<ListProduct>();
 
   const fetchProducts = async (query?: GetUsersQuery): Promise<void> => {
     try {
@@ -106,15 +112,18 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
   };
 
   const handleDeleteProduct = async (id: string) => {
+    setLoadingDelete(true);
     try {
       const res = await deleteProduct(id);
       if (res.status === 200) {
         toast.success("Xóa thành công");
         fetchProducts();
+        setOpenModalDelete(false);
       }
     } catch (error) {
       console.log(error);
     }
+    setLoadingDelete(false);
   };
 
   const dataSourceProd = useMemo(() => {
@@ -163,6 +172,7 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
           ))}
         </>,
         <p>{item?.category.name}</p>,
+        <p>{item.quantity}</p>,
         <p className="first-letter:uppercase">{item?.gender}</p>,
         <>
           {item?.listImage.map((img) => (
@@ -187,7 +197,10 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
         </p>,
         <p className="w-full flex items-center justify-center">
           <span
-            onClick={() => handleDeleteProduct(item?.id)}
+            onClick={() => {
+              setItemDelete(item);
+              setOpenModalDelete(true);
+            }}
             title="Xóa sản phẩm"
             className="text-xl cursor-pointer hover:text-red-500 rounded-full hover:bg-[rgba(145,158,171,0.08)] p-1"
           >
@@ -230,6 +243,28 @@ const ManageProduct = ({ loading }: { loading: Boolean }) => {
       <Modal open={openEditModal} setOpen={setOpenEditModal}>
         <ProductUpload productEdit={itemEditModal} setOpen={setOpenEditModal} />
       </Modal>
+      <ModalCancel
+        open={openModalDelete}
+        setOpen={setOpenModalDelete}
+        title="Xoá sản phẩm này?"
+      >
+        <div className="flex items-center justify-center gap-10 mt-10">
+          <Button
+            onClick={() => setOpenModalDelete(false)}
+            className="w-40"
+            label="Huỷ"
+            variant="outline"
+          />
+          <Button
+            onClick={() => {
+              itemDelete && handleDeleteProduct(itemDelete?.id);
+            }}
+            className="w-40"
+            label="Xoá"
+            loading={loadingDelete}
+          />
+        </div>
+      </ModalCancel>
     </>
   );
 };

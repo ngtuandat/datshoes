@@ -13,6 +13,7 @@ export interface ProductProps {
   color: string[];
   price: number;
   size: number[];
+  quantity: number;
 }
 
 export interface ListProduct {
@@ -27,6 +28,7 @@ export interface ListProduct {
   createdAt?: string;
   gender: string;
   review: ListReview[];
+  quantity: number;
 }
 
 export interface ListReview {
@@ -42,6 +44,7 @@ export interface ProductValidator {
   img: string;
   size: string;
   price: string;
+  quantity: string;
 }
 
 export interface CommentReview {

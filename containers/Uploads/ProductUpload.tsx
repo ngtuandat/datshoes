@@ -60,11 +60,8 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
   const [loadingUploadFiles, setLoadingUploadFiles] = useState(false);
   const [nameProduct, setNameProduct] = useState<string>("");
   const [descProduct, setDescProduct] = useState<string>("");
+  const [quantityProduct, setQuantityProduct] = useState<number>();
 
-  console.log(descProduct, "descProduct");
-  if (descProduct == "") {
-    console.log(123);
-  }
   const [descProductEdit, setDescProductEdit] = useState<string>("");
 
   console.log(descProductEdit.length, "descProductEdit");
@@ -84,7 +81,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
       mess.name = "Hãy nhập tên sản phẩm";
     }
 
-    if (!descProduct) {
+    if (!descProduct && !descProductEdit) {
       mess.desc = "Hãy tạo thêm mô tả cho sản phẩm của bạn";
     }
 
@@ -100,6 +97,9 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
 
     if (priceProduct === 0) {
       mess.price = "Giá không thể là 0";
+    }
+    if (quantityProduct === 0) {
+      mess.quantity = "Số lượng sản phẩm tối thiếu là 1";
     }
 
     setValidatorMess(mess);
@@ -187,6 +187,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
     setCategoryList(res.data);
   };
 
+  console.log({ descProductEdit });
   const handleProduct = async () => {
     try {
       validatorForm();
@@ -198,7 +199,8 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
         categoryValue,
         colorSelected.length > 0,
         priceProduct,
-        sizeSelected.length > 0)
+        sizeSelected.length > 0,
+        quantityProduct)
       ) {
         const colorLower = colorSelected.map((element) => {
           return element.toLowerCase();
@@ -218,6 +220,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
           color: colorLower,
           price: priceProduct,
           size: sizeSelected,
+          quantity: quantityProduct,
         };
         console.log(product, "productxxx");
         if (productEdit) {
@@ -240,6 +243,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
 
   useEffect(() => {
     if (productEdit) {
+      console.log({ productEdit });
       setDfCheck(String(productEdit.gender).toLocaleLowerCase());
       setCategoryValue(productEdit.category.name);
       setColorSelected(productEdit.color);
@@ -250,6 +254,7 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
       setDescProductEdit(productEdit.description);
       setPriceProduct(productEdit.price);
       setIdProductEdit(productEdit.id);
+      setQuantityProduct(productEdit.quantity);
     }
   }, [productEdit]);
 
@@ -485,6 +490,27 @@ const ProductUpload = ({ productEdit, setOpen }: ProductUploadProps) => {
                 </i>
               )}
             </div>
+            <div className="relative">
+              <input
+                type="number"
+                value={quantityProduct}
+                onChange={(e) => setQuantityProduct(e.target.valueAsNumber)}
+                placeholder="1"
+                className={`text-white text-sm bg-transparent border w-full px-2.5 py-3 rounded-lg placeholder:text-[rgb(99,115,129)] focus:border-white hover:border-white border-color-primary ${
+                  validatorMess?.quantity && "border-red-500"
+                }`}
+              />
+              <label
+                className={`absolute px-1 text-[rgb(99,115,129)] -top-2 left-3 text-xs bg-[rgb(33,43,54)] ${
+                  validatorMess?.quantity && "text-red-500"
+                }`}
+              >
+                Sô lượng
+              </label>
+            </div>
+            {validatorMess?.quantity && (
+              <i className="text-red-500 text-xs pl-1">{validatorMess.name}</i>
+            )}
             <div>
               {colorSelected.length > 0 && (
                 <div className="mb-4">

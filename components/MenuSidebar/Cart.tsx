@@ -26,7 +26,7 @@ const Cart = () => {
       fetchCart(decoded.id);
     }
   }, [token, updateCart, fetchCart]);
-
+  console.log({ count });
   return (
     <Link href="/checkout">
       <div className="bg-[rgb(33,43,54)] z-[2100] cursor-pointer text-white pl-4 pr-6 pt-4 pb-2 fixed top-40 right-0 rounded-l-md shadow-sm">

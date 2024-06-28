@@ -420,11 +420,12 @@ const Checkout = ({ loading }: { loading: Boolean }) => {
   }, [listProductBuy]);
 
   const handleBoughtProd = async ({ isPay }: { isPay?: boolean }) => {
+    console.log({ voucherUsed });
     try {
       if (token) {
         const decoded: any = jwt_decode(token);
         await boughtProduct(String(decoded.id), voucherUsed?.id, isPay);
-        if (voucherUsed) {
+        if (voucherUsed && Object.keys(voucherUsed).length !== 0) {
           await UserUsedVoucher({
             userId: decoded.id,
             code: voucherUsed?.code,
