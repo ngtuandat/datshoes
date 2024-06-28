@@ -176,18 +176,20 @@ const Purchase = ({ loading }: { loading: Boolean }) => {
                           )}
                         </div>
                       </div>
-                      <button
-                        // onClick={() => handleDeletePurchase(item?.id)}
-                        onClick={() => {
-                          setItemCancel(item);
-                          setOpenModalCancel(true);
-                        }}
-                        className="text-white hover:bg-red-700 hover:bg-opacity-10 max-w-[140px] flex items-center justify-center space-x-2 border border-color-primary px-1 py-2 rounded-md"
-                      >
-                        <span className="font-bold text-sm flex items-center space-x-1">
-                          <MdOutlineDeleteSweep /> <p>Hủy đơn</p>
-                        </span>
-                      </button>
+                      {item.status === "pending" && (
+                        <button
+                          // onClick={() => handleDeletePurchase(item?.id)}
+                          onClick={() => {
+                            setItemCancel(item);
+                            setOpenModalCancel(true);
+                          }}
+                          className="text-white hover:bg-red-700 hover:bg-opacity-10 max-w-[140px] flex items-center justify-center space-x-2 border border-color-primary px-1 py-2 rounded-md"
+                        >
+                          <span className="font-bold text-sm flex items-center space-x-1">
+                            <MdOutlineDeleteSweep /> <p>Hủy đơn</p>
+                          </span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -47,6 +47,7 @@ async function createProduct(product: ProductProps, res: NextApiResponse) {
         listImage: product.image,
         size: product.size,
         gender: product.gender,
+        quantity: product.quantity,
       },
     });
     res.status(200).json("Create Successful");
@@ -95,6 +96,9 @@ async function getProduct(res: NextApiResponse, query: GetUsersQuery) {
     const getProd = await prisma.product.findMany({
       skip: (Number(query.page || 1) - 1) * 6,
       take: Number(query.limit),
+      include: {
+        category: true,
+      },
       where: {
         ...categoryFilter,
         name: {
@@ -164,6 +168,7 @@ async function updateProduct(res: NextApiResponse, product: ProductProps) {
         listImage: product.image,
         size: product.size,
         gender: product.gender,
+        quantity: product.quantity,
       },
     });
     res.status(200).json("Update Successful");
