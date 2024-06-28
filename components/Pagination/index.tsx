@@ -204,10 +204,11 @@ const Page = ({
   page: number;
   onChangePage: (page: number) => void;
 }) => {
+  console.log({ current, page });
   return current === page ? (
     <button
       aria-current="page"
-      className={`pg-page-item pg-page-item-${page} z-10 relative inline-flex items-center px-4 py-2 text-white text-sm font-medium`}
+      className={`pg-page-item pg-page-item-${page} z-10 relative inline-flex items-center px-4 py-2 text-green-500 text-sm font-medium`}
     >
       {page}
     </button>

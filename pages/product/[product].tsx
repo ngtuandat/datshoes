@@ -58,6 +58,7 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
   const token = Cookies.get("token");
   const { count, fetchCart } = useCart();
 
+  console.log({ dataProduct });
   const fetchDetailProduct = async (id: string | string[]) => {
     try {
       const res = await getDetailProduct(String(id));
@@ -170,6 +171,15 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
       console.log(error);
     }
   };
+
+  console.log({
+    wqeqw:
+      loadAddProd &&
+      dataProduct &&
+      dataProduct?.quantity < 0 &&
+      dataProduct?.quantity === 0 &&
+      quantity > dataProduct?.quantity,
+  });
 
   return (
     <>
@@ -319,20 +329,52 @@ const ProductDetail = ({ loading }: { loading: Boolean }) => {
                     </button>
                   </div>
                 </div>
+                <div className="flex items-center justify-between h-10">
+                  <p className="text-base font-semibold">Số lượng trong kho</p>
+                  <div className="relative hover:border-white select-none flex items-center rounded-lg w-[78px] py-1 justify-around">
+                    {dataProduct?.quantity}
+                  </div>
+                </div>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <button
-                disabled={loadAddProd}
-                onClick={handleAddToCart}
-                className="flex items-center space-x-1 px-5 py-3 text-base font-bold rounded-lg text-[rgb(33,43,54)] bg-[rgb(255,171,0)] hover:shadow-[0_15px_20px_-15px_rgb(255,171,0)]"
+                onClick={() => {
+                  !loadAddProd &&
+                    dataProduct &&
+                    dataProduct?.quantity > 0 &&
+                    quantity <= dataProduct?.quantity &&
+                    handleAddToCart();
+                }}
+                className={`
+               ${
+                 !loadAddProd &&
+                 dataProduct &&
+                 dataProduct?.quantity > 0 &&
+                 quantity <= dataProduct?.quantity
+                   ? " bg-[rgb(255,171,0)] hover:shadow-[0_15px_20px_-15px_rgb(255,171,0)] text-[rgb(33,43,54)]"
+                   : "bg-slate-500 cursor-default"
+               }
+               
+                  flex items-center space-x-1 px-5 py-3 text-base font-bold rounded-lg `}
               >
                 {loadAddProd ? <LoadingBtn /> : <MdOutlineAddShoppingCart />}
                 <p>Thêm vào giỏ hàng</p>
               </button>
               <button
-                onClick={handleBuyNow}
-                className="flex-1 px-5 py-3 text-base font-bold rounded-lg bg-green-500  hover:shadow-[0_15px_20px_-15px] hover:shadow-green-500"
+                onClick={() => {
+                  dataProduct &&
+                    dataProduct?.quantity > 0 &&
+                    quantity <= dataProduct?.quantity &&
+                    handleBuyNow();
+                }}
+                className={`${
+                  dataProduct &&
+                  dataProduct?.quantity > 0 &&
+                  quantity <= dataProduct?.quantity
+                    ? " bg-green-500  hover:shadow-[0_15px_20px_-15px] hover:shadow-green-500 cursor-pointer"
+                    : "bg-slate-500 cursor-default"
+                } flex-1 px-5 py-3 text-base font-bold rounded-lg`}
               >
                 <p>Mua ngay</p>
               </button>

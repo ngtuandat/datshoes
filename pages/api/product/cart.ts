@@ -49,6 +49,18 @@ async function addProductToCart(res: NextApiResponse, product: ProductBuy) {
           quantityProd: productBuy.quantityProd + product.quantity,
         },
       });
+      const productInStock = await prisma.product.findUnique({
+        where: { id: product.id },
+        select: { quantity: true },
+      });
+
+      if (!productInStock || productInStock.quantity < product.quantity) {
+        throw new Error("Không đủ số lượng sản phẩm trong kho");
+      }
+      await prisma.product.update({
+        where: { id: product.id },
+        data: { quantity: { decrement: product.quantity } },
+      });
     } else {
       await prisma.cart.create({
         data: {
@@ -63,6 +75,7 @@ async function addProductToCart(res: NextApiResponse, product: ProductBuy) {
         },
       });
     }
+
     res.status(200).json("Add Successful");
   } catch (error) {
     res.status(500).json(error);
