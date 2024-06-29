@@ -9,6 +9,7 @@ import Link from "next/link";
 import PaginationClient from "../components/Pagination/PaginationClient";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { Categorys, News, Support } from "../mockData";
+import Footer from "../components/Footer";
 
 const minimalUi = {
   offscreenP: {
@@ -246,7 +247,7 @@ const ContentHome = () => {
               </div>
             ))}
           </div>
-          <div>
+          <div className="text-white">
             <button onClick={handlePrevious} disabled={startIndex === 0}>
               Previous
             </button>
@@ -383,6 +384,7 @@ const ContentHome = () => {
           total={totalProduct}
           onChange={onChangePage}
         />
+        <Footer />
       </div>
     </div>
   );

@@ -46,6 +46,10 @@ const NavClientMb = ({
       label: "Sản Phẩm",
       icon: <GiRunningShoe />,
     },
+    {
+      url: "/contact",
+      label: "Liên Hệ",
+    },
   ];
 
   const userNav = [

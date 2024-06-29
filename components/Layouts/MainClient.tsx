@@ -4,6 +4,7 @@ import MenuFixed from "../MenuSidebar/MenuFixed";
 import HeaderClient from "../Header/HeaderClient";
 import Cart from "../MenuSidebar/Cart";
 import { useRouter } from "next/router";
+import NavClient from "../NavBar/NavClient";
 
 const MainClient = ({ children }: ChildrenProps) => {
   const router = useRouter();

@@ -5,6 +5,7 @@ import ContentHome from "../containers/ContentHome";
 import { CustomHeader } from "./../components/Header/CustomHeader";
 import { useRouter } from "next/router";
 import LoadingPage from "../components/Loading/LoadingPage";
+import NavClient from "../components/NavBar/NavClient";
 
 const Home = ({ loading }: { loading: Boolean }) => {
   return (
