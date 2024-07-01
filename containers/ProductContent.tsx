@@ -8,8 +8,9 @@ import PaginationClient from "./../components/Pagination/PaginationClient";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import LoadingPage from "../components/Loading/LoadingPage";
+import Footer from "../components/Footer";
 
-const DEFAULT_PRODUCTS_LIMIT = 5;
+const DEFAULT_PRODUCTS_LIMIT = 16;
 
 const ProductContent = () => {
   const [limitValue, setLimitValue] = useState(DEFAULT_PRODUCTS_LIMIT);
@@ -117,6 +118,7 @@ const ProductContent = () => {
         total={totalProduct}
         onChange={onChangePage}
       />
+      <Footer />
     </>
   );
 };

@@ -203,19 +203,19 @@ const MenuFilter = ({ open, setOpen }: MenuFilterProp) => {
       <motion.div
         onClick={handleClose}
         initial="open"
-        // animate={open ? "open" : "closed"}
-        animate="open"
+        animate={open ? "open" : "closed"}
+        // animate="open"
         variants={backFilter}
         // className={`fixed inset-0 `}
       />
       <motion.div
         initial="open"
-        // animate={open ? "open" : "closed"}
-        animate="open"
+        animate={open ? "open" : "closed"}
+        // animate="open"
         variants={menuFilter}
         className="fixed z-[2500] bg-product shadow-xl w-64 top-0 bottom-0 right-0"
       >
-        <div className="flex items-center justify-between p-4 pr-2 border-b border-b-[rgba(145,158,171,0.24)]">
+        <div className="flex items-center justify-between p-4 pr-2 border-b border-b-[rgba(145,158,171,0.24)] ">
           <h1 className="text-base font-semibold">Filters</h1>
 
           <div

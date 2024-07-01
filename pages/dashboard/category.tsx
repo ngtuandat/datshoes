@@ -79,7 +79,7 @@ const Category = ({ loading }: { loading: Boolean }) => {
   return (
     <div>
       {loading && <LoadingPage />}
-      <ContentHeader title="Quản lý voucher" name="Danh sách voucher" />
+      <ContentHeader title="Quản lý voucher" name="Danh sách category" />
       <Card>
         <Card.Content>
           <div className="flex items-center justify-end">

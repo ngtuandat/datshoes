@@ -5,7 +5,9 @@ import { FaShoppingCart } from "react-icons/fa";
 
 const NavClient = () => {
   const router = useRouter();
+  console.log(router, "routerxxx");
   const path = router.pathname;
+  console.log(path, "pathxxx");
   const [pathSelected, setPathSelected] = useState("/");
 
   useEffect(() => {
@@ -20,6 +22,11 @@ const NavClient = () => {
     {
       url: "/product",
       label: "Xem sản phẩm",
+    },
+
+    {
+      url: "/contact",
+      label: "Liên Hệ",
     },
     {
       url: "/checkout",
