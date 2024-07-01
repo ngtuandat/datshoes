@@ -7,6 +7,9 @@ import { GetUsersQuery } from "../interfaces/user";
 import { getAllProducts } from "../services/product";
 import Link from "next/link";
 import PaginationClient from "../components/Pagination/PaginationClient";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { Categorys, News, Support } from "../mockData";
+import Footer from "../components/Footer";
 
 const minimalUi = {
   offscreenP: {
@@ -35,7 +38,7 @@ const inputVariant = {
   },
   closed: {},
 };
-const DEFAULT_PRODUCTS_LIMIT = 5;
+const DEFAULT_PRODUCTS_LIMIT = 52;
 const ContentHome = () => {
   const [focused, setFocused] = useState(false);
   const [limitValue, setLimitValue] = useState(DEFAULT_PRODUCTS_LIMIT);
@@ -46,13 +49,16 @@ const ContentHome = () => {
     // "./images/logo.png",
     // "./images/logo1.jpg",
     // "./images/bannerhotel.jpeg",
-    "./images/anh1.jpg",
-    "./images/anh2.jpg",
-    // "./images/anh3.jpg",
-    // "./images/anh4.jpg",
+    "./images/banner1.png",
+    "./images/banner2.png",
+    "./images/banner3.png",
+
+    // "./images/anh3.png",
+    // "./images/anh4.png",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const Gender = ["kids", "men", "women", "all"];
 
   console.log(currentImageIndex, "currentImageIndex");
 
@@ -78,6 +84,7 @@ const ContentHome = () => {
   }, []);
 
   const router = useRouter();
+
   const fetchProducts = async (query?: GetUsersQuery): Promise<void> => {
     try {
       const { data } = await getAllProducts({
@@ -114,148 +121,26 @@ const ContentHome = () => {
       shallow: true,
     });
   };
+
+  const [startIndex, setStartIndex] = useState(0);
+  console.log(startIndex, "startIndex");
+
+  const handleNext = () => {
+    setStartIndex((prevIndex) => prevIndex + 7);
+  };
+
+  const handlePrevious = () => {
+    setStartIndex((prevIndex) => prevIndex - 7);
+  };
+  console.log(startIndex, "xxxxsxsxs");
+  console.log(startIndex + 8, "loghocai");
+  const categorys = Categorys.slice(startIndex, startIndex + 8);
+
+  const handleClick = (id: number) => {
+    router.push(`/article/${id}`);
+  };
   return (
     <div className="max-w-sm md:max-w-2xl lg:max-w-[1200px] mx-auto">
-      {/* <div className="py-24 lg:py-32">
-        <div className="flex flex-col items-center text-center mb-20">
-          <motion.p
-            initial="offscreenP"
-            whileInView="onscreen"
-            variants={minimalUi}
-            className="uppercase text-[rgb(99,115,129)] text-xs font-bold -mt-2 mb-2"
-          >
-            Cuc shoes
-          </motion.p>
-          <motion.h1
-            initial="offscreenH"
-            whileInView="onscreen"
-            variants={minimalUi}
-            className="text-white font-extrabold lg:text-[40px] text-4xl"
-          >
-            Cuc Shoes
-            <br />
-            có gì?
-          </motion.h1>
-        </div>
-        <motion.div
-          initial="offscreenP"
-          whileInView="onscreen"
-          variants={minimalUi}
-          className="hidden lg:grid grid-cols-3 gap-20 items-center"
-        >
-          <div className="col-span-3 lg:col-span-1 px-10 py-20 text-center h-fit shadow-lg rounded-2xl lg:shadow-none">
-            <img
-              className="mx-auto"
-              src="/images/home/minimal-helps/ic_make_brand.svg"
-              alt=""
-            />
-            <div>
-              <h1 className="mb-4 mt-16 font-bold text-xl text-white">
-                Branding
-              </h1>
-              <p className="text-base text-[rgb(145,158,171)] font-normal">
-                Consistent design makes it easy to brand your own.
-              </p>
-            </div>
-          </div>
-          <div className="col-span-3 lg:col-span-1 px-10 py-20 text-center h-fit shadow-lg lg:shadow-ui rounded-2xl">
-            <img
-              className="mx-auto"
-              src="/images/home/minimal-helps/ic_design.svg"
-              alt=""
-            />
-            <div>
-              <h1 className="mb-4 mt-16 font-bold text-xl text-white">
-                UI & UX Design
-              </h1>
-              <p className="text-base text-[rgb(145,158,171)] font-normal">
-                The kit is built on the principles of the atomic design system.
-                It helps you to create projects fastest and easily customized
-                packages for your projects.
-              </p>
-            </div>
-          </div>
-          <div className="col-span-3 lg:col-span-1 px-10 py-20 text-center h-fit shadow-lg rounded-2xl lg:shadow-none">
-            <img
-              className="mx-auto"
-              src="/images/home/minimal-helps/ic_development.svg"
-              alt=""
-            />
-            <div>
-              <h1 className="mb-4 mt-16 font-bold text-xl text-white">
-                Development
-              </h1>
-              <p className="text-base text-[rgb(145,158,171)] font-normal">
-                Easy to customize and extend, saving you time and money.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-        <div className="lg:hidden grid grid-cols-3">
-          <motion.div
-            initial="offscreenP"
-            whileInView="onscreen"
-            variants={minimalUi}
-            className="col-span-3 lg:col-span-1 px-10 py-20 text-center h-fit shadow-lg rounded-2xl lg:shadow-none"
-          >
-            <img
-              className="mx-auto"
-              src="/images/home/minimal-helps/ic_make_brand.svg"
-              alt=""
-            />
-            <div>
-              <h1 className="mb-4 mt-16 font-bold text-xl text-white">
-                Branding
-              </h1>
-              <p className="text-base text-[rgb(145,158,171)] font-normal">
-                Consistent design makes it easy to brand your own.
-              </p>
-            </div>
-          </motion.div>
-          <motion.div
-            initial="offscreenP"
-            whileInView="onscreen"
-            variants={minimalUi}
-            className="col-span-3 lg:col-span-1 px-10 py-20 text-center h-fit shadow-lg lg:shadow-ui rounded-2xl"
-          >
-            <img
-              className="mx-auto"
-              src="/images/home/minimal-helps/ic_design.svg"
-              alt=""
-            />
-            <div>
-              <h1 className="mb-4 mt-16 font-bold text-xl text-white">
-                UI & UX Design
-              </h1>
-              <p className="text-base text-[rgb(145,158,171)] font-normal">
-                The kit is built on the principles of the atomic design system.
-                It helps you to create projects fastest and easily customized
-                packages for your projects.
-              </p>
-            </div>
-          </motion.div>
-          <motion.div
-            initial="offscreenP"
-            whileInView="onscreen"
-            variants={minimalUi}
-            className="col-span-3 lg:col-span-1 px-10 py-20 text-center h-fit shadow-lg rounded-2xl lg:shadow-none"
-          >
-            <img
-              className="mx-auto"
-              src="/images/home/minimal-helps/ic_development.svg"
-              alt=""
-            />
-            <div>
-              <h1 className="mb-4 mt-16 font-bold text-xl text-white">
-                Development
-              </h1>
-              <p className="text-base text-[rgb(145,158,171)] font-normal">
-                Easy to customize and extend, saving you time and money.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </div> */}
       <div className="mt-[100px] max-w-sm lg:max-w-[1200px] mx-auto">
         <form className="flex items-center text-xl mb-12">
           <label htmlFor="simple-search" className="sr-only">
@@ -281,29 +166,156 @@ const ContentHome = () => {
           </div>
           <div />
         </form>
-        <div className="grid grid-cols-10">
-          <div className="col-span-7">
+        <div className="grid grid-cols-10 gap-10 h-[400px]">
+          <div className="col-span-7 relative group ">
             <img
-              className="w-full"
+              className="w-full object-cover"
+              style={{ maxHeight: "400px" }}
               src={images[currentImageIndex]}
               alt="Slideshow"
             />
-            <div className="slideshow-controls mt-4">
+            <div className="slideshow-controls text-center absolute top-1/2 transform -translate-y-1/2 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <button
-                className="hover:cursor-pointer mr-2"
+                className="hover:cursor-pointer mr-2 bg-black opacity-20 hover:opacity-30 text-white py-2 rounded-md px-4 text-3xl absolute left-3"
                 onClick={goToPreviousImage}
               >
-                Previous
+                <MdKeyboardArrowLeft />
               </button>
-              <button onClick={goToNextImage}>Next</button>
+              <button
+                onClick={goToNextImage}
+                className="bg-black opacity-20 hover:opacity-30 text-white py-2 rounded-md px-4 text-3xl absolute right-3"
+              >
+                <MdKeyboardArrowRight />
+              </button>
             </div>
           </div>
-          <div className="col-span-3">
-            <img src="./images/anh2.jpg" alt="" />
-            <img src="./images/anh2.jpg" alt="" />
+
+          <div className="col-span-3 space-y-6 flex flex-col items-center">
+            <img
+              className="w-full h-[200px] object-cover"
+              src="./images/anh5.jpg"
+              alt="Image 1"
+            />
+            <img
+              className="w-full h-[200px] object-cover"
+              src="./images/anh6.jpg"
+              alt="Image 2"
+            />
           </div>
         </div>
-        {products && products?.length > 0 ? (
+        <div className="grid grid-cols-12">
+          <div className="col-span-5 mt-16">
+            <div className="text-[30px] font-light text-white mt-5 mb-[30px]">
+              Hãy Đồng hành cùng chúng tôi
+            </div>
+            <div className="space-y-7">
+              {Support.map((item, index) => (
+                <div className="flex items-start gap-x-5">
+                  <div className="text-primary">{item.icon}</div>
+                  <div>
+                    <div className="text-white text-lg font-bold">
+                      {item.title}
+                    </div>
+                    <div className="text-[#ccc] text-sm">{item.content}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="col-span-7 flex justify-center">
+            <img className="h-[560px]" src="./images/anhsp.png" alt="" />
+          </div>
+        </div>
+        <div className="text-[30px] flex justify-center font-light text-white mt-5 mb-[30px]">
+          Danh Mục Sản Phẩm
+        </div>
+        <div>
+          <div className="flex gap-x-[38px] whitespace-nowrap overflow-hidden">
+            {categorys.map((item, index) => (
+              <div
+                className="flex flex-col items-center"
+                style={{ minWidth: "124px" }}
+              >
+                <img
+                  className="w-[124px] h-[124px] rounded-full object-cover"
+                  src={item.image}
+                  alt=""
+                />
+                <div className="text-white mt-2">{item.title}</div>
+                {/* <div className="text-white">{item.accommodation} chỗ ở</div> */}
+                {/* <div className="text-white">{index}</div> */}
+              </div>
+            ))}
+          </div>
+          <div className="text-white">
+            <button onClick={handlePrevious} disabled={startIndex === 0}>
+              Previous
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={startIndex + 8 >= Categorys.length}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+        <div className="text-[30px] flex justify-center font-light text-white mt-5 mb-[30px]">
+          Danh Sách Sản Phẩm
+        </div>
+        {products && products.length > 0 ? (
+          <div>
+            {Gender.map((gender) => (
+              <div key={gender}>
+                <h2 className="text-white">{gender.toUpperCase()}</h2>
+                <div className="grid grid-cols-4 gap-6 mb-10">
+                  {products?.map(
+                    (product, index) =>
+                      (gender === "all" || product.gender === gender) && (
+                        <div key={index}>
+                          <Link
+                            href={`/product/${product?.id}`}
+                            className="bg-product col-span-4 lg:col-span-1 rounded-lg cursor-pointer hover:-translate-y-1 transition-all duration-200"
+                          >
+                            <div className="p-2">
+                              <img
+                                className="rounded-lg w-[262px] h-[262px] object-cover"
+                                src={product?.listImage[0]}
+                                alt={product?.name}
+                              />
+                            </div>
+                            <div className="py-6 px-2">
+                              <h1 className="text-base font-semibold text-white">
+                                {product?.name}
+                              </h1>
+                              <div className="flex items-center justify-between mt-5 px-3">
+                                <div className="flex items-center">
+                                  {product?.color.map((col, idx) => (
+                                    <div
+                                      className="h-3 w-3 rounded-full"
+                                      key={idx}
+                                      style={{ backgroundColor: col }}
+                                    />
+                                  ))}
+                                </div>
+                                <p className="text-base font-semibold text-white">
+                                  {product?.price.toLocaleString("vi")} đ
+                                </p>
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      )
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="flex w-full justify-center items-center text-xl sm:text-2xl font-bold py-40 opacity-20">
+            Không có sản phẩm bạn đang tìm!!
+          </p>
+        )}
+        {/* {products && products?.length > 0 ? (
           <div className="grid grid-cols-4 gap-6 mb-10">
             {products.map((product, idx) => (
               <Link
@@ -344,13 +356,35 @@ const ContentHome = () => {
           <p className="flex w-full justify-center items-center text-xl sm:text-2xl font-bold py-40 opacity-20">
             Không có sản phẩm bạn đang tìm!!
           </p>
-        )}
+        )} */}
+        <div className="text-[30px] flex justify-center font-light text-white mt-5 mb-[30px]">
+          Tin Tức FitFusionZone
+        </div>
+        <div className="grid grid-cols-3 gap-5 mb-10">
+          {News.map((item, index) => (
+            <div
+              onClick={() => handleClick(item.id)}
+              key={item.id}
+              className="flex flex-col items-center space-y-4"
+            >
+              <div className="w-[300px] h-[300px] ">
+                <img
+                  src={item.image}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="text-white">{item.title}</div>
+            </div>
+          ))}
+        </div>
         <PaginationClient
           current={Number(router.query.page || 1)}
           pageSize={limitValue}
           total={totalProduct}
           onChange={onChangePage}
         />
+        <Footer />
       </div>
     </div>
   );
